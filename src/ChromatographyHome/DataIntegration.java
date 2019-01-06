@@ -1,4 +1,4 @@
-package sample;
+package ChromatographyHome;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -6,7 +6,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 public class DataIntegration implements Runnable {
 

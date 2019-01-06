@@ -1,13 +1,8 @@
-package sample;
+package ChromatographyHome;
 
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class AddData implements Runnable {
 

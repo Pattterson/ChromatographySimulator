@@ -1,4 +1,4 @@
-package sample;
+package ChromatographyHome;
 
 import javafx.application.Platform;
 import javafx.scene.chart.LineChart;

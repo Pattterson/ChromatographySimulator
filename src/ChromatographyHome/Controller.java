@@ -1,4 +1,4 @@
-package sample;
+package ChromatographyHome;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
-    private static File file = new File("/Users/alexpatterson/IdeaProjects/ChromatographySimulator/src/sample/music.wav");
+    private static File file = new File("/Users/alexpatterson/IdeaProjects/ChromatographySimulator/src/ChromatographyHome/music.wav");
     private static final String MEDIA_URI = file.toURI().toString();
     private static Media sound = new Media(MEDIA_URI);
 

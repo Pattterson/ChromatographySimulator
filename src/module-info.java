@@ -3,5 +3,5 @@ module ChromatographySimulator {
     requires javafx.controls;
     requires javafx.media;
 
-    opens sample;
+    opens ChromatographyHome;
 }

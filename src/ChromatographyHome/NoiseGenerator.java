@@ -1,6 +1,5 @@
-package sample;
+package ChromatographyHome;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class NoiseGenerator {

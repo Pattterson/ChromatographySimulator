@@ -1,7 +1,5 @@
-package sample;
+package ChromatographyHome;
 
-import java.util.Arrays;
-import java.util.List;
 // moving linear regression using least squares analysis, see https://www.mathsisfun.com/data/least-squares-regression.html
 //use to implement traditional (Waters) integration https://www.waters.com/webassets/cms/library/docs/local_seminar_presentations/DA_NUT2013_A4_Rune_Frederiksen.pdf
 public class DataRegression implements Runnable {

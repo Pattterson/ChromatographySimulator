@@ -1,4 +1,4 @@
-package sample;
+package ChromatographyHome;
 
 public class Peak {
     private double peakStartTime;
