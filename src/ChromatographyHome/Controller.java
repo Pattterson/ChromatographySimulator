@@ -2,32 +2,45 @@ package ChromatographyHome;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+
+//for a second stage (for reference)
+// Stage secondStage = new Stage();
+//         secondStage.setScene(new Scene(new HBox(4, new Label("Second window"))));
+//         secondStage.show();
 public class Controller {
     private static File file = new File("./src/ChromatographyHome/music.wav");
     private static final String MEDIA_URI = file.toURI().toString();
     private static Media sound = new Media(MEDIA_URI);
+
+
 
     @FXML
     private Label speedIndicator;
 
     private Task<ObservableList<XYChart.Data>> task;
     private static MediaPlayer mediaPlayer;
+    private ObservableList<IntegrationEvent> eventsList = FXCollections.observableArrayList();
 
     @FXML
     private NumberAxis yAxis;
@@ -46,6 +59,19 @@ public class Controller {
 
     XYChart.Series series = new XYChart.Series();
 
+    @FXML
+    private TableView<IntegrationEvent> eventsTable;
+
+    @FXML
+    private TableColumn<IntegrationEvent,ComboBox> eventColumn;
+
+    @FXML
+    private TableColumn<IntegrationEvent,Double> eventStartColumn;
+
+    @FXML
+    private TableColumn<IntegrationEvent,Double> eventEndColumn;
+
+
 
 
 
@@ -63,6 +89,17 @@ public class Controller {
 
 
     public void initialize() {
+
+        initializeIntegrationEvents();
+        System.out.println(eventsTable);
+        eventsTable.setItems(eventsList);
+
+        eventColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent,ComboBox>("eventType"));
+        eventStartColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent,Double>("eventStartTime"));
+        eventEndColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent,Double>("eventEndTime"));
+
+
+
         xAxis.autoRangingProperty().setValue(true);
         yAxis.autoRangingProperty().setValue(true);
 
@@ -87,6 +124,9 @@ public class Controller {
     }
 
     public void laceReboot() {
+        System.out.println("Hello World!");
+
+
         lineChart.setVisible(true);
         startButton.setDisable(false);
         System.out.println(speedSlider.getValue());
@@ -146,7 +186,27 @@ public class Controller {
     public void button3Clicked() {
 
 
+
+
+
+
     }
+
+    private void initializeIntegrationEvents(){
+        IntegrationEvent defaultEvent1 = new IntegrationEvent(3.4,4.8 );
+        IntegrationEvent defaultEvent2 = new IntegrationEvent(3.5,4.9 );
+        IntegrationEvent defaultEvent3 = new IntegrationEvent(3.6,4.1 );
+        IntegrationEvent defaultEvent4 = new IntegrationEvent(3.7,4.2 );
+        IntegrationEvent defaultEvent5 = new IntegrationEvent(3.8,4.3 );
+
+        eventsList.add(defaultEvent1);
+        eventsList.add(defaultEvent2);
+        eventsList.add(defaultEvent3);
+        eventsList.add(defaultEvent4);
+        eventsList.add(defaultEvent5);
+        System.out.println(eventsList);
+    }
+
 }
 
 
