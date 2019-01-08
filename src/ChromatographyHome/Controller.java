@@ -15,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -25,9 +26,17 @@ import java.util.List;
 
 
 //for a second stage (for reference)
-// Stage secondStage = new Stage();
-//         secondStage.setScene(new Scene(new HBox(4, new Label("Second window"))));
-//         secondStage.show();
+//public void changeScreenButtonPushed(ActionEvent event) throws IOException
+//        {
+//        Parent tableViewParent = FXMLLoader.load(getClass().getResource("ExampleOfTableView.fxml"));
+//        Scene tableViewScene = new Scene(tableViewParent);
+//
+//        //This line gets the Stage information
+//        Stage window = new Stage();
+//
+//        window.setScene(tableViewScene);
+//        window.show();
+//        }
 public class Controller {
     private static File file = new File("./src/ChromatographyHome/music.wav");
     private static final String MEDIA_URI = file.toURI().toString();
@@ -41,6 +50,7 @@ public class Controller {
     private Task<ObservableList<XYChart.Data>> task;
     private static MediaPlayer mediaPlayer;
     private ObservableList<IntegrationEvent> eventsList = FXCollections.observableArrayList();
+    private ObservableList<SampleInfo> sampleList = FXCollections.observableArrayList();
 
     @FXML
     private NumberAxis yAxis;
@@ -71,6 +81,22 @@ public class Controller {
     @FXML
     private TableColumn<IntegrationEvent,Double> eventEndColumn;
 
+    @FXML
+    private TableColumn<SampleInfo,Integer> sampleNumberColumn;
+
+    @FXML
+    private TableColumn<SampleInfo,String> sampleNameColumn;
+
+    @FXML
+    private TableColumn<SampleInfo,ComboBox> sampleTypeColumn;
+
+    @FXML
+    private TableColumn<SampleInfo,Double> injectionVolumeColumn;
+
+    @FXML
+    private TableView<SampleInfo> sampleTable;
+
+
 
 
 
@@ -90,6 +116,8 @@ public class Controller {
 
     public void initialize() {
 
+
+        //initialize integration table
         initializeIntegrationEvents();
         System.out.println(eventsTable);
         eventsTable.setItems(eventsList);
@@ -97,6 +125,21 @@ public class Controller {
         eventColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent,ComboBox>("eventType"));
         eventStartColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent,Double>("eventStartTime"));
         eventEndColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent,Double>("eventEndTime"));
+
+        //initialize sample table
+        addInjectionDummyData();
+        sampleTable.setItems(sampleList);
+
+        sampleNumberColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,Integer>("SampleNumber"));
+        sampleNameColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,String>("SampleName"));
+        sampleTypeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,ComboBox>("sampleType"));
+        injectionVolumeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,Double>("injectionVolume"));
+
+
+
+
+
+
 
 
 
@@ -122,6 +165,7 @@ public class Controller {
         });
 
     }
+
 
     public void laceReboot() {
         System.out.println("Hello World!");
@@ -206,6 +250,19 @@ public class Controller {
         eventsList.add(defaultEvent5);
         System.out.println(eventsList);
     }
+
+
+    private void addInjectionDummyData() {
+        SampleInfo dummySample1 = new SampleInfo("Working Standard",(double)5);
+        SampleInfo dummySample2 = new SampleInfo("Sensitivity",(double)5);
+        SampleInfo dummySample3 = new SampleInfo(" Lot 749353",(double)10);
+        sampleList.add(dummySample1);
+        sampleList.add(dummySample2);
+        sampleList.add(dummySample3);
+
+
+    }
+
 
 }
 

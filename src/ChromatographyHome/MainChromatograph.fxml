@@ -110,10 +110,12 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <TableView GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.vgrow="ALWAYS">
+                                <TableView fx:id="sampleTable" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.rowSpan="2" GridPane.vgrow="ALWAYS">
                                     <columns>
-                                        <TableColumn prefWidth="75.0" text="C1" />
-                                        <TableColumn prefWidth="82.0" text="C2" />
+                                        <TableColumn fx:id="sampleNumberColumn" prefWidth="75.0" text="C" />
+                              <TableColumn fx:id="sampleNameColumn" prefWidth="75.0" text="Sample Name" />
+                              <TableColumn fx:id="sampleTypeColumn" prefWidth="75.0" text="Sample Type" />
+                                        <TableColumn fx:id="injectionVolumeColumn" prefWidth="82.0" text="Injection Volume" />
                                     </columns>
                                 </TableView>
                                 <TableView fx:id="eventsTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4" GridPane.rowSpan="3">
