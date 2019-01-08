@@ -115,6 +115,8 @@ public class Controller {
 
 
     public void initialize() {
+//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete " + "fred" + " ?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+//        alert.showAndWait();
 
 
         //initialize integration table
