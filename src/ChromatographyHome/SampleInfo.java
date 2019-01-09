@@ -25,6 +25,15 @@ public class SampleInfo {
         this.injectionVolume = injectionVolume;
 
     }
+    public SampleInfo(){
+        sampleNumber = sampleCounter;
+        sampleCounter ++;
+        sampleType.getItems().add("Sample");
+        sampleType.getItems().add("Standard");
+        sampleType.getItems().add("Blank");
+        this.injectionVolume = (double)5;
+
+    }
 
 
     public static Integer getSampleCounter() {
