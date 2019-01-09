@@ -164,8 +164,8 @@ public class GenerateData implements Runnable {
                     pointsToAdd.add(new XYChart.Data(time, response));
                     dataForProcessing[counter][0] = time;
                     dataForProcessing[counter][1] = response;
-                    System.out.println("Added (x,y) to dataForProcessing Array: (" + dataForProcessing[counter][0] + "," + dataForProcessing[counter][1] + ")"
-                            + "counter is: " + counter + " out of " + maximumCycles);
+//                    System.out.println("Added (x,y) to dataForProcessing Array: (" + dataForProcessing[counter][0] + "," + dataForProcessing[counter][1] + ")"
+//                            + "counter is: " + counter + " out of " + maximumCycles);
                     counter += 1;
 
                     if (counter > maximumCycles) {
@@ -238,7 +238,18 @@ public class GenerateData implements Runnable {
 
 
     private class GenerateDatum {
+        //generate datum may be better as just a function since it only does one thing
+
         private int calculateResponse(double time) {
+            //calculate response as a function of time and compound list
+
+            List<Compound> dummyCompoundList= new ArrayList<>();
+            populateDummyCompoundList(dummyCompoundList);
+            for(Compound compound: dummyCompoundList){
+                System.out.println("RT = " + compound.getRetentionTime() + ": Response = " + compound.getResponse());
+
+            }
+
 
             //Gaussian parameters, to be adjusted later
             double a = 100;
@@ -267,6 +278,18 @@ public class GenerateData implements Runnable {
             response += NoiseGenerator.generateNoise();
             return response;
         }
+
+        private void populateDummyCompoundList(List<Compound> compoundList){
+            for(int i=0; i<5;i++){
+                Compound compound = new Compound("CCCHHH");
+                compound.setRetentionTime((double)30+30*i);
+                compound.setResponse(i+1+0.5);
+                compoundList.add(compound);
+
+            }
+        };
+
+
     }
 
 
