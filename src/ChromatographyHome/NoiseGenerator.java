@@ -8,7 +8,7 @@ public class NoiseGenerator {
 
     static int generateNoise(){
         int min = 20;
-        int max = 50;
+        int max = 25;
 
         int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
 

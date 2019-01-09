@@ -245,35 +245,19 @@ public class GenerateData implements Runnable {
 
             List<Compound> dummyCompoundList= new ArrayList<>();
             populateDummyCompoundList(dummyCompoundList);
-            for(Compound compound: dummyCompoundList){
-                System.out.println("RT = " + compound.getRetentionTime() + ": Response = " + compound.getResponse());
-
-            }
-
-
-            //Gaussian parameters, to be adjusted later
-            double a = 100;
-            double b = 1;
-            double c = 20;
-
             int response = 0;
-            //compound lists must be sorted --Change to stack??? --no because we should check every retention time for each time in chromatogram
-            for (int i = 0; i < retentionTimes.size(); i++) {
-                double retTime = retentionTimes.get(i);
-                //if within gaussian range
 
-                double adjustedTime = retTime - time;
-//                System.out.println("adjustedTime = " + adjustedTime);
-                double x = time - retTime;
-                if (time > retTime + halfPeakWidth.get(i)) {
-                    c = 20;
-                } else {
-                    c = 20;
-                }
+            for(Compound compound: dummyCompoundList) {
+                double retentionTime = compound.getRetentionTime();
 
-                double exponential = -1 * Math.pow(x - b, 2) / (2 * c * c);
-                double gaussian = a * Math.exp(exponential);
-                response += gaussian * responseFactor.get(i);
+                //adjusted retention time: since we want peaks to elute as specific times,
+                // we must subtract the current time since a gaussian distribution is centered at x = 0.
+                //example retentionTime = 30s; when time = 30s, adjusted retention time will be zero (the max of the distribution)
+                double adjustedRetentionTime = retentionTime-time;
+
+                //we coiuld also use mu to shift peaks, but there is no need to at the moment
+                //use sigma to account for peak broadening
+                response += calculateGaussian(adjustedRetentionTime,0,10) * compound.getResponse();
             }
             response += NoiseGenerator.generateNoise();
             return response;
@@ -288,6 +272,16 @@ public class GenerateData implements Runnable {
 
             }
         };
+
+        private int calculateGaussian(double x, double mu, double sigma){
+            int result = 0;
+
+            double coefficient = 1/(Math.sqrt(2*Math.PI*sigma*sigma));
+            double exponential = Math.exp(-(x-mu) * (x-mu)/(2*sigma*sigma));
+
+            return (int)(coefficient*exponential*1000);
+            //response of 1000 just for example, will be based on response factor for each specific compound
+        }
 
 
     }
