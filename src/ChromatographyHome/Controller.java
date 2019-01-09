@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -12,11 +13,13 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -95,6 +98,15 @@ public class Controller {
 
     @FXML
     private TableView<SampleInfo> sampleTable;
+    
+    @FXML
+    private Button newSampleButton;
+    @FXML
+    private Button deleteSampleButton;
+    @FXML
+    private Button newEventButton;
+    @FXML
+    private Button deleteEventButton;
 
 
 
@@ -136,6 +148,26 @@ public class Controller {
         sampleNameColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,String>("SampleName"));
         sampleTypeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,ComboBox>("sampleType"));
         injectionVolumeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,Double>("injectionVolume"));
+
+        sampleTable.setEditable(true);
+        sampleNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        sampleTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        //convert that double to a string, we can parse later.
+// injectionVolumeColumn.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Double>() {
+//            @Override
+//            public String toString(Double aDouble) {
+//                return null;
+//            }
+//
+//            @Override
+//            public Double fromString(String s) {
+//                return null;
+//            }
+
+
+
+
 
 
 
@@ -266,6 +298,29 @@ public class Controller {
     }
 
 
+    public void newSampleButtonPushed() {
+        SampleInfo sampleInfo = new SampleInfo();
+        sampleTable.getItems().add(sampleInfo);
+    }
+
+    public void deleteSampleButtonPushed() {
+
+        ObservableList<SampleInfo> selectedRows = sampleTable.getSelectionModel().getSelectedItems();
+        ObservableList<SampleInfo> allSamples = sampleTable.getItems();
+        for(SampleInfo sample: selectedRows){
+            System.out.println("removing:" + sample.getSampleName());
+            allSamples.remove(sample);
+            System.out.println(allSamples.contains(sample));
+
+        }
+
+    }
+
+    public void newEventButtonPushed() {
+    }
+
+    public void deleteEventButtonPushed() {
+    }
 }
 
 
