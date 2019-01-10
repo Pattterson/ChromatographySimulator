@@ -168,7 +168,7 @@
                 <AnchorPane minWidth="0.0" prefHeight="549.0">
                     <children>
                         <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Actions" textAlignment="CENTER" textFill="$x2" wrapText="false" />
-                        <Button fx:id="startButton" layoutX="21.0" layoutY="37.0" mnemonicParsing="false" onMouseClicked="#buttonClicked" text="Start" />
+                        <Button fx:id="startButton" layoutX="21.0" layoutY="37.0" mnemonicParsing="false" onMouseClicked="#startButtonClicked" text="Start" />
                         <Button layoutX="21.0" layoutY="64.0" mnemonicParsing="false" text="Abort Run" textFill="RED" />
                         <Button layoutX="21.0" layoutY="91.0" mnemonicParsing="false" text="Inject Next sample" />
                         <Button layoutX="21.0" layoutY="118.0" mnemonicParsing="false" text="Pause Set" />

@@ -70,7 +70,6 @@ public class Controller {
     @FXML
     private Slider speedSlider;
 
-    XYChart.Series series = new XYChart.Series();
 
     @FXML
     private TableView<IntegrationEvent> eventsTable;
@@ -181,7 +180,7 @@ public class Controller {
         yAxis.autoRangingProperty().setValue(true);
 
 
-        lineChart.getData().add(series);
+
         lineChart.setVisible(true);
         startButton.setDisable(false);
 
@@ -211,9 +210,12 @@ public class Controller {
 
     }
 
-    public void buttonClicked() {
+    public void startButtonClicked() {
         startButton.setDisable(false);
         System.out.println(MEDIA_URI);
+
+        XYChart.Series series = new XYChart.Series();
+        lineChart.getData().add(series);
 
 
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
