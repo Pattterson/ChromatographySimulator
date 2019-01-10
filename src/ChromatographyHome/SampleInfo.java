@@ -1,7 +1,18 @@
 package ChromatographyHome;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SampleInfo {
@@ -11,27 +22,63 @@ public class SampleInfo {
     private String sampleName;
     private ComboBox<String> sampleType = new ComboBox<>();
     private Double injectionVolume;
-    private Map<Compound,Double> sampleCompounds;
+    private List<Compound> sampleCompounds;
+
+    private Button compoundButton = new Button("0");
+
+
+
+    public Button getCompoundButton() {
+        return compoundButton;
+    }
+
+    public void setCompoundButton(Button compoundButton) {
+        this.compoundButton = compoundButton;
+    }
 
     public SampleInfo(String sampleName, Double injectionVolume) {
+        compoundButton.setOnAction(actionEvent -> {
+
+
+            Parent compoundAdditionTable = null;
+            try {
+                compoundAdditionTable = FXMLLoader.load(getClass().getResource("CompoundAdditionTable.fxml"));
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Could not instantiate add Compound Table");
+            }
+            Scene tableViewScene = new Scene(compoundAdditionTable);
+
+        //This line gets the Stage information
+        Stage window = new Stage();
+
+        window.setScene(tableViewScene);
+        window.show();
+
+        });
+
         sampleNumber = sampleCounter;
-        sampleCounter ++;
+        sampleCounter++;
         sampleType.getItems().add("Sample");
         sampleType.getItems().add("Standard");
         sampleType.getItems().add("Blank");
 
         this.sampleName = sampleName;
-        this.sampleType = sampleType;
         this.injectionVolume = injectionVolume;
 
+        sampleCompounds = new ArrayList<>();
+
     }
-    public SampleInfo(){
+
+    public SampleInfo() {
         sampleNumber = sampleCounter;
-        sampleCounter ++;
+        sampleCounter++;
         sampleType.getItems().add("Sample");
         sampleType.getItems().add("Standard");
         sampleType.getItems().add("Blank");
-        this.injectionVolume = (double)5;
+        this.injectionVolume = (double) 5;
+
+        sampleCompounds = new ArrayList<>();
 
     }
 
@@ -76,11 +123,19 @@ public class SampleInfo {
         this.injectionVolume = injectionVolume;
     }
 
-    public Map<Compound, Double> getSampleCompounds() {
+    public List<Compound> getSampleCompounds() {
         return sampleCompounds;
     }
 
-    public void setSampleCompounds(Map<Compound, Double> sampleCompounds) {
+    public void setSampleCompounds(List<Compound> sampleCompounds) {
         this.sampleCompounds = sampleCompounds;
+    }
+
+    public void addCompound(Compound compound) {
+        sampleCompounds.add(compound);
+    }
+
+    public void removeCompound(Compound compound) {
+        sampleCompounds.remove(compound);
     }
 }

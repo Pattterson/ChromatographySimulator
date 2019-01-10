@@ -116,6 +116,7 @@
                               <TableColumn fx:id="sampleNameColumn" prefWidth="75.0" text="Sample Name" />
                               <TableColumn fx:id="sampleTypeColumn" prefWidth="75.0" text="Sample Type" />
                                         <TableColumn fx:id="injectionVolumeColumn" prefWidth="82.0" text="Injection Volume" />
+                              <TableColumn fx:id="compoundsColumn" prefWidth="75.0" text="Compounds" />
                                     </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

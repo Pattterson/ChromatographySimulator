@@ -106,6 +106,8 @@ public class Controller {
     private Button newEventButton;
     @FXML
     private Button deleteEventButton;
+    @FXML
+    private TableColumn<SampleInfo,Button> compoundsColumn;
 
 
 
@@ -147,6 +149,8 @@ public class Controller {
         sampleNameColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,String>("SampleName"));
         sampleTypeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,ComboBox>("sampleType"));
         injectionVolumeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,Double>("injectionVolume"));
+        compoundsColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,Button>("compoundButton"));
+
 
         sampleTable.setEditable(true);
         sampleNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
