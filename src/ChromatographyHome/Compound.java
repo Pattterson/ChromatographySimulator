@@ -1,5 +1,7 @@
 package ChromatographyHome;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public class Compound {
 
 
@@ -7,7 +9,7 @@ public class Compound {
     private Double response;
     private String name = "";
     private String number = "";
-    private String smiles = "";
+    private SimpleStringProperty smiles = new SimpleStringProperty("");
     private String concentration = "";
     private String offset ="";
 
@@ -29,7 +31,7 @@ public class Compound {
     }
 
     public void setSmiles(String smiles) {
-        this.smiles = smiles;
+        this.smiles = new SimpleStringProperty(smiles);
     }
 
     public String getConcentration() {
@@ -48,12 +50,13 @@ public class Compound {
         this.offset = offset;
     }
 
-    public Compound(String smiles) {
+    public Compound(SimpleStringProperty smiles) {
         this.smiles = smiles;
     }
 
     public String getSmiles() {
-        return smiles;
+
+        return smiles.get();
     }
 
     public Double getRetentionTime() {

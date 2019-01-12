@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -8,8 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
-<GridPane prefHeight="250.0" prefWidth="366.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" >
+<GridPane prefHeight="250.0" prefWidth="366.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" />
    </columnConstraints>
@@ -21,21 +21,21 @@
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <TableView fx:id="CompoundsTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+      <TableView fx:id="compoundsTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
         <columns>
           <TableColumn fx:id="compoundNumberColumn" prefWidth="75.0" text="Compound number" />
-          <TableColumn fx:id="compoundNameColumn" prefWidth="75.0" text="Compound name" />
-            <TableColumn fx:id="smilesColumn" prefWidth="75.0" text="Smiles" />
+          <TableColumn fx:id="compoundNameColumn"  prefWidth="75.0" text="Compound name" />
+            <TableColumn fx:id="smilesColumn" onEditCommit="#editCommitted" prefWidth="75.0" text="Smiles" />
             <TableColumn fx:id="concentrationColumn" prefWidth="75.0" text="Concentration" />
             <TableColumn fx:id="offsetColumn" prefWidth="75.0" text="Offset" />
         </columns>
       </TableView>
       <HBox prefHeight="29.0" prefWidth="366.0">
          <children>
-
-            <Button fx:id="addCompoundButton" mnemonicParsing="false" onAction="#addCompoundButton" text="Add compound" />
+            <Button fx:id="AddCompoundButton" mnemonicParsing="false" onAction="#addCompoundButton" text="Add compound" />
             <Button fx:id="removeSelectedButton" mnemonicParsing="false" onAction="#removeSelectedButtonPushed" text="Remove Selected" />
             <Button fx:id="finishButton" mnemonicParsing="false" onAction="#finishButtonClicked" text="Finish" />
+            <Hyperlink fx:id="hyperlink" onAction="#hyperlinkPressed" text="Hyperlink" />
          </children>
       </HBox>
    </children>

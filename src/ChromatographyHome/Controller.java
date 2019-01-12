@@ -129,6 +129,8 @@ public class Controller {
 
 
     public void initialize() {
+
+
 //        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete " + "fred" + " ?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
 //        alert.showAndWait();
 
@@ -326,10 +328,9 @@ public class Controller {
     public void newEventButtonPushed() {
     }
 
+
     public void deleteEventButtonPushed() {
     }
-
-
 }
 
 

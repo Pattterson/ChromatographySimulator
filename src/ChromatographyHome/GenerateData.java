@@ -1,6 +1,7 @@
 package ChromatographyHome;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Slider;
@@ -265,7 +266,7 @@ public class GenerateData implements Runnable {
 
         private void populateDummyCompoundList(List<Compound> compoundList){
             for(int i=0; i<5;i++){
-                Compound compound = new Compound("CCCHHH");
+                Compound compound = new Compound(new SimpleStringProperty(" qwijibo"));
                 compound.setRetentionTime((double)30+30*i);
                 compound.setResponse(i+1+0.5);
                 compoundList.add(compound);

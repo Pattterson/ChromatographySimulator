@@ -1,14 +1,20 @@
 package ChromatographyHome;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class CompoundAdditionTableController {
     ObservableList<Compound> compoundList = FXCollections.observableArrayList();
@@ -35,25 +41,32 @@ public class CompoundAdditionTableController {
     public Button removeSelectedButton;
     @FXML
     public Button finishButton;
-    public TableView<Compound> CompoundsTable;
+    @FXML
+    public TableView<Compound> compoundsTable;
+    @FXML
+    public Hyperlink hyperlink;
+
 
     public void initialize(){
 
         //note to self, should create helper class / static methods to automate initialization of tables
         populateDummyData();
-        CompoundsTable.setItems(compoundList);
+        compoundsTable.setItems(compoundList);
         compoundNameColumn.setCellValueFactory(new PropertyValueFactory<Compound,String>("name"));
         compoundNumberColumn.setCellValueFactory(new PropertyValueFactory<Compound,String>("number"));
-        smilesColumn.setCellValueFactory(new PropertyValueFactory<Compound,String>("smiles"));
+        System.out.println("qoeifwjpqoiewjf");
+        smilesColumn.setCellValueFactory(new PropertyValueFactory<Compound, SimpleStringProperty>("smiles"));
+        System.out.println("fred");
         concentrationColumn.setCellValueFactory(new PropertyValueFactory<Compound,String>("concentration"));
         offsetColumn.setCellValueFactory(new PropertyValueFactory<Compound,String>("offset"));
-
-        CompoundsTable.setEditable(true);
+//
+        compoundsTable.setEditable(true);
         compoundNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         compoundNumberColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         smilesColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         concentrationColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         offsetColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        System.out.println("george");
     }
 
 
@@ -62,18 +75,90 @@ public class CompoundAdditionTableController {
     }
 
     public void finishButtonClicked(ActionEvent actionEvent) {
+        for(Compound compound: compoundList){
+            System.out.println(compound.getSmiles());
+        }
     }
 
     public void removeSelectedButtonPushed(ActionEvent actionEvent) {
     }
 
     private void populateDummyData(){
-        compoundList.add(new Compound("CHHHOH"));
-        compoundList.add(new Compound("CCCHH"));
-        compoundList.add(new Compound("CHCHHH"));
-        compoundList.add(new Compound("CH3C3C"));
+        compoundList.add(new Compound(new SimpleStringProperty("CHHHOH")));
+        compoundList.add(new Compound(new SimpleStringProperty("ab")));
+        compoundList.add(new Compound(new SimpleStringProperty("qwef")));
+        compoundList.add(new Compound(new SimpleStringProperty("qwef")));
         System.out.println(compoundList);
     }
 
+    public void hyperlinkPressed(){
+        Hyperlink hyperlink = new Hyperlink();
+        hyperlink.setText("Molecular editor");
+        openMolecularEditor();
 
-}
+        hyperlink.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                openMolecularEditor();
+            }
+        });
+    }
+
+
+
+    public void editCommitted(TableColumn.CellEditEvent<Compound,String> event) {
+        String newValue = event.getNewValue();
+        compoundsTable.getSelectionModel().getSelectedItem().setSmiles(newValue);
+
+
+
+        }
+
+
+
+
+
+
+
+
+    private void openMolecularEditor() {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MolecularEditor.fxml"));
+        MolecularEditorController controller = new MolecularEditorController();
+        loader.setController(controller);
+
+        try {
+            Scene MolecularEditorScene = new Scene(loader.load(),600,600);
+            Stage window = new Stage();
+
+            window.setScene(MolecularEditorScene);
+            window.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Unable to load the molecular editor");
+        }
+    }
+
+
+    }
+
+
+
+
+
+//
+//        System.out.println("edit committed fired");
+//        smilesColumn.up
+//        Compound updatedCompound = compoundsTable.getSelectionModel().getSelectedItem();
+//        System.out.println("new Smiles" + updatedCompound.getSmiles());
+//        updatedCompound.setSmiles(new SimpleStringProperty(updatedCompound.getSmiles()));
+
+
+
+
+
+
+
+
+
