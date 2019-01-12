@@ -2,9 +2,51 @@ package ChromatographyHome;
 
 public class Compound {
 
-    private String smiles;
+
     private Double retentionTime;
     private Double response;
+    private String name = "";
+    private String number = "";
+    private String smiles = "";
+    private String concentration = "";
+    private String offset ="";
+
+    public String getName() {
+        return name;
+
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setSmiles(String smiles) {
+        this.smiles = smiles;
+    }
+
+    public String getConcentration() {
+        return concentration;
+    }
+
+    public void setConcentration(String concentration) {
+        this.concentration = concentration;
+    }
+
+    public String getOffset() {
+        return offset;
+    }
+
+    public void setOffset(String offset) {
+        this.offset = offset;
+    }
 
     public Compound(String smiles) {
         this.smiles = smiles;

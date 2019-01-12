@@ -23,6 +23,7 @@ import javafx.util.StringConverter;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -305,7 +306,7 @@ public class Controller {
 
 
     public void newSampleButtonPushed() {
-        SampleInfo sampleInfo = new SampleInfo();
+        SampleInfo sampleInfo = new SampleInfo("",(double)0);
         sampleTable.getItems().add(sampleInfo);
     }
 
@@ -327,6 +328,8 @@ public class Controller {
 
     public void deleteEventButtonPushed() {
     }
+
+
 }
 
 

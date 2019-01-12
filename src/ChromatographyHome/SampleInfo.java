@@ -1,5 +1,12 @@
 package ChromatographyHome;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ArrayChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,9 +30,10 @@ public class SampleInfo {
     private String sampleName;
     private ComboBox<String> sampleType = new ComboBox<>();
     private Double injectionVolume;
-    private List<Compound> sampleCompounds;
+    private ObservableList<Compound> sampleCompounds = FXCollections.observableArrayList();
 
     private Button compoundButton = new Button("0");
+
 
 
 
@@ -37,25 +46,31 @@ public class SampleInfo {
     }
 
     public SampleInfo(String sampleName, Double injectionVolume) {
+        IntegerBinding sampleCompoundsSizeProperty = Bindings.size(sampleCompounds);
+
+        compoundButton.textProperty().bind(sampleCompoundsSizeProperty.asString());
         compoundButton.setOnAction(actionEvent -> {
 
+            ObservableList<Compound> dummyList = FXCollections.observableArrayList();
 
-            Parent compoundAdditionTable = null;
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CompoundAdditionTable.fxml"));
+            CompoundAdditionTableController controller = new CompoundAdditionTableController(sampleCompounds);
+            loader.setController(controller);
+
             try {
-                compoundAdditionTable = FXMLLoader.load(getClass().getResource("CompoundAdditionTable.fxml"));
+                Scene compoundTableScene = new Scene(loader.load(),600,600);
+                Stage window = new Stage();
+
+                window.setScene(compoundTableScene);
+                window.show();
+
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Could not instantiate add Compound Table");
+                System.out.println("Unable to load Compound table view scene");
             }
-            Scene tableViewScene = new Scene(compoundAdditionTable);
-
-        //This line gets the Stage information
-        Stage window = new Stage();
-
-        window.setScene(tableViewScene);
-        window.show();
-
         });
+
 
         sampleNumber = sampleCounter;
         sampleCounter++;
@@ -65,8 +80,6 @@ public class SampleInfo {
 
         this.sampleName = sampleName;
         this.injectionVolume = injectionVolume;
-
-        sampleCompounds = new ArrayList<>();
 
     }
 
@@ -78,7 +91,8 @@ public class SampleInfo {
         sampleType.getItems().add("Blank");
         this.injectionVolume = (double) 5;
 
-        sampleCompounds = new ArrayList<>();
+
+
 
     }
 
@@ -127,7 +141,7 @@ public class SampleInfo {
         return sampleCompounds;
     }
 
-    public void setSampleCompounds(List<Compound> sampleCompounds) {
+    public void setSampleCompounds(ObservableList<Compound> sampleCompounds) {
         this.sampleCompounds = sampleCompounds;
     }
 
