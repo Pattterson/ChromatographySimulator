@@ -13,6 +13,11 @@ public class Compound {
     private String concentration = "";
     private String offset ="";
 
+    public Compound(SimpleStringProperty smiles) {
+        this.smiles = smiles;
+    }
+
+
     public String getName() {
         return name;
 
@@ -50,9 +55,6 @@ public class Compound {
         this.offset = offset;
     }
 
-    public Compound(SimpleStringProperty smiles) {
-        this.smiles = smiles;
-    }
 
     public String getSmiles() {
 
