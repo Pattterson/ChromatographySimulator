@@ -1,5 +1,11 @@
+.root{
+-fx-background-image: url("gravel.png")
+}
+
+
 .chart {
     -fx-padding: 10px;
+    -fx-background-image: url("gravel.png")
 
 }
 .chart-content {
