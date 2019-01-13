@@ -110,7 +110,7 @@ public class Controller {
     @FXML
     private TableColumn<SampleInfo,Button> compoundsColumn;
 
-    int injectionNumber;
+     int injectionNumber = 1;
 
 
 
@@ -220,8 +220,9 @@ public class Controller {
     }
 
     public void startButtonClicked() {
-        startButton.setDisable(true);
+        startButton.setDisable(false);
         System.out.println(MEDIA_URI);
+
 
         XYChart.Series series = new XYChart.Series();
         lineChart.getData().add(series);

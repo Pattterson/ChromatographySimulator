@@ -18,6 +18,7 @@ public class GenerateData implements Runnable {
     private static int counter;
     private static Slider speedSlider;
     private static double maximumCycles;
+    private static int injectionCounter =1;
     ArrayList<XYChart.Data<Double, Integer>> pointsToAdd = new ArrayList<>();
     double[][] dataForProcessing;
     private double runTime = 30; //minutes
@@ -73,12 +74,15 @@ public class GenerateData implements Runnable {
 
         GenerateDatum generateDatum = new GenerateDatum();
         startGenerationTimer(speedSliderValue * 200, generateDatum);
+        compounds=sampleInfo.get(injectionCounter-1).getSampleCompounds();
 
 
     }
 
     private void startGenerationTimer(int frequency, GenerateDatum generateDatum) {
         Timer timer = new Timer(true);
+        counter = 0;
+
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 //How often a datapoint is generated -- to be updated so user can control this LABEL D
@@ -94,6 +98,13 @@ public class GenerateData implements Runnable {
                     if (counter > maximumCycles) {
                         timer.cancel();
                         timer.purge();
+                        injectionCounter++;
+                        GenerateDatum generateNextDatum = new GenerateDatum();
+                        compounds=sampleInfo.get(injectionCounter-1).getSampleCompounds();
+
+                        startGenerationTimer(speedSliderValue * 200, generateDatum);
+
+
 
                     } else if (speedSlider.valueProperty().intValue() != 200 / frequency) {
                         timer.cancel();
