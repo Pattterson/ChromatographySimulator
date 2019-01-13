@@ -234,7 +234,7 @@ public class Controller {
         ObservableList<Compound> compoundList = FXCollections.observableArrayList();
         compoundList = sampleList.get(0).getSampleCompounds();
 
-        Runnable generateData = new GenerateData(lineChart, series,compoundList, speedSlider);
+        Runnable generateData = new GenerateData(lineChart, series,sampleList, speedSlider);
         Thread thread = new Thread(generateData);
         thread.setDaemon(true);
         thread.start();
@@ -317,9 +317,27 @@ public class Controller {
         ObservableList<SampleInfo> selectedRows = sampleTable.getSelectionModel().getSelectedItems();
         ObservableList<SampleInfo> allSamples = sampleTable.getItems();
         for(SampleInfo sample: selectedRows){
+            int sampleNumberRemoved = sample.getSampleNumber();
             System.out.println("removing:" + sample.getSampleName());
+            SampleInfo.sampleCounter--;
             allSamples.remove(sample);
             System.out.println(allSamples.contains(sample));
+
+            for(SampleInfo remainingSample: sampleList){
+                if (remainingSample.getSampleNumber()>sampleNumberRemoved){
+                    remainingSample.setSampleNumber(remainingSample.getSampleNumber()-1);
+
+
+
+                }
+
+
+
+
+
+        }
+
+
 
         }
 

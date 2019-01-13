@@ -67,12 +67,15 @@ public class CompoundAdditionTableController {
         concentrationColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         offsetColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
+
     }
 
 
     public void addCompoundButton(ActionEvent actionEvent) {
         Compound compound = new Compound(new SimpleStringProperty("CCCHC"));
+        compound.setNumber(Integer.toString(compoundList.size()+1));
         compoundsTable.getItems().add(compound);
+
     }
 
     public void finishButtonClicked(ActionEvent actionEvent) {
@@ -82,6 +85,11 @@ public class CompoundAdditionTableController {
     }
 
     public void removeSelectedButtonPushed(ActionEvent actionEvent) {
+        Compound compoundToRemove = compoundsTable.getSelectionModel().getSelectedItem();
+        compoundList.remove(compoundToRemove);
+        for (int i=0;i<compoundList.size(); i++){
+            compoundList.get(i).setNumber(Integer.toString(i+1));
+        }
     }
 
     private void populateDummyData(){
@@ -89,6 +97,11 @@ public class CompoundAdditionTableController {
         compoundList.add(new Compound(new SimpleStringProperty("ab")));
         compoundList.add(new Compound(new SimpleStringProperty("qwef")));
         compoundList.add(new Compound(new SimpleStringProperty("qwef")));
+
+        //Compounds in list are assigned integer in the order in which they are added
+        for(int i=0; i<compoundList.size(); i++){
+            compoundList.get(i).setNumber(Integer.toString(i+1));
+        }
         System.out.println(compoundList);
     }
 
