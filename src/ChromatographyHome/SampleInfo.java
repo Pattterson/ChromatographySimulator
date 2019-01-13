@@ -23,6 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+//Each sample (characterized by a SampleInfo Object) contains both sample metadata (sample number, name, injection volume, etc...)
+//and a list of zero or more compounds.  Compounds represent the specific molecules that make up the sample and are what will determine
+//chromatographic profiles.
+
 public class SampleInfo {
 
     static Integer sampleCounter = 1;
@@ -137,7 +142,7 @@ public class SampleInfo {
         this.injectionVolume = injectionVolume;
     }
 
-    public List<Compound> getSampleCompounds() {
+    public ObservableList<Compound> getSampleCompounds() {
         return sampleCompounds;
     }
 

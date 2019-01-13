@@ -66,12 +66,13 @@ public class CompoundAdditionTableController {
         smilesColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         concentrationColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         offsetColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        System.out.println("george");
+
     }
 
 
     public void addCompoundButton(ActionEvent actionEvent) {
-        System.out.println("test");
+        Compound compound = new Compound(new SimpleStringProperty("CCCHC"));
+        compoundsTable.getItems().add(compound);
     }
 
     public void finishButtonClicked(ActionEvent actionEvent) {

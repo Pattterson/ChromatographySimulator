@@ -2,6 +2,10 @@ package ChromatographyHome;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Slider;
@@ -25,16 +29,16 @@ public class GenerateData implements Runnable {
     ArrayList<XYChart.Data<Double, Integer>> pointsToAdd = new ArrayList<>();
     double[][] dataForProcessing;
     private static double maximumCycles;
+    private ObservableList<Compound> compounds;
 
 
-    public GenerateData(LineChart lineChart, XYChart.Series series, List<Double> retentionTimes, List<Double> responseFactor, Slider speedSlider) {
+    public GenerateData(LineChart lineChart, XYChart.Series series, ObservableList<Compound> compounds, Slider speedSlider) {
         this.lineChart = lineChart;
         this.series = series;
-        this.retentionTimes = retentionTimes;
-        this.responseFactor = responseFactor;
         this.speedSlider = speedSlider;
         speedSliderValue = speedSlider.valueProperty().intValue();
         maximumCycles = runTime * 60 / samplingRate;
+        this.compounds = compounds;
 
         System.out.println();
         dataForProcessing = new double[(int) (maximumCycles + 1)][2];
@@ -242,13 +246,11 @@ public class GenerateData implements Runnable {
         //generate datum may be better as just a function since it only does one thing
 
         private int calculateResponse(double time) {
-            //calculate response as a function of time and compound list
 
-            List<Compound> dummyCompoundList= new ArrayList<>();
-            populateDummyCompoundList(dummyCompoundList);
             int response = 0;
 
-            for(Compound compound: dummyCompoundList) {
+            for(Compound compound: compounds) {
+
                 double retentionTime = compound.getRetentionTime();
 
                 //adjusted retention time: since we want peaks to elute as specific times,
@@ -267,8 +269,8 @@ public class GenerateData implements Runnable {
         private void populateDummyCompoundList(List<Compound> compoundList){
             for(int i=0; i<5;i++){
                 Compound compound = new Compound(new SimpleStringProperty(" qwijibo"));
-                compound.setRetentionTime((double)30+30*i);
-                compound.setResponse(i+1+0.5);
+                compound.setRetentionTime(Integer.toString(30+30*i));
+                compound.setResponse(Double.toString(i+1+0.5));
                 compoundList.add(compound);
 
             }

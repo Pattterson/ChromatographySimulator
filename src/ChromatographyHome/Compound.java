@@ -14,7 +14,10 @@ public class Compound {
     private String offset ="";
 
     public Compound(SimpleStringProperty smiles) {
+        System.out.println("constructor fired");
         this.smiles = smiles;
+        setRetentionTime(smiles.toString());
+        setResponse(smiles.toString());
     }
 
 
@@ -37,6 +40,12 @@ public class Compound {
 
     public void setSmiles(String smiles) {
         this.smiles = new SimpleStringProperty(smiles);
+
+        //if smiles are updated, then we'll have to generate a response factor and a retention time
+        setRetentionTime(smiles);
+        setResponse(smiles);
+
+
     }
 
     public String getConcentration() {
@@ -65,15 +74,35 @@ public class Compound {
         return retentionTime;
     }
 
-    public void setRetentionTime(Double retentionTime) {
-        this.retentionTime = retentionTime;
+    public void setRetentionTime(String smiles) {
+        System.out.println("set rt fired");
+        this.retentionTime = calculateRetentionTime(smiles);
     }
+
+
 
     public Double getResponse() {
         return response;
     }
 
-    public void setResponse(Double response) {
-        this.response = response;
+    public void setResponse(String smiles) {
+        this.response = calculateResponse(smiles);
     }
+
+    //Sample method for now, will be made more robust in future
+    private Double calculateResponse(String smiles) {
+
+        System.out.println(Math.random());
+
+
+        return smiles.length() * 2000 * Math.random();
+    }
+
+    //Without  multidimentional statistical models such as QSRR, retention times can only be predicted with a low degree of accuracy.
+    //Due to the nature of this program, low accuracy should not be an issue nor should it affect other parts of the software or calculations
+    private Double calculateRetentionTime(String smiles) {
+        return  Math.random()* 1750;
+    }
+
+
 }

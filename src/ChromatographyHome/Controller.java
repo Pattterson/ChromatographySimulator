@@ -110,6 +110,8 @@ public class Controller {
     @FXML
     private TableColumn<SampleInfo,Button> compoundsColumn;
 
+    int injectionNumber;
+
 
 
 
@@ -218,7 +220,7 @@ public class Controller {
     }
 
     public void startButtonClicked() {
-        startButton.setDisable(false);
+        startButton.setDisable(true);
         System.out.println(MEDIA_URI);
 
         XYChart.Series series = new XYChart.Series();
@@ -226,15 +228,13 @@ public class Controller {
 
 
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        System.out.println(sound.getDuration());
-//        mediaPlayer.setOnError(() -> System.out.println("Error : " + mediaPlayer.getError().toString()));
+
         mediaPlayer.play();
-        // For example
 
+        ObservableList<Compound> compoundList = FXCollections.observableArrayList();
+        compoundList = sampleList.get(0).getSampleCompounds();
 
-        List list1 = new ArrayList<>();
-        List list2 = new ArrayList<>();
-        Runnable generateData = new GenerateData(lineChart, series, list1, list2, speedSlider);
+        Runnable generateData = new GenerateData(lineChart, series,compoundList, speedSlider);
         Thread thread = new Thread(generateData);
         thread.setDaemon(true);
         thread.start();
