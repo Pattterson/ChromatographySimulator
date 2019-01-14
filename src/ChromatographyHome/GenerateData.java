@@ -12,6 +12,8 @@ import javafx.scene.control.Slider;
 
 import java.util.*;
 
+
+//no longer used, to be deleted in a future release
 public class GenerateData implements Runnable {
 
 
@@ -90,6 +92,7 @@ public class GenerateData implements Runnable {
                 int response = generateDatum.calculateResponse(time);
                 synchronized (pointsToAdd) {
                     pointsToAdd.add(new XYChart.Data(time, response));
+
                     dataForProcessing[counter][0] = time;
                     dataForProcessing[counter][1] = response;
 
@@ -177,7 +180,7 @@ public class GenerateData implements Runnable {
                 //example retentionTime = 30s; when time = 30s, adjusted retention time will be zero (the max of the distribution)
                 double adjustedRetentionTime = retentionTime - time;
 
-                //we coiuld also use mu to shift peaks, but there is no need to at the moment
+                //we could also use mu to shift peaks, but there is no need to at the moment
                 //use sigma to account for peak broadening
                 response += calculateGaussian(adjustedRetentionTime, 0, 10) * compound.getResponse();
             }

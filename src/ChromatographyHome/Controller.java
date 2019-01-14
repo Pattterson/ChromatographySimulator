@@ -42,6 +42,7 @@ import java.util.List;
 //        window.show();
 //        }
 public class Controller {
+    //must be updated before deploying to getclass.getresource();
     private static File file = new File("./src/ChromatographyHome/music.wav");
     private static final String MEDIA_URI = file.toURI().toString();
     private static Media sound = new Media(MEDIA_URI);
@@ -222,23 +223,22 @@ public class Controller {
     public void startButtonClicked() {
         startButton.setDisable(false);
         System.out.println(MEDIA_URI);
+        InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(0).getSampleCompounds(),30,5,speedSlider,
+                1,lineChart,new XYChart.Series<>(),startButton,5);
 
-
-        XYChart.Series series = new XYChart.Series();
-        lineChart.getData().add(series);
-
-
+        Injection injection = new Injection(injectionInfo);
+        injection.run();
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
         mediaPlayer.play();
 
-        ObservableList<Compound> compoundList = FXCollections.observableArrayList();
-        compoundList = sampleList.get(0).getSampleCompounds();
-
-        Runnable generateData = new GenerateData(lineChart, series,sampleList, speedSlider);
-        Thread thread = new Thread(generateData);
-        thread.setDaemon(true);
-        thread.start();
+//        ObservableList<Compound> compoundList = FXCollections.observableArrayList();
+//        compoundList = sampleList.get(0).getSampleCompounds();
+//
+//        Runnable generateData = new GenerateData(lineChart, series,sampleList, speedSlider);
+//        Thread thread = new Thread(generateData);
+//        thread.setDaemon(true);
+//        thread.start();
 
 
     }
