@@ -174,7 +174,7 @@ public class DataIntegration implements Runnable {
 
                         Node n = integrationSeries.getNode();
                             StringBuilder style = new StringBuilder();
-                            style.append("-fx-stroke: black; \n  -fx-stroke-width: 3px;");
+                            style.append("-fx-stroke: red; \n  -fx-stroke-width: 3px;");
                             n.setStyle(style.toString());
 
 

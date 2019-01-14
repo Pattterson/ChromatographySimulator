@@ -1,6 +1,8 @@
 package ChromatographyHome;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -39,6 +41,15 @@ public class InjectionInfo {
         this.series = series;
         this.nextInjection = nextInjection;
         pointsToCollect = (int)(samplingRate * 60 * runTime + 1); //+1 for time =0 datapoint
+
+        Platform.runLater(() -> {
+            Node n = series.getNode();
+            StringBuilder style = new StringBuilder();
+            style.append("-fx-stroke: black; \n  -fx-stroke-width: 1px;");
+            n.setStyle(style.toString());
+
+        });
+
     }
 
     public boolean isInjectionAbandoned() {
@@ -79,5 +90,9 @@ public class InjectionInfo {
 
     public int getRefreshRate() {
         return refreshRate;
+    }
+
+    public Button getNextInjection() {
+        return nextInjection;
     }
 }

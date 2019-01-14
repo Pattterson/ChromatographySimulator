@@ -100,6 +100,16 @@ public class Injection implements Runnable{
                     timer.cancel();
                     timer.purge();
                     System.out.println("output timer has stopped");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Platform.runLater(() -> {
+                        injectionInfo.getNextInjection().fire();
+                        injectionInfo.getLineChart().getData().remove(injectionInfo.getSeries());
+                    });
+
                 } else if (speedSliderValue != injectionInfo.getSpeedSlider().valueProperty().intValue()) {
                     timer.cancel();
                     timer.purge();
