@@ -46,6 +46,7 @@ public class Controller {
     private static File file = new File("./src/ChromatographyHome/music.wav");
     private static final String MEDIA_URI = file.toURI().toString();
     private static Media sound = new Media(MEDIA_URI);
+    private static int injectionCounter =1;
 
 
 
@@ -221,16 +222,29 @@ public class Controller {
     }
 
     public void startButtonClicked() {
-        startButton.setDisable(false);
-        System.out.println(MEDIA_URI);
-        InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(0).getSampleCompounds(),30,5,speedSlider,
-                1,lineChart,new XYChart.Series<>(),startButton,5);
+        if (injectionCounter == 1) {
+            MediaPlayer mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.play();
+        }
 
-        Injection injection = new Injection(injectionInfo);
-        injection.run();
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
-        mediaPlayer.play();
+        if(injectionCounter<=sampleList.size()){
+            InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(injectionCounter-1).getSampleCompounds(),15,5,speedSlider,
+                    injectionCounter,lineChart,new XYChart.Series<>(),startButton,5);
+            injectionCounter++;
+            Injection injection = new Injection(injectionInfo);
+            injection.run();
+
+        }
+        else {
+            startButton.setDisable(true);
+
+        }
+
+
+
+
+
 
 //        ObservableList<Compound> compoundList = FXCollections.observableArrayList();
 //        compoundList = sampleList.get(0).getSampleCompounds();
