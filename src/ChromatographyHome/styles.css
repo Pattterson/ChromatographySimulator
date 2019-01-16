@@ -57,6 +57,12 @@
 .chart-series-line {
     -fx-stroke-width: 0.5px;
 
+
 }
+
+.table-column {
+  -fx-alignment: CENTER;
+}
+
 .default-color0.chart-series-line { -fx-stroke: #ff0c00; }
 

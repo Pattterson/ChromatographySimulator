@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("MainChromatograph.fxml"));
         primaryStage.setTitle("Chromatography Simulator 2019");
-        Scene scene = new Scene(root, 900, 550);
+        Scene scene = new Scene(root, 1350, 825);
 
         primaryStage.setScene(scene);
         scene.getStylesheets().add(Main.class.getResource("styles.css").toExternalForm());
