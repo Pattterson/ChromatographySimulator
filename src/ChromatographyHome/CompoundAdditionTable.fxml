@@ -24,18 +24,21 @@
       <TableView fx:id="compoundsTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
         <columns>
           <TableColumn fx:id="compoundNumberColumn" prefWidth="75.0" text="Compound number" />
-          <TableColumn fx:id="compoundNameColumn"  prefWidth="75.0" text="Compound name" />
+          <TableColumn fx:id="compoundNameColumn" prefWidth="75.0" text="Compound name" />
             <TableColumn fx:id="smilesColumn" onEditCommit="#editCommitted" prefWidth="75.0" text="Smiles" />
             <TableColumn fx:id="concentrationColumn" prefWidth="75.0" text="Concentration" />
             <TableColumn fx:id="offsetColumn" prefWidth="75.0" text="Offset" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
       <HBox prefHeight="29.0" prefWidth="366.0">
          <children>
             <Button fx:id="AddCompoundButton" mnemonicParsing="false" onAction="#addCompoundButton" text="Add compound" />
             <Button fx:id="removeSelectedButton" mnemonicParsing="false" onAction="#removeSelectedButtonPushed" text="Remove Selected" />
             <Button fx:id="finishButton" mnemonicParsing="false" onAction="#finishButtonClicked" text="Finish" />
-            <Hyperlink fx:id="hyperlink" onAction="#hyperlinkPressed" text="Hyperlink" />
+            <Hyperlink fx:id="hyperlink" onAction="#hyperlinkPressed" text="Open Molecular Editor" />
          </children>
       </HBox>
    </children>

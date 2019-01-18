@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,9 +46,9 @@ import java.util.List;
 //        }
 public class Controller {
     //must be updated before deploying to getclass.getresource();
-    private static File file = new File("./src/ChromatographyHome/music.wav");
-    private static final String MEDIA_URI = file.toURI().toString();
-    private static Media sound = new Media(MEDIA_URI);
+    private static File file;
+    private static  String MEDIA_URI;
+    private static Media sound;
     private static int injectionCounter =1;
 
 
@@ -134,7 +135,13 @@ public class Controller {
 //    }
 
 
-    public void initialize() {
+    public void initialize() throws URISyntaxException {
+        file = new File(getClass().getResource("music.wav").toURI());
+        MEDIA_URI = file.toURI().toString();
+        sound =  new Media(MEDIA_URI);
+
+        newEventButton.setDisable(true);
+        deleteEventButton.setDisable(true);
 
 
 
@@ -145,7 +152,6 @@ public class Controller {
 
         //initialize integration table
         initializeIntegrationEvents();
-        System.out.println(eventsTable);
         eventsTable.setItems(eventsList);
 
         eventColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent,ComboBox>("eventType"));
@@ -216,12 +222,10 @@ public class Controller {
 
 
     public void laceReboot() {
-        System.out.println("Hello World!");
 
 
         lineChart.setVisible(true);
         startButton.setDisable(false);
-        System.out.println(speedSlider.getValue());
 
     }
 
@@ -233,7 +237,7 @@ public class Controller {
 
 
         if(injectionCounter<=sampleList.size()){
-            InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(injectionCounter-1).getSampleCompounds(),15,5,speedSlider,
+            InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(injectionCounter-1).getSampleCompounds(),33,5,speedSlider,
                     injectionCounter,lineChart,new XYChart.Series<>(),startButton,5);
             injectionCounter++;
             Injection injection = new Injection(injectionInfo);
@@ -310,7 +314,7 @@ public class Controller {
         eventsList.add(defaultEvent3);
         eventsList.add(defaultEvent4);
         eventsList.add(defaultEvent5);
-        System.out.println(eventsList);
+
     }
 
 
@@ -337,10 +341,8 @@ public class Controller {
         ObservableList<SampleInfo> allSamples = sampleTable.getItems();
         for(SampleInfo sample: selectedRows){
             int sampleNumberRemoved = sample.getSampleNumber();
-            System.out.println("removing:" + sample.getSampleName());
             SampleInfo.sampleCounter--;
             allSamples.remove(sample);
-            System.out.println(allSamples.contains(sample));
 
             for(SampleInfo remainingSample: sampleList){
                 if (remainingSample.getSampleNumber()>sampleNumberRemoved){
@@ -363,6 +365,7 @@ public class Controller {
     }
 
     public void newEventButtonPushed() {
+
     }
 
 

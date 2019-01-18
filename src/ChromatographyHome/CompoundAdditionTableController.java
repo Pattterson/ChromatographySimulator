@@ -54,9 +54,8 @@ public class CompoundAdditionTableController {
         compoundsTable.setItems(compoundList);
         compoundNameColumn.setCellValueFactory(new PropertyValueFactory<Compound,String>("name"));
         compoundNumberColumn.setCellValueFactory(new PropertyValueFactory<Compound,String>("number"));
-        System.out.println("qoeifwjpqoiewjf");
+
         smilesColumn.setCellValueFactory(new PropertyValueFactory<Compound, SimpleStringProperty>("smiles"));
-        System.out.println("fred");
         concentrationColumn.setCellValueFactory(new PropertyValueFactory<Compound,String>("concentration"));
         offsetColumn.setCellValueFactory(new PropertyValueFactory<Compound,String>("offset"));
 //
@@ -72,7 +71,7 @@ public class CompoundAdditionTableController {
 
 
     public void addCompoundButton(ActionEvent actionEvent) {
-        Compound compound = new Compound(new SimpleStringProperty("CCCHC"));
+        Compound compound = new Compound(new SimpleStringProperty(""));
         compound.setNumber(Integer.toString(compoundList.size()+1));
         compoundsTable.getItems().add(compound);
 
@@ -93,16 +92,15 @@ public class CompoundAdditionTableController {
     }
 
     private void populateDummyData(){
-        compoundList.add(new Compound(new SimpleStringProperty("CHHHOH")));
-        compoundList.add(new Compound(new SimpleStringProperty("ab")));
-        compoundList.add(new Compound(new SimpleStringProperty("qwef")));
-        compoundList.add(new Compound(new SimpleStringProperty("qwef")));
+        compoundList.add(new Compound(new SimpleStringProperty("CO")));
+        compoundList.add(new Compound(new SimpleStringProperty("CC1=CC=CC=C1")));
+        compoundList.add(new Compound(new SimpleStringProperty("CC(C)(C)c1cc(C)cc(c1O)C(C)(C)C")));
 
         //Compounds in list are assigned integer in the order in which they are added
         for(int i=0; i<compoundList.size(); i++){
             compoundList.get(i).setNumber(Integer.toString(i+1));
         }
-        System.out.println(compoundList);
+
     }
 
     public void hyperlinkPressed(){
@@ -142,7 +140,7 @@ public class CompoundAdditionTableController {
         loader.setController(controller);
 
         try {
-            Scene MolecularEditorScene = new Scene(loader.load(),600,600);
+            Scene MolecularEditorScene = new Scene(loader.load(),600,425);
             Stage window = new Stage();
 
             window.setScene(MolecularEditorScene);

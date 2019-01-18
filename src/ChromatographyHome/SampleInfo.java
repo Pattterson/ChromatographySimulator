@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
@@ -33,7 +34,7 @@ public class SampleInfo {
     static Integer sampleCounter = 1;
     private int sampleNumber;
     private String sampleName;
-    private ComboBox<String> sampleType = new ComboBox<>();
+    private ComboBox<Label> sampleType = new ComboBox<>();
     private Double injectionVolume;
     private ObservableList<Compound> sampleCompounds = FXCollections.observableArrayList();
 
@@ -59,12 +60,13 @@ public class SampleInfo {
             ObservableList<Compound> dummyList = FXCollections.observableArrayList();
 
 
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CompoundAdditionTable.fxml"));
             CompoundAdditionTableController controller = new CompoundAdditionTableController(sampleCompounds);
             loader.setController(controller);
 
             try {
-                Scene compoundTableScene = new Scene(loader.load(),600,600);
+                Scene compoundTableScene = new Scene(loader.load(),600,300);
                 Stage window = new Stage();
 
                 window.setScene(compoundTableScene);
@@ -79,9 +81,20 @@ public class SampleInfo {
 
         sampleNumber = sampleCounter;
         sampleCounter++;
-        sampleType.getItems().add("Sample");
-        sampleType.getItems().add("Standard");
-        sampleType.getItems().add("Blank");
+        Label label = new Label("Standard");
+                label.setEllipsisString("");
+
+        Label label2 = new Label("Sample");
+        label.setEllipsisString("");
+
+        Label label3 = new Label("Blank");
+        label.setEllipsisString("");
+
+
+
+        sampleType.getItems().add(label2);
+        sampleType.getItems().add(label);
+        sampleType.getItems().add(label3);
 
         this.sampleName = sampleName;
         this.injectionVolume = injectionVolume;
@@ -91,9 +104,9 @@ public class SampleInfo {
     public SampleInfo() {
         sampleNumber = sampleCounter;
         sampleCounter++;
-        sampleType.getItems().add("Sample");
-        sampleType.getItems().add("Standard");
-        sampleType.getItems().add("Blank");
+//        sampleType.getItems().add("Sample");
+//        sampleType.getItems().add("Standard");
+//        sampleType.getItems().add("Blank");
         this.injectionVolume = (double) 5;
 
 
@@ -126,11 +139,11 @@ public class SampleInfo {
         this.sampleName = sampleName;
     }
 
-    public ComboBox<String> getSampleType() {
+    public ComboBox<Label> getSampleType() {
         return sampleType;
     }
 
-    public void setSampleType(ComboBox<String> sampleType) {
+    public void setSampleType(ComboBox<Label> sampleType) {
         this.sampleType = sampleType;
     }
 

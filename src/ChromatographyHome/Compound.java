@@ -14,7 +14,6 @@ public class Compound {
     private String offset ="";
 
     public Compound(SimpleStringProperty smiles) {
-        System.out.println("constructor fired");
         this.smiles = smiles;
         setRetentionTime(smiles.toString());
         setResponse(smiles.toString());
@@ -75,7 +74,7 @@ public class Compound {
     }
 
     public void setRetentionTime(String smiles) {
-        System.out.println("set rt fired");
+
         this.retentionTime = calculateRetentionTime(smiles);
     }
 
@@ -92,7 +91,7 @@ public class Compound {
     //Sample method for now, will be made more robust in future
     private Double calculateResponse(String smiles) {
 
-        System.out.println(Math.random());
+
 
 
         return smiles.length() * 2000 * Math.random();
