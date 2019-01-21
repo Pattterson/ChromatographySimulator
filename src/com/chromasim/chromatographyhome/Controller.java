@@ -1,4 +1,4 @@
-package ChromatographyHome;
+package com.chromasim.chromatographyhome;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

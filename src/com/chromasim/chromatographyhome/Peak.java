@@ -1,4 +1,4 @@
-package ChromatographyHome;
+package com.chromasim.chromatographyhome;
 
 public class Peak {
     private double peakStartTime;

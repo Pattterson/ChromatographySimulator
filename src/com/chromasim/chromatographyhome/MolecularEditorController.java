@@ -1,4 +1,4 @@
-package ChromatographyHome;
+package com.chromasim.chromatographyhome;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

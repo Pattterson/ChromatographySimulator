@@ -1,4 +1,4 @@
-package ChromatographyHome;
+package com.chromasim.chromatographyhome;
 
 // moving linear regression using least squares analysis, see https://www.mathsisfun.com/data/least-squares-regression.html
 //use to implement traditional (Waters) integration https://www.waters.com/webassets/cms/library/docs/local_seminar_presentations/DA_NUT2013_A4_Rune_Frederiksen.pdf

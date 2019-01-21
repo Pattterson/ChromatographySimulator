@@ -1,4 +1,4 @@
-package ChromatographyHome;
+package com.chromasim.chromatographyhome;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
