@@ -25,6 +25,7 @@ import javafx.util.StringConverter;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -136,9 +137,17 @@ public class Controller {
 
 
     public void initialize() throws URISyntaxException {
-        file = new File(getClass().getResource("music.wav").toURI());
-        MEDIA_URI = file.toURI().toString();
-        sound =  new Media(MEDIA_URI);
+        URL url = getClass().getResource("music.wav");
+        try {
+            Media sound = new Media(url.toURI().toString());
+            mediaPlayer = new MediaPlayer(sound);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+//        file = new File(getClass().getClassLoader().getResource("ChromatographyHome/music.wav").toURI());
+
+//        MEDIA_URI = file.toURI().toString();
+//        sound =  new Media(MEDIA_URI);
 
         newEventButton.setDisable(true);
         deleteEventButton.setDisable(true);
@@ -231,7 +240,6 @@ public class Controller {
 
     public void startButtonClicked() {
         if (injectionCounter == 1) {
-            MediaPlayer mediaPlayer = new MediaPlayer(sound);
             mediaPlayer.play();
         }
 

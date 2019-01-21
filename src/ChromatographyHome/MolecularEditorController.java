@@ -7,6 +7,8 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class MolecularEditorController {
 
@@ -15,11 +17,11 @@ public class MolecularEditorController {
     @FXML
     Button closeButton;
 
-    public void initialize(){
-        File file = new File("./src/ChromatographyHome/MolecularEditorResources/jme_examples/jme_window.html");
-        System.out.println(file.exists());
+    public void initialize() throws URISyntaxException {
+        URL url = getClass().getResource("MolecularEditorResources/jme_examples/jme_window.html");
+
         WebEngine engine = webView.getEngine();
-        engine.load(file.toURI().toString());
+        engine.load(url.toURI().toString());
 
 
     }
