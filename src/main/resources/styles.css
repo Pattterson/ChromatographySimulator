@@ -1,0 +1,68 @@
+.root{
+-fx-background-image: url("gravel.png")
+}
+
+.split-pane{
+-fx-background-image: url("gravel.png")
+}
+
+
+.chart {
+    -fx-padding: 10px;
+    -fx-background-image: url("gravel.png")
+
+}
+.chart-content {
+    -fx-padding: 30px;
+
+}
+
+.chart-title {
+  -fx-text-fill: #000000;
+  -fx-font-size: 1.6em;
+}
+
+.axis-label {
+  -fx-text-fill: #000000;
+}
+
+.chart-legend {
+   -fx-background-color:  transparent;
+   -fx-padding: 20px;
+}
+
+.chart-legend-item-symbol{
+   -fx-background-radius: 0;
+}
+
+.chart-legend-item{
+    -fx-text-fill: #191970;
+}
+
+.chart-plot-background {
+    -fx-background-color: white;
+}
+.chart-vertical-grid-lines {
+    -fx-stroke: #9b9b9b;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: #9b9b9b;
+}
+.chart-alternative-row-fill {
+    -fx-fill: transparent;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+
+}
+.chart-series-line {
+    -fx-stroke-width: 0.5px;
+
+
+}
+
+.table-column {
+  -fx-alignment: CENTER;
+}
+
+.default-color0.chart-series-line { -fx-stroke: #ff0c00; }
+
