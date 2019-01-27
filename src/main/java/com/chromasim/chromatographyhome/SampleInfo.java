@@ -28,6 +28,7 @@ public class SampleInfo {
     private ObservableList<Compound> sampleCompounds = FXCollections.observableArrayList();
 
     private Button compoundButton = new Button("0");
+    private Stage compoundAdditionTableStage = new Stage();
 
 
 
@@ -47,19 +48,14 @@ public class SampleInfo {
         compoundButton.setOnAction(actionEvent -> {
 
             ObservableList<Compound> dummyList = FXCollections.observableArrayList();
-
-
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CompoundAdditionTable.fxml"));
             CompoundAdditionTableController controller = new CompoundAdditionTableController(sampleCompounds);
             loader.setController(controller);
 
             try {
                 Scene compoundTableScene = new Scene(loader.load(),600,300);
-                Stage window = new Stage();
-
-                window.setScene(compoundTableScene);
-                window.show();
+                compoundAdditionTableStage.setScene(compoundTableScene);
+                compoundAdditionTableStage.show();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -153,6 +149,7 @@ public class SampleInfo {
     }
 
     public void addCompound(Compound compound) {
+
         sampleCompounds.add(compound);
     }
 

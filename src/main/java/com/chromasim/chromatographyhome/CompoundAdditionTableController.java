@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.IOException;
 
@@ -45,6 +46,8 @@ public class CompoundAdditionTableController {
     @FXML
     public Hyperlink hyperlink;
 
+
+    private Stage MolecularEditorStage = new Stage();
 
     public void initialize(){
 
@@ -133,17 +136,14 @@ public class CompoundAdditionTableController {
 
 
     private void openMolecularEditor() {
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MolecularEditor.fxml"));
         MolecularEditorController controller = new MolecularEditorController();
         loader.setController(controller);
-
         try {
             Scene MolecularEditorScene = new Scene(loader.load(),600,425);
-            Stage window = new Stage();
 
-            window.setScene(MolecularEditorScene);
-            window.show();
+            MolecularEditorStage.setScene(MolecularEditorScene);
+            MolecularEditorStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
