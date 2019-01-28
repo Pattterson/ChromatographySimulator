@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -24,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -51,6 +53,8 @@ public class Controller {
     private static  String MEDIA_URI;
     private static Media sound;
     private static int injectionCounter =1;
+    private Stage mainStage = new Stage();
+    private boolean acquisitionViewShowing=true;
 
 
 
@@ -379,6 +383,59 @@ public class Controller {
 
     public void deleteEventButtonPushed() {
     }
+
+    public void goToAcquisitionView(){
+        if(!acquisitionViewShowing){
+            Controller controller = new Controller();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainChromatograph.fxml"));
+            loader.setController(controller);
+            try {
+                Scene mainChromatograph = new Scene(loader.load(),600,600);
+                mainStage.setScene(mainChromatograph);
+                mainStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+    }
+    public void goToProcessingView(){
+        if(acquisitionViewShowing){
+            mainStage.close();
+            ProcessingController processingController = new ProcessingController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProcessingView.fxml"));
+            loader.setController(processingController);
+            try {
+                    Scene processingScene = new Scene(loader.load(),600,300);
+                    mainStage.setScene(processingScene);
+                    mainStage.show();
+
+                    } catch (IOException e) {
+                    e.printStackTrace();
+
+                    }
+
+
+        }
+
+    }
+
+
 }
 
-
+//    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CompoundAdditionTable.fxml"));
+//    CompoundAdditionTableController controller = new CompoundAdditionTableController(sampleCompounds);
+//            loader.setController(controller);
+//
+//                    try {
+//                    Scene compoundTableScene = new Scene(loader.load(),600,300);
+//                    compoundAdditionTableStage.setScene(compoundTableScene);
+//                    compoundAdditionTableStage.show();
+//
+//                    } catch (IOException e) {
+//                    e.printStackTrace();
+//                    System.out.println("Unable to load Compound table view scene");
+//                    }
+//                    });

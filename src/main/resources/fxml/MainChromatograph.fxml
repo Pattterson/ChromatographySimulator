@@ -5,6 +5,7 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -64,6 +65,12 @@
                         <MenuItem mnemonicParsing="false" text="Action 1" />
                     </items>
                 </Menu>
+            <Menu mnemonicParsing="false" text="View">
+              <items>
+                  <CheckMenuItem mnemonicParsing="false" selected="true" text="Acquisition" onAction="#goToAcquisitionView" />
+                  <CheckMenuItem mnemonicParsing="false" text="Processing" onAction="#goToProcessingView" />
+              </items>
+            </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
                         <MenuItem fx:id="LaceReboot" mnemonicParsing="false" onAction="#laceReboot" text="Reboot LACE" />
