@@ -47,7 +47,6 @@ public class InjectionInfo {
             StringBuilder style = new StringBuilder();
             style.append("-fx-stroke: black; \n  -fx-stroke-width: 1px;");
             n.setStyle(style.toString());
-
         });
 
     }

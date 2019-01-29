@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -122,19 +123,6 @@ public class Controller {
     int injectionNumber = 1;
 
 
-//Not used
-//    public void acquisitionSpeedChange(){
-//        System.out.println("fired");
-//        int speed = (int) speedSlider.getValue();
-//        if (speed==1){
-//            speedIndicator.setText("Real Time (1X)");
-//        }
-//        else {
-//            speedIndicator.setText("Accelerated (" + speed +"X)");
-//        }
-//    }
-
-
     public void initialize() throws URISyntaxException {
         URL url = getClass().getResource("/music.wav");
         try {
@@ -143,17 +131,10 @@ public class Controller {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-//        file = new File(getClass().getClassLoader().getResource("ChromatographyHome/music.wav").toURI());
-
-//        MEDIA_URI = file.toURI().toString();
-//        sound =  new Media(MEDIA_URI);
 
         newEventButton.setDisable(true);
         deleteEventButton.setDisable(true);
 
-
-//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete " + "fred" + " ?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
-//        alert.showAndWait();
 
 
         //initialize integration table
@@ -178,18 +159,6 @@ public class Controller {
         sampleTable.setEditable(true);
         sampleNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         sampleTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-        //convert that double to a string, we can parse later.
-// injectionVolumeColumn.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Double>() {
-//            @Override
-//            public String toString(Double aDouble) {
-//                return null;
-//            }
-//
-//            @Override
-//            public Double fromString(String s) {
-//                return null;
-//            }
 
 
         xAxis.autoRangingProperty().setValue(true);
@@ -241,16 +210,6 @@ public class Controller {
 
         }
 
-
-//        ObservableList<Compound> compoundList = FXCollections.observableArrayList();
-//        compoundList = sampleList.get(0).getSampleCompounds();
-//
-//        Runnable generateData = new GenerateData(lineChart, series,sampleList, speedSlider);
-//        Thread thread = new Thread(generateData);
-//        thread.setDaemon(true);
-//        thread.start();
-
-
     }
 
     public void integrate() {
@@ -265,10 +224,6 @@ public class Controller {
             rawData[i][0] = series2.getData().get(i).getXValue().doubleValue();
             rawData[i][1] = series2.getData().get(i).getYValue().doubleValue();
         }
-//        Runnable dataRegression = new DataRegression(RawData,4);
-//        Thread thread = new Thread(dataRegression);
-//        thread.setDaemon(true);
-//        thread.start();
 
         Runnable dataIntegration = new DataIntegration(4, 5, rawData, 3, rawData, lineChart);
         Thread thread = new Thread(dataIntegration);
@@ -382,18 +337,3 @@ public class Controller {
 
 
 }
-
-//    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CompoundAdditionTable.fxml"));
-//    CompoundAdditionTableController controller = new CompoundAdditionTableController(sampleCompounds);
-//            loader.setController(controller);
-//
-//                    try {
-//                    Scene compoundTableScene = new Scene(loader.load(),600,300);
-//                    compoundAdditionTableStage.setScene(compoundTableScene);
-//                    compoundAdditionTableStage.show();
-//
-//                    } catch (IOException e) {
-//                    e.printStackTrace();
-//                    System.out.println("Unable to load Compound table view scene");
-//                    }
-//                    });

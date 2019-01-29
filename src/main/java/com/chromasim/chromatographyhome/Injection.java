@@ -66,7 +66,6 @@ public class Injection implements Runnable{
                     } else if (injectionInfo.getSpeedSlider().valueProperty().intValue() != speedSliderValue) {
                         timer.cancel();
                         timer.purge();
-                        System.out.println("speed slider update fired");
                         startGenerationTimer();   // start the time again with a new period time
                     }
                 }
@@ -135,12 +134,10 @@ public class Injection implements Runnable{
 
 
     private double calculateResponseAtDatum(double time){
-        System.out.println("time is " + time);
         double response = NoiseGenerator.generateNoise();
-        System.out.println("response = " + response);
         if(injectionInfo.getCompounds().size()==0){
 //            System.out.println("there are no compounds in the list");
-            System.out.println("compounds are 0, therefore noise only" + response);
+
             return response;
 
 
