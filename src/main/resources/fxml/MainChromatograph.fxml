@@ -67,7 +67,7 @@
                 </Menu>
             <Menu mnemonicParsing="false" text="View">
               <items>
-                  <CheckMenuItem mnemonicParsing="false" selected="true" text="Acquisition" onAction="#goToAcquisitionView" />
+                  <CheckMenuItem mnemonicParsing="false" selected="true" text="Acquisition" />
                   <CheckMenuItem mnemonicParsing="false" text="Processing" onAction="#goToProcessingView" />
               </items>
             </Menu>

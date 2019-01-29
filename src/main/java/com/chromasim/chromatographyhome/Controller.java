@@ -1,5 +1,6 @@
 package com.chromasim.chromatographyhome;
 
+import com.sun.javafx.stage.StageHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -33,8 +34,6 @@ import java.util.Collections;
 import java.util.List;
 
 
-
-
 //for a second stage (for reference)
 //public void changeScreenButtonPushed(ActionEvent event) throws IOException
 //        {
@@ -50,12 +49,12 @@ import java.util.List;
 public class Controller {
     //must be updated before deploying to getclass.getresource();
     private static File file;
-    private static  String MEDIA_URI;
+    private static String MEDIA_URI;
     private static Media sound;
-    private static int injectionCounter =1;
-    private Stage mainStage = new Stage();
-    private boolean acquisitionViewShowing=true;
-
+    private static int injectionCounter = 1;
+    private Stage mainStage;
+    private boolean acquisitionViewShowing = true;
+    private Scene processingScene;
 
 
     @FXML
@@ -86,29 +85,29 @@ public class Controller {
     private TableView<IntegrationEvent> eventsTable;
 
     @FXML
-    private TableColumn<IntegrationEvent,ComboBox> eventColumn;
+    private TableColumn<IntegrationEvent, ComboBox> eventColumn;
 
     @FXML
-    private TableColumn<IntegrationEvent,Double> eventStartColumn;
+    private TableColumn<IntegrationEvent, Double> eventStartColumn;
 
     @FXML
-    private TableColumn<IntegrationEvent,Double> eventEndColumn;
+    private TableColumn<IntegrationEvent, Double> eventEndColumn;
 
     @FXML
-    private TableColumn<SampleInfo,Integer> sampleNumberColumn;
+    private TableColumn<SampleInfo, Integer> sampleNumberColumn;
 
     @FXML
-    private TableColumn<SampleInfo,String> sampleNameColumn;
+    private TableColumn<SampleInfo, String> sampleNameColumn;
 
     @FXML
-    private TableColumn<SampleInfo,ComboBox> sampleTypeColumn;
+    private TableColumn<SampleInfo, ComboBox> sampleTypeColumn;
 
     @FXML
-    private TableColumn<SampleInfo,Double> injectionVolumeColumn;
+    private TableColumn<SampleInfo, Double> injectionVolumeColumn;
 
     @FXML
     private TableView<SampleInfo> sampleTable;
-    
+
     @FXML
     private Button newSampleButton;
     @FXML
@@ -118,13 +117,9 @@ public class Controller {
     @FXML
     private Button deleteEventButton;
     @FXML
-    private TableColumn<SampleInfo,Button> compoundsColumn;
+    private TableColumn<SampleInfo, Button> compoundsColumn;
 
-     int injectionNumber = 1;
-
-
-
-
+    int injectionNumber = 1;
 
 
 //Not used
@@ -157,8 +152,6 @@ public class Controller {
         deleteEventButton.setDisable(true);
 
 
-
-
 //        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete " + "fred" + " ?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
 //        alert.showAndWait();
 
@@ -167,19 +160,19 @@ public class Controller {
         initializeIntegrationEvents();
         eventsTable.setItems(eventsList);
 
-        eventColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent,ComboBox>("eventType"));
-        eventStartColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent,Double>("eventStartTime"));
-        eventEndColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent,Double>("eventEndTime"));
+        eventColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent, ComboBox>("eventType"));
+        eventStartColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent, Double>("eventStartTime"));
+        eventEndColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent, Double>("eventEndTime"));
 
         //initialize sample table
         addInjectionDummyData();
         sampleTable.setItems(sampleList);
 
-        sampleNumberColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,Integer>("SampleNumber"));
-        sampleNameColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,String>("SampleName"));
-        sampleTypeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,ComboBox>("sampleType"));
-        injectionVolumeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,Double>("injectionVolume"));
-        compoundsColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo,Button>("compoundButton"));
+        sampleNumberColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, Integer>("SampleNumber"));
+        sampleNameColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, String>("SampleName"));
+        sampleTypeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, ComboBox>("sampleType"));
+        injectionVolumeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, Double>("injectionVolume"));
+        compoundsColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, Button>("compoundButton"));
 
 
         sampleTable.setEditable(true);
@@ -199,20 +192,8 @@ public class Controller {
 //            }
 
 
-
-
-
-
-
-
-
-
-
-
-
         xAxis.autoRangingProperty().setValue(true);
         yAxis.autoRangingProperty().setValue(true);
-
 
 
         lineChart.setVisible(true);
@@ -248,22 +229,17 @@ public class Controller {
         }
 
 
-        if(injectionCounter<=sampleList.size()){
-            InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(injectionCounter-1).getSampleCompounds(),33,5,speedSlider,
-                    injectionCounter,lineChart,new XYChart.Series<>(),startButton,5);
+        if (injectionCounter <= sampleList.size()) {
+            InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(injectionCounter - 1).getSampleCompounds(), 33, 5, speedSlider,
+                    injectionCounter, lineChart, new XYChart.Series<>(), startButton, 5);
             injectionCounter++;
             Injection injection = new Injection(injectionInfo);
             injection.run();
 
-        }
-        else {
+        } else {
             startButton.setDisable(true);
 
         }
-
-
-
-
 
 
 //        ObservableList<Compound> compoundList = FXCollections.observableArrayList();
@@ -294,13 +270,10 @@ public class Controller {
 //        thread.setDaemon(true);
 //        thread.start();
 
-        Runnable dataIntegration = new DataIntegration(4,5,rawData,3,rawData,lineChart);
+        Runnable dataIntegration = new DataIntegration(4, 5, rawData, 3, rawData, lineChart);
         Thread thread = new Thread(dataIntegration);
         thread.setDaemon(true);
         thread.start();
-
-
-
 
 
     }
@@ -308,18 +281,14 @@ public class Controller {
     public void button3Clicked() {
 
 
-
-
-
-
     }
 
-    private void initializeIntegrationEvents(){
-        IntegrationEvent defaultEvent1 = new IntegrationEvent(3.4,4.8 );
-        IntegrationEvent defaultEvent2 = new IntegrationEvent(3.5,4.9 );
-        IntegrationEvent defaultEvent3 = new IntegrationEvent(3.6,4.1 );
-        IntegrationEvent defaultEvent4 = new IntegrationEvent(3.7,4.2 );
-        IntegrationEvent defaultEvent5 = new IntegrationEvent(3.8,4.3 );
+    private void initializeIntegrationEvents() {
+        IntegrationEvent defaultEvent1 = new IntegrationEvent(3.4, 4.8);
+        IntegrationEvent defaultEvent2 = new IntegrationEvent(3.5, 4.9);
+        IntegrationEvent defaultEvent3 = new IntegrationEvent(3.6, 4.1);
+        IntegrationEvent defaultEvent4 = new IntegrationEvent(3.7, 4.2);
+        IntegrationEvent defaultEvent5 = new IntegrationEvent(3.8, 4.3);
 
         eventsList.add(defaultEvent1);
         eventsList.add(defaultEvent2);
@@ -331,9 +300,9 @@ public class Controller {
 
 
     private void addInjectionDummyData() {
-        SampleInfo dummySample1 = new SampleInfo("Working Standard",(double)5);
-        SampleInfo dummySample2 = new SampleInfo("Sensitivity",(double)5);
-        SampleInfo dummySample3 = new SampleInfo(" Lot 749353",(double)10);
+        SampleInfo dummySample1 = new SampleInfo("Working Standard", (double) 5);
+        SampleInfo dummySample2 = new SampleInfo("Sensitivity", (double) 5);
+        SampleInfo dummySample3 = new SampleInfo(" Lot 749353", (double) 10);
         sampleList.add(dummySample1);
         sampleList.add(dummySample2);
         sampleList.add(dummySample3);
@@ -343,7 +312,7 @@ public class Controller {
 
 
     public void newSampleButtonPushed() {
-        SampleInfo sampleInfo = new SampleInfo("",(double)0);
+        SampleInfo sampleInfo = new SampleInfo("", (double) 0);
         sampleTable.getItems().add(sampleInfo);
     }
 
@@ -351,25 +320,20 @@ public class Controller {
 
         ObservableList<SampleInfo> selectedRows = sampleTable.getSelectionModel().getSelectedItems();
         ObservableList<SampleInfo> allSamples = sampleTable.getItems();
-        for(SampleInfo sample: selectedRows){
+        for (SampleInfo sample : selectedRows) {
             int sampleNumberRemoved = sample.getSampleNumber();
             SampleInfo.sampleCounter--;
             allSamples.remove(sample);
 
-            for(SampleInfo remainingSample: sampleList){
-                if (remainingSample.getSampleNumber()>sampleNumberRemoved){
-                    remainingSample.setSampleNumber(remainingSample.getSampleNumber()-1);
-
+            for (SampleInfo remainingSample : sampleList) {
+                if (remainingSample.getSampleNumber() > sampleNumberRemoved) {
+                    remainingSample.setSampleNumber(remainingSample.getSampleNumber() - 1);
 
 
                 }
 
 
-
-
-
-        }
-
+            }
 
 
         }
@@ -384,41 +348,35 @@ public class Controller {
     public void deleteEventButtonPushed() {
     }
 
-    public void goToAcquisitionView(){
-        if(!acquisitionViewShowing){
-            Controller controller = new Controller();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainChromatograph.fxml"));
-            loader.setController(controller);
-            try {
-                Scene mainChromatograph = new Scene(loader.load(),600,600);
-                mainStage.setScene(mainChromatograph);
-                mainStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
-        }
+    public void goToProcessingView() {
 
+        Scene mainScene = StageHelper.getStages().get(0).getScene();
+        mainStage = StageHelper.getStages().get(0);
 
-    }
-    public void goToProcessingView(){
-        if(acquisitionViewShowing){
-            mainStage.close();
-            ProcessingController processingController = new ProcessingController();
+//            mainStage.hide();
+        if (ProcessingController.getProcessingControllerCounter() == 0) {
+            ProcessingController processingController = new ProcessingController(mainStage, mainScene);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProcessingView.fxml"));
             loader.setController(processingController);
             try {
-                    Scene processingScene = new Scene(loader.load(),600,300);
-                    mainStage.setScene(processingScene);
-                    mainStage.show();
-
-                    } catch (IOException e) {
-                    e.printStackTrace();
-
-                    }
+                processingScene = new Scene(loader.load());
+                mainStage.setWidth(mainStage.getWidth());
+                mainStage.setHeight(mainStage.getHeight());
+                mainStage.setScene(processingScene);
 
 
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
+        } else {
+
+            mainStage.setWidth(mainStage.getWidth());
+            mainStage.setHeight(mainStage.getHeight());
+            mainStage.setScene(processingScene);
         }
+
 
     }
 

@@ -18,6 +18,7 @@ public class Peak {
 
     public void setPeakStartResponse(double peakStartResponse) {
         this.peakStartResponse = peakStartResponse;
+        System.out.println();
     }
 
     public void setPeakApexTime(double peakApexTime) {
