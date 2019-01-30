@@ -26,8 +26,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.chart.AreaChart?>
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chromasim.chromatographyhome.Controller">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chromasim.chromatographyhome.Controller">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -129,15 +128,15 @@
                         <Insets />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="newEventButton" disable="true" mnemonicParsing="false" onAction="#newEventButtonPushed" text="New Event" GridPane.rowIndex="7" />
-                  <Button fx:id="deleteEventButton" disable="true" mnemonicParsing="false" onAction="#deleteEventButtonPushed" text="Delete Event" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                  <Button fx:id="newEventButton" mnemonicParsing="false" onAction="#newEventButtonPushed" text="New Event" GridPane.rowIndex="7" />
+                  <Button fx:id="deleteEventButton" mnemonicParsing="false" onAction="#deleteEventButtonPushed" text="Delete Event" GridPane.columnIndex="1" GridPane.rowIndex="7">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
                   </Button>
                       </children>
                   </GridPane>
-                <GridPane>
+                <GridPane fx:id="chartContainer">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                     </columnConstraints>

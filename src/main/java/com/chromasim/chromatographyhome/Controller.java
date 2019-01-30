@@ -1,26 +1,36 @@
 package com.chromasim.chromatographyhome;
 
 import com.sun.javafx.stage.StageHelper;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -56,6 +66,10 @@ public class Controller {
     private Stage mainStage;
     private boolean acquisitionViewShowing = true;
     private Scene processingScene;
+    final Rectangle zoomRect = new Rectangle();
+    final Polygon polygon = new Polygon();
+    private double[][] polygonPoints = new double[4][2];
+
 
 
     @FXML
@@ -119,6 +133,10 @@ public class Controller {
     private Button deleteEventButton;
     @FXML
     private TableColumn<SampleInfo, Button> compoundsColumn;
+    @FXML
+    private GridPane chartContainer;
+
+
 
     int injectionNumber = 1;
 
@@ -132,8 +150,6 @@ public class Controller {
             e.printStackTrace();
         }
 
-        newEventButton.setDisable(true);
-        deleteEventButton.setDisable(true);
 
 
 
@@ -180,6 +196,13 @@ public class Controller {
                 }
             }
         });
+
+
+
+        zoomRect.setManaged(false);
+        zoomRect.setFill(Color.LIGHTSEAGREEN.deriveColor(0, 1, 1, 0.5));
+        chartContainer.getChildren().add(zoomRect);
+        setUpZooming(zoomRect,lineChart);
 
     }
 
@@ -296,11 +319,21 @@ public class Controller {
     }
 
     public void newEventButtonPushed() {
+//        doZoom(zoomRect, lineChart);
 
     }
 
 
     public void deleteEventButtonPushed() {
+        final NumberAxis xAxis = (NumberAxis)lineChart.getXAxis();
+        xAxis.setLowerBound(0);
+        xAxis.setUpperBound(1000);
+        final NumberAxis yAxis = (NumberAxis)lineChart.getYAxis();
+        yAxis.setLowerBound(0);
+        yAxis.setUpperBound(1000);
+
+        zoomRect.setWidth(0);
+        zoomRect.setHeight(0);
     }
 
 
@@ -334,6 +367,97 @@ public class Controller {
 
 
     }
+
+    private void setUpZooming(final Rectangle rect, final Node zoomingNode) {
+        double[][] zoomRange = new double[2][2];
+        final ObjectProperty<Point2D> mouseAnchor = new SimpleObjectProperty<>();
+        zoomingNode.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                Point2D pointInScene = new Point2D(event.getSceneX(), event.getSceneY());
+                Axis<Number> xAxis = lineChart.getXAxis();
+                Axis<Number> yAxis = lineChart.getYAxis();
+                double xPosInAxis = xAxis.sceneToLocal(new Point2D(pointInScene.getX(), 0)).getX();
+                double yPosInAxis = yAxis.sceneToLocal(new Point2D(0, pointInScene.getY())).getY();
+                double x = xAxis.getValueForDisplay(xPosInAxis).doubleValue();
+                double y = yAxis.getValueForDisplay(yPosInAxis).doubleValue();
+                System.out.println(x+ " " + y);
+                zoomRange[0][0] = x;
+                zoomRange[0][1] = y;
+
+
+                mouseAnchor.set(new Point2D(event.getX(), event.getY()));
+                rect.setWidth(0);
+                rect.setHeight(0);
+
+            }
+        });
+        zoomingNode.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+//                double x = event.getX();
+//                double y = event.getY();
+//                rect.setX(Math.min(x, mouseAnchor.get().getX()));
+//                rect.setY(Math.min(y, mouseAnchor.get().getY()));
+//                rect.setWidth(Math.abs(x - mouseAnchor.get().getX()));
+//                rect.setHeight(Math.abs(y - mouseAnchor.get().getY()));
+
+                Point2D pointInScene = new Point2D(event.getSceneX(), event.getSceneY());
+                Axis<Number> xAxis = lineChart.getXAxis();
+                Axis<Number> yAxis = lineChart.getYAxis();
+                double xPosInAxis = xAxis.sceneToLocal(new Point2D(pointInScene.getX(), 0)).getX();
+                double yPosInAxis = yAxis.sceneToLocal(new Point2D(0, pointInScene.getY())).getY();
+                double x = xAxis.getValueForDisplay(xPosInAxis).doubleValue();
+                double y = yAxis.getValueForDisplay(yPosInAxis).doubleValue();
+
+                double xRect = event.getX();
+                double yRect = event.getY();
+
+                double mouseX = mouseAnchor.get().getX();
+                double mouseY = mouseAnchor.get().getY();
+                rect.setX(Math.min(xRect, mouseX));
+                rect.setY(Math.min(yRect, mouseY));
+                rect.setWidth(Math.abs(xRect - mouseX));
+                rect.setHeight(Math.abs(yRect - mouseY));
+                zoomRange[1][0] = x;
+                zoomRange[1][1] = y;
+
+
+
+                System.out.println(x + " " + y);
+            }
+
+
+
+        });
+
+        zoomingNode.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("we will zoom from " + zoomRange[0][0] + " , " + zoomRange[0][1] +
+                " to " + zoomRange[1][0] + " , " + zoomRange[1][1]);
+                doZoom(zoomRange);
+            }
+        });
+    }
+
+    private void doZoom(double[][] zoomRange) {
+        xAxis.setAutoRanging(false);
+        yAxis.setAutoRanging(false);
+
+
+
+        xAxis.setLowerBound(Math.min(zoomRange[0][0],zoomRange[1][0]));
+        yAxis.setLowerBound(Math.min(zoomRange[0][1],zoomRange[1][1]));
+        xAxis.setUpperBound(Math.max(zoomRange[0][0],zoomRange[1][0]));;
+        yAxis.setUpperBound(Math.max(zoomRange[0][1],zoomRange[1][1]));
+
+        zoomRect.setWidth(0);
+        zoomRect.setHeight(0);
+    }
+
 
 
 }
