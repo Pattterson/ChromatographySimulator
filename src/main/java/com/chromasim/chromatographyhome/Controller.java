@@ -67,8 +67,7 @@ public class Controller {
     private boolean acquisitionViewShowing = true;
     private Scene processingScene;
     final Rectangle zoomRect = new Rectangle();
-    final Polygon polygon = new Polygon();
-    private double[][] polygonPoints = new double[4][2];
+
 
 
 
@@ -319,7 +318,8 @@ public class Controller {
     }
 
     public void newEventButtonPushed() {
-//        doZoom(zoomRect, lineChart);
+        xAxis.setAutoRanging(true);
+        yAxis.setAutoRanging(true);
 
     }
 
@@ -405,8 +405,6 @@ public class Controller {
 //                rect.setHeight(Math.abs(y - mouseAnchor.get().getY()));
 
                 Point2D pointInScene = new Point2D(event.getSceneX(), event.getSceneY());
-                Axis<Number> xAxis = lineChart.getXAxis();
-                Axis<Number> yAxis = lineChart.getYAxis();
                 double xPosInAxis = xAxis.sceneToLocal(new Point2D(pointInScene.getX(), 0)).getX();
                 double yPosInAxis = yAxis.sceneToLocal(new Point2D(0, pointInScene.getY())).getY();
                 double x = xAxis.getValueForDisplay(xPosInAxis).doubleValue();
@@ -416,7 +414,11 @@ public class Controller {
                 double yRect = event.getY();
 
                 double mouseX = mouseAnchor.get().getX();
+
                 double mouseY = mouseAnchor.get().getY();
+
+                System.out.println(mouseX + " " + mouseY);
+
                 rect.setX(Math.min(xRect, mouseX));
                 rect.setY(Math.min(yRect, mouseY));
                 rect.setWidth(Math.abs(xRect - mouseX));
