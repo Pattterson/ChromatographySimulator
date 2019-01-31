@@ -63,7 +63,7 @@
                 </Menu>
             <Menu mnemonicParsing="false" text="View">
               <items>
-                  <CheckMenuItem mnemonicParsing="false" onAction="#" selected="true" text="Acquisition" />
+                  <CheckMenuItem mnemonicParsing="false" onAction="#gotoAcquisitionView" selected="true" text="Acquisition" />
                   <CheckMenuItem mnemonicParsing="false" text="Processing " />
               </items>
             </Menu>
@@ -126,7 +126,7 @@
                               <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                                    <LineChart id="lineChart" fx:id="lineChart" animated="false" createSymbols="false" legendVisible="false" prefHeight="5760.0" prefWidth="3940.0" title="Chromatogram">
+                                    <LineChart id="lineChart" fx:id="lineChart" animated="false" createSymbols="false" legendVisible="false" prefHeight="5760.0" prefWidth="3940.0" >
                                         <xAxis>
                                             <NumberAxis autoRanging="false" label="Time (seconds)" prefHeight="39.0" prefWidth="281.0" side="BOTTOM" fx:id="xAxis" />
                                         </xAxis>

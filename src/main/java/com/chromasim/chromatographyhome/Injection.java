@@ -88,6 +88,7 @@ public class Injection implements Runnable{
                     public void run() {
                         synchronized (pointsToAdd) {
                             injectionInfo.getSeries().getData().addAll(pointsToAdd);
+
                             pointsToAdd.clear();
 
                         }

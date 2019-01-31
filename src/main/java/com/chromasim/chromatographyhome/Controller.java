@@ -66,7 +66,9 @@ public class Controller {
     private Stage mainStage;
     private boolean acquisitionViewShowing = true;
     private Scene processingScene;
+    private ArrayList<InjectionInfo> injectionDataList = new ArrayList<>();
     final Rectangle zoomRect = new Rectangle();
+
 
 
 
@@ -178,8 +180,6 @@ public class Controller {
 
         xAxis.autoRangingProperty().setValue(true);
         yAxis.autoRangingProperty().setValue(true);
-
-
         lineChart.setVisible(true);
         startButton.setDisable(false);
 
@@ -221,8 +221,13 @@ public class Controller {
 
 
         if (injectionCounter <= sampleList.size()) {
+
             InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(injectionCounter - 1).getSampleCompounds(), 33, 5, speedSlider,
                     injectionCounter, lineChart, new XYChart.Series<>(), startButton, 5);
+
+            injectionDataList.add(injectionInfo);
+
+            //Controller does not need it's own injectionCounter, use one in injectionInfo instead
             injectionCounter++;
             Injection injection = new Injection(injectionInfo);
             injection.run();
@@ -344,7 +349,7 @@ public class Controller {
 
 //            mainStage.hide();
         if (ProcessingController.getProcessingControllerCounter() == 0) {
-            ProcessingController processingController = new ProcessingController(mainStage, mainScene);
+            ProcessingController processingController = new ProcessingController(mainStage, mainScene,injectionDataList);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProcessingView.fxml"));
             loader.setController(processingController);
             try {
