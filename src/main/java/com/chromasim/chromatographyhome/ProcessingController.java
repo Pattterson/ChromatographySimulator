@@ -19,6 +19,8 @@ public class ProcessingController {
     @FXML
     private LineChart<Number,Number> lineChart;
 
+    private ArrayList<InjectionInfo> injectionDataList;
+
 
 
 
@@ -28,19 +30,26 @@ public class ProcessingController {
 
     public ProcessingController(Stage mainStage, Scene mainScene, ArrayList<InjectionInfo> injectionDataList) {
 
-        XYChart.Series series = new XYChart.Series<Number,Number>();
-        series.getData().add(new XYChart.Data<Number,Number>(3,2));
-        series.getData().add(new XYChart.Data<Number,Number>(5,7));
-        series.getData().add(new XYChart.Data<Number,Number>(2,5));
-        lineChart.getData().add(series);
 
-        lineChart.setTitle("chromatogram");
+
+
 //        lineChart.getData().add(injectionDataList.get(0).getSeries());
         this.mainStage=mainStage;
         this.mainScene=mainScene;
+        this.injectionDataList = injectionDataList;
         processingControllerCounter++;
 
     }
+
+    public void initialize(){
+
+         XYChart.Series<Number,Number> series = new XYChart.Series<Number,Number>(injectionDataList.get(0).getSeries().getData());
+        lineChart.getData().add(series);
+        System.out.println("fired1");
+        lineChart.setTitle("IAMPOTATO");
+        System.out.println("fired2");
+    }
+
 
     public static int getProcessingControllerCounter() {
         return processingControllerCounter;

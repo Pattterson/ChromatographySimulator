@@ -85,6 +85,7 @@ public class Compound {
     }
 
     public void setResponse(String smiles) {
+
         this.response = calculateResponse(smiles);
     }
 
