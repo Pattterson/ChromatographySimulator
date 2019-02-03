@@ -34,16 +34,41 @@ public class Injection implements Runnable{
 
         Timer timer = new Timer(true);
 
-
         timer.scheduleAtFixedRate(new TimerTask() {
 
             int speedSliderValue =  injectionInfo.getSpeedSlider().valueProperty().intValue();
             public void run() {
+                generate();
+
+                if (samplingPoint > injectionInfo.getPointsToCollect() || injectionInfo.getInjectionAbandoned()) {
+                    timer.cancel();
+                    timer.purge();
+
+
+                    //if speedSliderValue has changed
+                }
+                else if(injectionInfo.getInstantaneousInjectionFlag()){
+                    timer.cancel();
+                    timer.purge();
+                    while(samplingPoint<=injectionInfo.getPointsToCollect()){
+                        generate();
+                    }
+
+
+                }
+
+                else if (injectionInfo.getSpeedSlider().valueProperty().intValue() != speedSliderValue) {
+                    timer.cancel();
+                    timer.purge();
+                    startGenerationTimer();   // start the time again with a new period time
+                }
+
+
+            }
+
+            private void generate() {
                 //If sampling rate is 5(hz), we collect 5 points per second, therefore time will increment by 0.2
                 double time = samplingPoint * 1/injectionInfo.getSamplingRate();
-
-
-
 
                 double response = calculateResponseAtDatum(time);
                 synchronized (pointsToAdd) {
@@ -52,27 +77,12 @@ public class Injection implements Runnable{
                     samplingPoint += 1;
 
 
-                    if (samplingPoint > injectionInfo.getPointsToCollect()) {
-                        timer.cancel();
-                        timer.purge();
-                        //not sure what this is
-//                        injectionCounter++;
-//                        GenerateDatum generateNextDatum = new GenerateDatum();
-//                        compounds=sampleInfo.get(injectionCounter-1).getSampleCompounds();
-//                        startGenerationTimer(speedSliderValue * 200, generateDatum);
 
-
-                        //if speedSliderValue has changed
-                    } else if (injectionInfo.getSpeedSlider().valueProperty().intValue() != speedSliderValue) {
-                        timer.cancel();
-                        timer.purge();
-                        startGenerationTimer();   // start the time again with a new period time
-                    }
                 }
             }
 
-//            period is (1/sampling rate(hz)) * 1000(ms/s) / speed slider modulation
-        }, 0, (int)(1 / injectionInfo.getSamplingRate() * 1000 / injectionInfo.getSpeedSlider().valueProperty().intValue()));
+//            frequency is (1/sampling rate(hz)) * 1000(ms/s) / speed slider modulation
+        }, 0, (long)(1 / injectionInfo.getSamplingRate() * 1000 / injectionInfo.getSpeedSlider().valueProperty().longValue()));
     }
 
 
@@ -96,7 +106,7 @@ public class Injection implements Runnable{
                     }
                 });
 
-                if (injectionInfo.getSeries().getData().size()>injectionInfo.getPointsToCollect()) {
+                if (injectionInfo.getSeries().getData().size()>injectionInfo.getPointsToCollect() || injectionInfo.getInjectionAbandoned()) {
                     timer.cancel();
                     timer.purge();
                     System.out.println("output timer has stopped");
