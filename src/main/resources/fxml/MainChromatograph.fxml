@@ -144,8 +144,8 @@
                                 <Font size="18.0" fx:id="x1" />
                      </font></Label>
                         <Button fx:id="startButton" layoutX="21.0" layoutY="37.0" mnemonicParsing="false" onAction="#startButtonClicked" text="Start" />
-                        <Button disable="true" layoutX="21.0" layoutY="64.0" mnemonicParsing="false" text="Abort Run" textFill="RED" />
-                        <Button disable="true" layoutX="21.0" layoutY="91.0" mnemonicParsing="false" text="Inject Next sample" />
+                        <Button disable="false" layoutX="21.0" layoutY="64.0" mnemonicParsing="false" text="Abandon Injection" textFill="RED" onAction="#abandonInjection" />
+                        <Button disable="false" layoutX="21.0" layoutY="91.0" mnemonicParsing="false" text="Finish and Inject Next Sample" onAction="#finishInjection" />
                         <Button disable="true" layoutX="21.0" layoutY="118.0" mnemonicParsing="false" text="Pause Set" />
                         <Button disable="true" layoutX="21.0" layoutY="145.0" mnemonicParsing="false" text="Gerstel" />
                         <Button layoutX="11.0" layoutY="270.0" mnemonicParsing="false" onMouseClicked="#integrate" text="AutoIntegrate" />
