@@ -18,15 +18,14 @@ public class InjectionInfo {
     private double runTime; //in minutes
     private double samplingRate;
     private Slider speedSlider;
-    private static int injectionCounter =1;
-    private final int injectionNumber ;
+    static int injectionCounter =1;
     private LineChart<Number,Number> lineChart;
     private XYChart.Series<Number,Number> series;
     private Button nextInjection;
     private int pointsToCollect;
     private int refreshRate; //chromatogram refresh / add data rate, in seconds
 
-    public InjectionInfo(ObservableList<Compound> compounds, double runTime, double samplingRate, Slider speedSlider, int injectionNumber, LineChart<Number, Number> lineChart, XYChart.Series<Number, Number> series, Button nextInjection, int refreshRate) {
+    public InjectionInfo(ObservableList<Compound> compounds, double runTime, double samplingRate, Slider speedSlider, LineChart<Number, Number> lineChart, XYChart.Series<Number, Number> series, Button nextInjection, int refreshRate) {
         injectionAbandoned = false;
         this.compounds = compounds;
         this.runTime = runTime;
@@ -34,7 +33,6 @@ public class InjectionInfo {
         this.speedSlider = speedSlider;
         this.refreshRate = refreshRate;
 
-        this.injectionNumber = injectionNumber;
         injectionCounter++;
 
         this.lineChart = lineChart;

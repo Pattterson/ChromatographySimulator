@@ -64,7 +64,6 @@ public class Controller {
     private static File file;
     private static String MEDIA_URI;
     private static Media sound;
-    private static int injectionCounter = 1;
     private Stage mainStage;
     private boolean acquisitionViewShowing = true;
     private Scene processingScene;
@@ -198,23 +197,24 @@ public class Controller {
     }
 
     public void startButtonClicked() {
-        if (injectionCounter == 1) {
+        if (InjectionInfo.injectionCounter == 1) {
             mediaPlayer.play();
+
         }
         lineChartController.getxAxis().setAutoRanging(true);
         lineChartController.getyAxis().setAutoRanging(true);
+        int injectionNumber = InjectionInfo.injectionCounter;
 
 
 
-        if (injectionCounter <= sampleList.size()) {
+        if (injectionNumber <= sampleList.size()) {
 
-            InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(injectionCounter - 1).getSampleCompounds(), 33, 5, speedSlider,
-                    injectionCounter, lineChartController.getLineChart(), new XYChart.Series<>(), startButton, 5);
+            InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(injectionNumber - 1).getSampleCompounds(), 33, 5, speedSlider,
+                                          lineChartController.getLineChart(), new XYChart.Series<>(), startButton, 5);
 
             injectionDataList.add(injectionInfo);
 
             //Controller does not need it's own injectionCounter, use one in injectionInfo instead
-            injectionCounter++;
             Injection injection = new Injection(injectionInfo);
             injection.run();
 
