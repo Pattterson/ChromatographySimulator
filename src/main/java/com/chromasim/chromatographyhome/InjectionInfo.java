@@ -8,10 +8,14 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 //All information needed to perform one injection (instrument method parameters / sample compounds, etc...
 //will be included in an Injection Info object which is passed to an injection object to actually perform the injection
 public class InjectionInfo {
+
 
     private boolean injectionAbandoned;
     private ObservableList<Compound> compounds;
@@ -19,13 +23,16 @@ public class InjectionInfo {
     private double samplingRate;
     private Slider speedSlider;
     static int injectionCounter =1;
+    private final int thisInjectionNumber;
     private LineChart<Number,Number> lineChart;
     private XYChart.Series<Number,Number> series;
     private Button nextInjection;
     private int pointsToCollect;
     private int refreshRate; //chromatogram refresh / add data rate, in seconds
+    static List<InjectionInfo> injectionList= new ArrayList<>();
 
     public InjectionInfo(ObservableList<Compound> compounds, double runTime, double samplingRate, Slider speedSlider, LineChart<Number, Number> lineChart, XYChart.Series<Number, Number> series, Button nextInjection, int refreshRate) {
+        thisInjectionNumber = injectionCounter;
         injectionAbandoned = false;
         this.compounds = compounds;
         this.runTime = runTime;
@@ -40,6 +47,8 @@ public class InjectionInfo {
         this.nextInjection = nextInjection;
         pointsToCollect = (int)(samplingRate * 60 * runTime + 1); //+1 for time =0 datapoint
 
+        injectionList.add(this);
+
         Platform.runLater(() -> {
             Node n = series.getNode();
             StringBuilder style = new StringBuilder();
@@ -51,6 +60,10 @@ public class InjectionInfo {
 
     public boolean isInjectionAbandoned() {
         return injectionAbandoned;
+    }
+
+    public int getThisInjectionNumber() {
+        return thisInjectionNumber;
     }
 
     public ObservableList<Compound> getCompounds() {
@@ -74,6 +87,15 @@ public class InjectionInfo {
     }
 
     public XYChart.Series<Number, Number> getSeries() {
+
+
+        Platform.runLater(() -> {
+            Node n = series.getNode();
+            StringBuilder style = new StringBuilder();
+            style.append("-fx-stroke: black; \n  -fx-stroke-width: 1px;");
+            n.setStyle(style.toString());
+        });
+
         return series;
     }
 
