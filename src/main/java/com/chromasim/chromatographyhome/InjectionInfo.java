@@ -30,6 +30,7 @@ public class InjectionInfo {
     private int pointsToCollect;
     private int refreshRate; //chromatogram refresh / add data rate, in seconds
     static List<InjectionInfo> injectionList= new ArrayList<>();
+    private boolean instantaneousInjectionFlag = false;
 
     public InjectionInfo(ObservableList<Compound> compounds, double runTime, double samplingRate, Slider speedSlider, LineChart<Number, Number> lineChart, XYChart.Series<Number, Number> series, Button nextInjection, int refreshRate) {
         thisInjectionNumber = injectionCounter;
@@ -58,7 +59,7 @@ public class InjectionInfo {
 
     }
 
-    public boolean isInjectionAbandoned() {
+    public boolean getInjectionAbandoned() {
         return injectionAbandoned;
     }
 
@@ -113,5 +114,18 @@ public class InjectionInfo {
 
     public Button getNextInjection() {
         return nextInjection;
+    }
+
+    public void setInjectionAbandoned(boolean injectionAbandoned) {
+        this.injectionAbandoned = injectionAbandoned;
+    }
+
+    public boolean getInstantaneousInjectionFlag() {
+
+        return instantaneousInjectionFlag;
+    }
+
+    public void setInstantaneousInjectionFlag(boolean instantaneousInjectionFlag){
+        this.instantaneousInjectionFlag = instantaneousInjectionFlag;
     }
 }
