@@ -68,7 +68,7 @@ public class Controller {
     private boolean acquisitionViewShowing = true;
     private Scene processingScene;
     private ArrayList<InjectionInfo> injectionDataList = new ArrayList<>();
-
+    private LineChart<Number,Number> lineChart;
 
 
     @FXML
@@ -135,6 +135,7 @@ public class Controller {
     public void initialize() throws URISyntaxException {
         lineChartController.setController(this);
         chartContainer = lineChartController.getChartContainer();
+        lineChart = lineChartController.getLineChart();
 
         URL url = getClass().getResource("/music.wav");
         try {
@@ -184,6 +185,7 @@ public class Controller {
             }
         });
 
+
     }
 
 
@@ -206,11 +208,10 @@ public class Controller {
         int injectionNumber = InjectionInfo.injectionCounter;
 
 
-
         if (injectionNumber <= sampleList.size()) {
 
             InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(injectionNumber - 1).getSampleCompounds(), 33, 5, speedSlider,
-                                          lineChartController.getLineChart(), new XYChart.Series<>(), startButton, 5);
+                    lineChartController.getLineChart(), new XYChart.Series<>(), startButton, 5);
 
             injectionDataList.add(injectionInfo);
 
@@ -317,11 +318,6 @@ public class Controller {
     }
 
 
-
-
-
-
-
     public void goToProcessingView() {
 
         Scene mainScene = StageHelper.getStages().get(0).getScene();
@@ -354,5 +350,26 @@ public class Controller {
     }
 
 
+    public void getClickedSampleInjection(MouseEvent mouseEvent) {
+        SampleInfo selectedItem = sampleTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            int injectionIndex = selectedItem.getSampleNumber() - 1;
+            if (injectionIndex < InjectionInfo.injectionList.size()) {
 
+                InjectionInfo selectedInjection = InjectionInfo.injectionList.get(injectionIndex);
+                System.out.println(selectedInjection.getCompounds().size());
+                lineChart.getData().clear();
+                lineChart.getData().add(selectedInjection.getSeries());
+
+
+            }
+
+
+        }
+
+
+    }
 }
+
+
+
