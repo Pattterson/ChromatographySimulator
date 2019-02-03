@@ -136,27 +136,7 @@
                   </Button>
                       </children>
                   </GridPane>
-                <GridPane fx:id="chartContainer">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <children>
-                        <LineChart id="lineChart" fx:id="lineChart" animated="false" createSymbols="false" legendVisible="false" prefHeight="576.0" prefWidth="394.0" title="Chromatogram">
-                            <xAxis>
-                                <NumberAxis autoRanging="false" label="Time (seconds)" prefHeight="39.0" prefWidth="281.0" side="BOTTOM" fx:id="xAxis" />
-                            </xAxis>
-                            <yAxis>
-                                <NumberAxis fx:id="yAxis" autoRanging="false" label="Counts" prefHeight="457.0" prefWidth="41.0" side="LEFT" />
-                            </yAxis>
-                     <cursor>
-                        <Cursor fx:constant="CROSSHAIR" />
-                     </cursor>
-                        </LineChart>
-                    </children>
-                </GridPane>
+                <fx:include source="LineChart.fxml" fx:id="lineChart"/>
                 <AnchorPane maxWidth="155.0" minWidth="0.0" prefHeight="549.0">
                     <children>
                         <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Actions" textAlignment="CENTER" textFill="#2448bf" wrapText="false">

@@ -69,7 +69,7 @@ public class Controller {
     private boolean acquisitionViewShowing = true;
     private Scene processingScene;
     private ArrayList<InjectionInfo> injectionDataList = new ArrayList<>();
-    final Rectangle zoomRect = new Rectangle();
+
 
 
     @FXML
@@ -79,15 +79,6 @@ public class Controller {
     private static MediaPlayer mediaPlayer;
     private ObservableList<IntegrationEvent> eventsList = FXCollections.observableArrayList();
     private ObservableList<SampleInfo> sampleList = FXCollections.observableArrayList();
-
-    @FXML
-    private NumberAxis yAxis;
-
-    @FXML
-    private NumberAxis xAxis;
-
-    @FXML
-    private LineChart<Number, Number> lineChart;
 
     @FXML
     private Button startButton;
@@ -133,14 +124,18 @@ public class Controller {
     private Button deleteEventButton;
     @FXML
     private TableColumn<SampleInfo, Button> compoundsColumn;
-    @FXML
+
     private GridPane chartContainer;
 
+    @FXML
+    private LineChartController lineChartController;
 
     int injectionNumber = 1;
 
 
     public void initialize() throws URISyntaxException {
+        lineChartController.setController(this);
+        chartContainer = lineChartController.getChartContainer();
 
         URL url = getClass().getResource("/music.wav");
         try {
@@ -174,9 +169,7 @@ public class Controller {
         sampleNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         sampleTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        xAxis.autoRangingProperty().setValue(false);
-        yAxis.autoRangingProperty().setValue(false);
-        lineChart.setVisible(true);
+
         startButton.setDisable(false);
 
         speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -192,22 +185,13 @@ public class Controller {
             }
         });
 
-
-        zoomRect.setManaged(false);
-        zoomRect.setFill(Color.LIGHTSEAGREEN.deriveColor(0, 1, 1, 0.5));
-        chartContainer.getChildren().add(zoomRect);
-
-
-        setUpZooming(zoomRect);
-        System.out.println(xAxis.getUpperBound());
-
     }
 
 
     public void laceReboot() {
 
 
-        lineChart.setVisible(true);
+        lineChartController.getLineChart().setVisible(true);
         startButton.setDisable(false);
 
 
@@ -217,15 +201,15 @@ public class Controller {
         if (injectionCounter == 1) {
             mediaPlayer.play();
         }
-        xAxis.setAutoRanging(true);
-        yAxis.setAutoRanging(true);
+        lineChartController.getxAxis().setAutoRanging(true);
+        lineChartController.getyAxis().setAutoRanging(true);
 
 
 
         if (injectionCounter <= sampleList.size()) {
 
             InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(injectionCounter - 1).getSampleCompounds(), 33, 5, speedSlider,
-                    injectionCounter, lineChart, new XYChart.Series<>(), startButton, 5);
+                    injectionCounter, lineChartController.getLineChart(), new XYChart.Series<>(), startButton, 5);
 
             injectionDataList.add(injectionInfo);
 
@@ -245,7 +229,7 @@ public class Controller {
 
         //The easiest way to start will be to convert series into array and process the array
         //Eventual goal is to process as a series without explicit conversion to an array
-        XYChart.Series<Number, Number> series2 = lineChart.getData().get(0);
+        XYChart.Series<Number, Number> series2 = lineChartController.getLineChart().getData().get(0);
         double[][] rawData = new double[series2.getData().size()][2];
 
 
@@ -254,7 +238,7 @@ public class Controller {
             rawData[i][1] = series2.getData().get(i).getYValue().doubleValue();
         }
 
-        Runnable dataIntegration = new DataIntegration(4, 5, rawData, 3, rawData, lineChart);
+        Runnable dataIntegration = new DataIntegration(4, 5, rawData, 3, rawData, lineChartController.getLineChart());
         Thread thread = new Thread(dataIntegration);
         thread.setDaemon(true);
         thread.start();
@@ -325,23 +309,17 @@ public class Controller {
     }
 
     public void newEventButtonPushed() {
-        xAxis.setAutoRanging(true);
-        yAxis.setAutoRanging(true);
 
     }
 
 
     public void deleteEventButtonPushed() {
-        final NumberAxis xAxis = (NumberAxis) lineChart.getXAxis();
-        xAxis.setLowerBound(0);
-        xAxis.setUpperBound(1000);
-        final NumberAxis yAxis = (NumberAxis) lineChart.getYAxis();
-        yAxis.setLowerBound(0);
-        yAxis.setUpperBound(1000);
-
-        zoomRect.setWidth(0);
-        zoomRect.setHeight(0);
     }
+
+
+
+
+
 
 
     public void goToProcessingView() {
@@ -375,146 +353,6 @@ public class Controller {
 
     }
 
-    private void setUpZooming(final Rectangle rect) {
-
-        final Node zoomingNode = lineChart;
-
-        //two x,y points to define zooming rectange in lineChart coordinates
-        double[][] zoomRange = new double[2][2];
-        final ObjectProperty<Point2D> mouseAnchorSemiLocal = new SimpleObjectProperty<>();
-        final ObjectProperty<Point2D> mouseAnchorScene = new SimpleObjectProperty<>();
-        final ObjectProperty<Point2D> mouseAnchorLocal = new SimpleObjectProperty<>();
-
-        zoomingNode.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println("mousepressed");
-
-                Point2D pointClicked = new Point2D(event.getSceneX(), event.getSceneY());
-
-                //relative to top left of axial coordinate system
-                double xPosInAxis = xAxis.sceneToLocal(new Point2D(pointClicked.getX(), 0)).getX();
-                double yPosInAxis = yAxis.sceneToLocal(new Point2D(0, pointClicked.getY())).getY();
-
-
-                //cartesian coordinates of event
-                double x1 = xAxis.getValueForDisplay(xPosInAxis).doubleValue(); //coordinates
-                double y1 = yAxis.getValueForDisplay(yPosInAxis).doubleValue(); //coordinates
-
-//              //coordinates of initial clicked (for zooming)
-                zoomRange[0][0] = x1;
-                zoomRange[0][1] = y1;
-
-
-                //local-cartesian coordinates
-                //semiLocal-relative to gridPane
-                //scene-relative to scene
-
-                mouseAnchorSemiLocal.set(new Point2D(event.getX(), event.getY()));
-                mouseAnchorScene.set(new Point2D(event.getSceneX(), event.getSceneY()));
-                mouseAnchorLocal.set(new Point2D(x1, y1));
-
-                rect.setWidth(0);
-                rect.setHeight(0);
-
-            }
-        });
-        zoomingNode.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-
-//                double x = event.getX();
-//                double y = event.getY();
-//                rect.setX(Math.min(x, mouseAnchorSemiLocal.get().getX()));
-//                rect.setY(Math.min(y, mouseAnchorSemiLocal.get().getY()));
-//                rect.setWidth(Math.abs(x - mouseAnchorSemiLocal.get().getX()));
-//                rect.setHeight(Math.abs(y - mouseAnchorSemiLocal.get().getY()));
-
-                Point2D pointInScene = new Point2D(event.getSceneX(), event.getSceneY());
-                final ObjectProperty<Point2D> movingMouseAnchorSemiLocal = new SimpleObjectProperty<>();
-                final ObjectProperty<Point2D> movingMouseAnchorScene = new SimpleObjectProperty<>();
-                final ObjectProperty<Point2D> movingMouseAnchorLocal = new SimpleObjectProperty<>();
-                final ObjectProperty<Point2D> x0PosScene = new SimpleObjectProperty<>();
-                final ObjectProperty<Point2D> x0PosSemiLocal = new SimpleObjectProperty();
-
-                movingMouseAnchorSemiLocal.set(new Point2D(event.getX(), event.getY()));
-                movingMouseAnchorScene.set(new Point2D(event.getSceneX(), event.getSceneY()));
-
-
-                //relative to left of scene
-//                System.out.println(pointInScene.getX());
-                double xPosInGridPane = xAxis.sceneToLocal(new Point2D(pointInScene.getX(), 0)).getX();
-                double yPosInGridPane = yAxis.sceneToLocal(new Point2D(0, pointInScene.getY())).getY();
-
-                double x2 = xAxis.getValueForDisplay(xPosInGridPane).doubleValue(); //coordinates
-                double y2 = yAxis.getValueForDisplay(yPosInGridPane).doubleValue(); //coordinates
-                movingMouseAnchorLocal.set(new Point2D(x2, y2));
-
-                //relative to left of gridpane
-                double xRect = event.getX();
-                double yRect = event.getY();
-
-                //rectange is drawn relative to parent gridPane
-                double anchorX = mouseAnchorSemiLocal.get().getX();
-                double anchorY = mouseAnchorSemiLocal.get().getY();
-
-                //equivalent
-//                    rect.setX(Math.min(mouseAnchorSemiLocal.get().getX(), movingMouseAnchorSemiLocal.get().getX()));
-
-                //0.001: added to XRect since otherwise when dragging from lower right to upper left, rectangle node interferes
-                //with setOnMouseClicked listener and listener will not fire
-                rect.setX(Math.min(xRect+0.001, anchorX));
-                rect.setY(Math.min(yRect, anchorY));
-                rect.setWidth(Math.abs(xRect - anchorX));
-                rect.setHeight(Math.abs(yRect - anchorY));
-
-                zoomRange[1][0] = x2;
-                zoomRange[1][1] = y2;
-                System.out.println("x1 "+zoomRange[0][0]);
-                System.out.println("x2 " +zoomRange[0][1]);
-                System.out.println("y1 "+zoomRange[1][0]);
-                System.out.println("y2 "+zoomRange[1][1]);
-            }
-
-
-        });
-
-        zoomingNode.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println("mouseCLick");
-                if (event.getButton() == MouseButton.SECONDARY) {
-                    if (event.getClickCount() == 2) {
-                        System.out.println("double click");
-                        xAxis.setAutoRanging(true);
-                        yAxis.setAutoRanging(true);
-                    }
-
-                } else {
-//                    System.out.println("we will zoom from " + zoomRange[0][0] + " , " + zoomRange[0][1] +
-//                            " to " + zoomRange[1][0] + " , " + zoomRange[1][1]);
-                doZoom(zoomRange);
-                }
-
-            }
-        });
-    }
-
-    private void doZoom(double[][] zoomRange) {
-
-        xAxis.setAutoRanging(false);
-        yAxis.setAutoRanging(false);
-
-
-        xAxis.setLowerBound(Math.min(zoomRange[0][0], zoomRange[1][0]));
-        yAxis.setLowerBound(Math.min(zoomRange[0][1], zoomRange[1][1]));
-        xAxis.setUpperBound(Math.max(zoomRange[0][0], zoomRange[1][0]));
-        ;
-        yAxis.setUpperBound(Math.max(zoomRange[0][1], zoomRange[1][1]));
-
-        zoomRect.setWidth(0);
-        zoomRect.setHeight(0);
-    }
 
 
 }
