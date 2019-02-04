@@ -18,6 +18,10 @@ public class IntegrationEvent {
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
     }
+    public IntegrationEvent(String eventTypeString, Double eventStartTime,Double eventEndTime){
+        this(eventStartTime,eventEndTime);
+        this.eventType.getSelectionModel().select(eventTypeString);
+    }
 
 
     public ComboBox getEventType() {
