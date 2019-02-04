@@ -70,11 +70,13 @@ public class Injection implements Runnable{
                 //If sampling rate is 5(hz), we collect 5 points per second, therefore time will increment by 0.2
                 double time = samplingPoint * 1/injectionInfo.getSamplingRate();
 
+
                 double response = calculateResponseAtDatum(time);
                 synchronized (pointsToAdd) {
                     pointsToAdd.add(new XYChart.Data<Number,Number>(time, response));
 
                     samplingPoint += 1;
+
 
 
 
@@ -102,6 +104,8 @@ public class Injection implements Runnable{
                             pointsToAdd.clear();
 
                         }
+                        double percentCompleted = ((double) samplingPoint) / injectionInfo.getPointsToCollect();
+                        injectionInfo.getProgressBar().progressProperty().set(percentCompleted);
 
                     }
                 });

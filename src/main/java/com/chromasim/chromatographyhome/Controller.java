@@ -129,6 +129,9 @@ public class Controller {
     @FXML
     private LineChartController lineChartController;
 
+    @FXML
+    private ProgressBar progressBar;
+
     int injectionNumber = 1;
 
 
@@ -147,8 +150,12 @@ public class Controller {
 
 
         //initialize integration table
+        Label placeholder = new Label("Integration events will be available once run has started");
+        placeholder.setWrapText(true);
+
+        eventsTable.setPlaceholder(placeholder);
         initializeIntegrationEvents();
-        eventsTable.setItems(eventsList);
+//        eventsTable.setItems(eventsList);
 
         eventColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent, ComboBox>("eventType"));
         eventStartColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent, Double>("eventStartTime"));
@@ -211,7 +218,7 @@ public class Controller {
         if (injectionNumber <= sampleList.size()) {
 
             InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(injectionNumber - 1).getSampleCompounds(), 33, 5, speedSlider,
-                    lineChartController.getLineChart(), new XYChart.Series<>(), startButton, 5);
+                    lineChart, new XYChart.Series<>(), startButton, 5,progressBar,this);
 
             injectionDataList.add(injectionInfo);
 
@@ -360,6 +367,7 @@ public class Controller {
                 System.out.println(selectedInjection.getCompounds().size());
                 lineChart.getData().clear();
                 lineChart.getData().add(selectedInjection.getSeries());
+                eventsTable.setItems(selectedInjection.getEventsList());
 
 
             }
@@ -381,6 +389,10 @@ public class Controller {
         currentInjection.setInstantaneousInjectionFlag(true);
 
 
+    }
+
+    public TableView<IntegrationEvent> getEventsTable() {
+        return eventsTable;
     }
 }
 
