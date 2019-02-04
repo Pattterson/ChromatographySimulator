@@ -1,11 +1,13 @@
 package com.chromasim.chromatographyhome;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.List;
 //will be included in an Injection Info object which is passed to an injection object to actually perform the injection
 public class InjectionInfo {
 
-
+//instead of transfering all fx elements manually, perhaps just share a copy of the controller
     private boolean injectionAbandoned;
     private ObservableList<Compound> compounds;
     private double runTime; //in minutes
@@ -31,8 +33,15 @@ public class InjectionInfo {
     private int refreshRate; //chromatogram refresh / add data rate, in seconds
     static List<InjectionInfo> injectionList= new ArrayList<>();
     private boolean instantaneousInjectionFlag = false;
+    private ProgressBar progressBar;
+    private Controller controller;
+    private ObservableList<IntegrationEvent> eventsList = FXCollections.observableArrayList();
 
-    public InjectionInfo(ObservableList<Compound> compounds, double runTime, double samplingRate, Slider speedSlider, LineChart<Number, Number> lineChart, XYChart.Series<Number, Number> series, Button nextInjection, int refreshRate) {
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public InjectionInfo(ObservableList<Compound> compounds, double runTime, double samplingRate, Slider speedSlider, LineChart<Number, Number> lineChart, XYChart.Series<Number, Number> series, Button nextInjection, int refreshRate, ProgressBar progressBar,Controller controller) {
         thisInjectionNumber = injectionCounter;
         injectionAbandoned = false;
         this.compounds = compounds;
@@ -40,6 +49,9 @@ public class InjectionInfo {
         this.samplingRate = samplingRate;
         this.speedSlider = speedSlider;
         this.refreshRate = refreshRate;
+        this.progressBar = progressBar;
+        this.controller = controller;
+        addDefaultIntegrationEvents();
 
         injectionCounter++;
 
@@ -57,6 +69,22 @@ public class InjectionInfo {
             n.setStyle(style.toString());
         });
 
+    }
+
+    private void addDefaultIntegrationEvents() {
+        IntegrationEvent defaultEvent1 = new IntegrationEvent("Set Threshold",0d, 0d);
+        IntegrationEvent defaultEvent2 = new IntegrationEvent("Set Peak Width",0d, 0d);
+        eventsList.add(defaultEvent1);
+        eventsList.add(defaultEvent2);
+        controller.getEventsTable().setItems(eventsList);
+    }
+
+    public ObservableList<IntegrationEvent> getEventsList() {
+        return eventsList;
+    }
+
+    public Controller getController() {
+        return controller;
     }
 
     public boolean getInjectionAbandoned() {
@@ -128,4 +156,6 @@ public class InjectionInfo {
     public void setInstantaneousInjectionFlag(boolean instantaneousInjectionFlag){
         this.instantaneousInjectionFlag = instantaneousInjectionFlag;
     }
+
+
 }
