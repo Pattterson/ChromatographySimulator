@@ -2,12 +2,14 @@ package com.chromasim.chromatographyhome;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -209,12 +211,28 @@ public class LineChartController {
         xAxis.setAutoRanging(false);
         yAxis.setAutoRanging(false);
 
+        double xLowerBound = Math.min(zoomRange[0][0], zoomRange[1][0]);
+        if(xLowerBound<xAxis.getLowerBound()){
+            xLowerBound = xAxis.getLowerBound();
+        }
+        double xUpperBound = Math.max(zoomRange[0][0], zoomRange[1][0]);
+        if(xUpperBound>xAxis.getUpperBound()){
+            xUpperBound = xAxis.getUpperBound();
+        }
 
-        xAxis.setLowerBound(Math.min(zoomRange[0][0], zoomRange[1][0]));
-        yAxis.setLowerBound(Math.min(zoomRange[0][1], zoomRange[1][1]));
-        xAxis.setUpperBound(Math.max(zoomRange[0][0], zoomRange[1][0]));
-        ;
-        yAxis.setUpperBound(Math.max(zoomRange[0][1], zoomRange[1][1]));
+        double yLowerBound = Math.min(zoomRange[0][1], zoomRange[1][1]);
+        if(yLowerBound<yAxis.getLowerBound()){
+            yLowerBound = yAxis.getLowerBound();
+        }
+        double yUpperBound = Math.max(zoomRange[0][1], zoomRange[1][1]);
+        if(yUpperBound>yAxis.getUpperBound()){
+            yUpperBound = yAxis.getUpperBound();
+        }
+
+        xAxis.setLowerBound(xLowerBound);
+        yAxis.setLowerBound(yLowerBound);
+        xAxis.setUpperBound(xUpperBound);
+        yAxis.setUpperBound(yUpperBound);
 
         zoomRect.setWidth(0);
         zoomRect.setHeight(0);
