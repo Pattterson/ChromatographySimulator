@@ -3,6 +3,7 @@ package com.chromasim.chromatographyhome;
 import com.sun.javafx.stage.StageHelper;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -40,6 +41,8 @@ import javafx.util.StringConverter;
 import javax.vecmath.Point2d;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -93,10 +96,10 @@ public class Controller {
     private TableColumn<IntegrationEvent, ComboBox> eventColumn;
 
     @FXML
-    private TableColumn<IntegrationEvent, Double> eventStartColumn;
+    private TableColumn<IntegrationEvent, String> eventStartColumn;
 
     @FXML
-    private TableColumn<IntegrationEvent, Double> eventEndColumn;
+    private TableColumn<IntegrationEvent, String> eventEndColumn;
 
     @FXML
     private TableColumn<SampleInfo, Integer> sampleNumberColumn;
@@ -108,7 +111,7 @@ public class Controller {
     private TableColumn<SampleInfo, ComboBox> sampleTypeColumn;
 
     @FXML
-    private TableColumn<SampleInfo, Double> injectionVolumeColumn;
+    private TableColumn<SampleInfo, String> injectionVolumeColumn;
 
     @FXML
     private TableView<SampleInfo> sampleTable;
@@ -132,10 +135,13 @@ public class Controller {
     @FXML
     private ProgressBar progressBar;
 
+    @FXML
+    private TableColumn<IntegrationEvent,String> eventValueColumn;
+
     int injectionNumber = 1;
 
 
-    public void initialize() throws URISyntaxException {
+    public void initialize() {
         lineChartController.setController(this);
         chartContainer = lineChartController.getChartContainer();
         lineChart = lineChartController.getLineChart();
@@ -157,24 +163,46 @@ public class Controller {
         initializeIntegrationEvents();
 //        eventsTable.setItems(eventsList);
 
-        eventColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent, ComboBox>("eventType"));
-        eventStartColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent, Double>("eventStartTime"));
-        eventEndColumn.setCellValueFactory(new PropertyValueFactory<IntegrationEvent, Double>("eventEndTime"));
+        eventsTable.setEditable(true);
+        initializeTableColumn(eventColumn,"eventType",false);
+        initializeTableColumn(eventStartColumn,"eventStartTime",true);
+        initializeTableColumn(eventEndColumn,"eventEndTime",true);
+        initializeTableColumn(eventValueColumn,"eventValue",true);
+
+
+
+//        eventStartColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+//        eventEndColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+//        eventValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+
 
         //initialize sample table
         addInjectionDummyData();
         sampleTable.setItems(sampleList);
 
-        sampleNumberColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, Integer>("SampleNumber"));
-        sampleNameColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, String>("SampleName"));
-        sampleTypeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, ComboBox>("sampleType"));
-        injectionVolumeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, Double>("injectionVolume"));
-        compoundsColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, Button>("compoundButton"));
-
-
         sampleTable.setEditable(true);
+
+        initializeTableColumn(sampleNumberColumn,"SampleNumber",false);
+        initializeTableColumn(sampleNameColumn,"sampleName",true);
+        initializeTableColumn(sampleTypeColumn,"sampleType",false);
+        initializeTableColumn(injectionVolumeColumn,"injectionVolume",true);
+        initializeTableColumn(compoundsColumn,"compoundButton",false);
+
+        sampleNameColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, String>("sampleName"));
+
+
         sampleNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        sampleTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+//        sampleNameColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, String>("SampleName"));
+//        sampleTypeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, ComboBox>("sampleType"));
+//        injectionVolumeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, Double>("injectionVolume"));
+//        compoundsColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, Button>("compoundButton"));
+//        sampleNumberColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, Integer>("SampleNumber"));
+
+
+
+//        sampleNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+//        sampleTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 
         startButton.setDisable(false);
@@ -191,6 +219,47 @@ public class Controller {
                 }
             }
         });
+
+
+    }
+
+    private void initializeTableColumn(TableColumn column, String fieldName,boolean makeEditable){
+        column.setCellValueFactory(new PropertyValueFactory<>(fieldName));
+
+
+        if(makeEditable){
+            column.setCellFactory(TextFieldTableCell.forTableColumn());
+            column.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
+                @Override
+                public void handle(TableColumn.CellEditEvent event) {
+                    SampleInfo selected = (SampleInfo) event.getTableView().getItems().get(
+                            event.getTablePosition().getRow());
+
+                    Method method;
+                    System.out.println("handler fired");
+                    try {
+                        String setterMethodName = "set" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
+                        System.out.println(setterMethodName);
+
+                         method = selected.getClass().getMethod(setterMethodName, String.class);
+                        System.out.println(event.getNewValue().toString());
+                        try {
+                            method.invoke(selected, event.getNewValue().toString());
+                        } catch (IllegalArgumentException e) {e.printStackTrace();}
+                        catch (IllegalAccessException e) {e.printStackTrace();}
+                        catch (InvocationTargetException e) {e.printStackTrace();}
+                    } catch (NoSuchMethodException e) {
+                        System.out.println("oh nose");
+                    }
+
+
+
+
+
+                }
+            });
+
+        }
 
 
     }
@@ -260,11 +329,11 @@ public class Controller {
     }
 
     private void initializeIntegrationEvents() {
-        IntegrationEvent defaultEvent1 = new IntegrationEvent(3.4, 4.8);
-        IntegrationEvent defaultEvent2 = new IntegrationEvent(3.5, 4.9);
-        IntegrationEvent defaultEvent3 = new IntegrationEvent(3.6, 4.1);
-        IntegrationEvent defaultEvent4 = new IntegrationEvent(3.7, 4.2);
-        IntegrationEvent defaultEvent5 = new IntegrationEvent(3.8, 4.3);
+        IntegrationEvent defaultEvent1 = new IntegrationEvent("3.4", "4.8");
+        IntegrationEvent defaultEvent2 = new IntegrationEvent("3.5", "4.9");
+        IntegrationEvent defaultEvent3 = new IntegrationEvent("3.6", "4.1");
+        IntegrationEvent defaultEvent4 = new IntegrationEvent("3.7", "4.2");
+        IntegrationEvent defaultEvent5 = new IntegrationEvent("3.8", "4.3");
 
         eventsList.add(defaultEvent1);
         eventsList.add(defaultEvent2);
@@ -276,9 +345,9 @@ public class Controller {
 
 
     private void addInjectionDummyData() {
-        SampleInfo dummySample1 = new SampleInfo("Working Standard", (double) 5);
-        SampleInfo dummySample2 = new SampleInfo("Sensitivity", (double) 5);
-        SampleInfo dummySample3 = new SampleInfo(" Lot 749353", (double) 10);
+        SampleInfo dummySample1 = new SampleInfo("Working Standard", "5");
+        SampleInfo dummySample2 = new SampleInfo("Sensitivity", "5");
+        SampleInfo dummySample3 = new SampleInfo(" Lot 749353", "5");
         sampleList.add(dummySample1);
         sampleList.add(dummySample2);
         sampleList.add(dummySample3);
@@ -288,7 +357,7 @@ public class Controller {
 
 
     public void newSampleButtonPushed() {
-        SampleInfo sampleInfo = new SampleInfo("", (double) 0);
+        SampleInfo sampleInfo = new SampleInfo("", "5");
         sampleTable.getItems().add(sampleInfo);
     }
 

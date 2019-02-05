@@ -5,10 +5,11 @@ import javafx.scene.control.ComboBox;
 public class IntegrationEvent {
 
     private ComboBox<String> eventType = new ComboBox<>();
-    private Double eventStartTime;
-    private Double eventEndTime;
+    private String eventStartTime;
+    private String eventEndTime;
+    private String eventValue;
 
-    public IntegrationEvent( Double eventStartTime, Double eventEndTime) {
+    public IntegrationEvent( String eventStartTime, String eventEndTime) {
         eventType.getItems().add("Inhibit Integration");
         eventType.getItems().add("Set Threshold");
         eventType.getItems().add("Set Peak Width");
@@ -17,12 +18,23 @@ public class IntegrationEvent {
 
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
+
+        eventValue=Integer.toString(3);
     }
-    public IntegrationEvent(String eventTypeString, Double eventStartTime,Double eventEndTime){
+    public IntegrationEvent(String eventTypeString, String eventStartTime,String eventEndTime){
         this(eventStartTime,eventEndTime);
         this.eventType.getSelectionModel().select(eventTypeString);
+
+        eventValue=Integer.toString(3);
     }
 
+    public String getEventValue() {
+        return eventValue;
+    }
+
+    public void setEventValue(String eventValue) {
+        this.eventValue = eventValue;
+    }
 
     public ComboBox getEventType() {
         return eventType;
@@ -32,19 +44,19 @@ public class IntegrationEvent {
         this.eventType = eventType;
     }
 
-    public Double getEventStartTime() {
+    public String getEventStartTime() {
         return eventStartTime;
     }
 
-    public void setEventStartTime(Double eventStartTime) {
+    public void setEventStartTime(String eventStartTime) {
         this.eventStartTime = eventStartTime;
     }
 
-    public Double getEventEndTime() {
+    public String getEventEndTime() {
         return eventEndTime;
     }
 
-    public void setEventEndTime(Double eventEndTime) {
+    public void setEventEndTime(String eventEndTime) {
         this.eventEndTime = eventEndTime;
     }
 }

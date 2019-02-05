@@ -2,6 +2,8 @@ package com.chromasim.chromatographyhome;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -23,8 +25,8 @@ public class SampleInfo {
     static Integer sampleCounter = 1;
     private int sampleNumber;
     private String sampleName;
-    private ComboBox<Label> sampleType = new ComboBox<>();
-    private Double injectionVolume;
+    private ComboBox<String> sampleType = new ComboBox<>();
+    private String injectionVolume;
     private ObservableList<Compound> sampleCompounds = FXCollections.observableArrayList();
 
     private Button compoundButton = new Button("0");
@@ -41,7 +43,7 @@ public class SampleInfo {
         this.compoundButton = compoundButton;
     }
 
-    public SampleInfo(String sampleName, Double injectionVolume) {
+    public SampleInfo(String sampleName, String injectionVolume) {
         IntegerBinding sampleCompoundsSizeProperty = Bindings.size(sampleCompounds);
 
         compoundButton.textProperty().bind(sampleCompoundsSizeProperty.asString());
@@ -77,9 +79,9 @@ public class SampleInfo {
 
 
 
-        sampleType.getItems().add(label2);
-        sampleType.getItems().add(label);
-        sampleType.getItems().add(label3);
+        sampleType.getItems().add("Standard");
+        sampleType.getItems().add("Sample");
+        sampleType.getItems().add("Blank");
 
         this.sampleName = sampleName;
         this.injectionVolume = injectionVolume;
@@ -92,7 +94,7 @@ public class SampleInfo {
 //        sampleType.getItems().add("Sample");
 //        sampleType.getItems().add("Standard");
 //        sampleType.getItems().add("Blank");
-        this.injectionVolume = (double) 5;
+        this.injectionVolume = "5";
 
 
 
@@ -116,27 +118,28 @@ public class SampleInfo {
         this.sampleNumber = sampleNumber;
     }
 
-    public String getSampleName() {
+    public  String getSampleName() {
         return sampleName;
     }
 
     public void setSampleName(String sampleName) {
-        this.sampleName = sampleName;
+        this.sampleName= sampleName;
     }
 
-    public ComboBox<Label> getSampleType() {
+    public ComboBox<String> getSampleType() {
         return sampleType;
     }
 
-    public void setSampleType(ComboBox<Label> sampleType) {
+    public void setSampleType(ComboBox<String> sampleType) {
         this.sampleType = sampleType;
     }
 
-    public Double getInjectionVolume() {
+    public String getInjectionVolume() {
         return injectionVolume;
     }
 
-    public void setInjectionVolume(Double injectionVolume) {
+    public void setInjectionVolume(String injectionVolume) {
+        System.out.println("settingInjectionVolume");
         this.injectionVolume = injectionVolume;
     }
 

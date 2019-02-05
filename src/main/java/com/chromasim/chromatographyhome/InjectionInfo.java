@@ -72,8 +72,8 @@ public class InjectionInfo {
     }
 
     private void addDefaultIntegrationEvents() {
-        IntegrationEvent defaultEvent1 = new IntegrationEvent("Set Threshold",0d, 0d);
-        IntegrationEvent defaultEvent2 = new IntegrationEvent("Set Peak Width",0d, 0d);
+        IntegrationEvent defaultEvent1 = new IntegrationEvent("Set Threshold","0", "0");
+        IntegrationEvent defaultEvent2 = new IntegrationEvent("Set Peak Width","0", "0");
         eventsList.add(defaultEvent1);
         eventsList.add(defaultEvent2);
         controller.getEventsTable().setItems(eventsList);

@@ -111,9 +111,10 @@
                           </TableView>
                           <TableView fx:id="eventsTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4" GridPane.rowSpan="3">
                               <columns>
-                                  <TableColumn fx:id="eventColumn" maxWidth="250.0" minWidth="59.0" prefWidth="300.0" text="Event" />
-                                  <TableColumn fx:id="eventStartColumn" maxWidth="150.0" minWidth="0.0" prefWidth="0.0" text="Start" />
-                        <TableColumn fx:id="eventEndColumn" maxWidth="150.0" prefWidth="150.0" text="End" />
+                                  <TableColumn fx:id="eventColumn" maxWidth="1000.0" minWidth="100.0" prefWidth="210.0" text="Event" />
+                                  <TableColumn fx:id="eventStartColumn" maxWidth="500.0" minWidth="50.0" prefWidth="50.0" text="Start" />
+                        <TableColumn fx:id="eventEndColumn" maxWidth="500.0" minWidth="50.0" prefWidth="50.0" text="End" />
+                        <TableColumn fx:id="eventValueColumn" maxWidth="500.0" minWidth="50.0" prefWidth="50.0" text="Value" />
                               </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
