@@ -42,12 +42,8 @@ public class ProcessingController {
     }
 
     public void initialize(){
-
-         XYChart.Series<Number,Number> series = new XYChart.Series<Number,Number>(injectionDataList.get(0).getSeries().getData());
-        lineChart.getData().add(series);
-        System.out.println("fired1");
-        lineChart.setTitle("IAMPOTATO");
-        System.out.println("fired2");
+//        XYChart.Series<Number,Number> series = new XYChart.Series<Number,Number>(injectionDataList.get(0).getSeries().getData());
+//        lineChart.getData().add(series);
     }
 
 
