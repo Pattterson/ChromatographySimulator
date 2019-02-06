@@ -1,9 +1,8 @@
 package com.chromasim.chromatographyhome;
 
+
 import com.sun.javafx.stage.StageHelper;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -13,32 +12,16 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point2D;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.SVGPath;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
-
-import javax.vecmath.Point2d;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -46,9 +29,6 @@ import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 
 //for a second stage (for reference)
 //public void changeScreenButtonPushed(ActionEvent event) throws IOException
@@ -142,6 +122,7 @@ public class Controller {
 
 
     public void initialize() {
+
         lineChartController.setController(this);
         chartContainer = lineChartController.getChartContainer();
         lineChart = lineChartController.getLineChart();
@@ -190,7 +171,6 @@ public class Controller {
         initializeTableColumn(compoundsColumn,"compoundButton",false);
 
         sampleNameColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, String>("sampleName"));
-
 
         sampleNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 //        sampleNameColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, String>("SampleName"));

@@ -23,6 +23,9 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.Cursor?>
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chromasim.chromatographyhome.Controller">
     <children>
         <MenuBar VBox.vgrow="NEVER">
@@ -134,7 +137,45 @@
                   </Button>
                       </children>
                   </GridPane>
-                <fx:include fx:id="lineChart" source="LineChart.fxml" />
+                <VBox>
+                    <children>
+                        <SplitPane dividerPositions="0.8" orientation="VERTICAL" VBox.vgrow="ALWAYS">
+                            <items>
+                                <fx:include fx:id="lineChart" source="LineChart.fxml" />
+                                <GridPane>
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <TableView prefHeight="200.0" prefWidth="200.0">
+                                            <columns>
+                                                <TableColumn prefWidth="75.0" text="C1" />
+                                                <TableColumn prefWidth="75.0" text="C2" />
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </GridPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </VBox>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <AnchorPane maxWidth="170.0" minWidth="0.0" prefHeight="543.0" prefWidth="170.0">
                     <children>
                         <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Actions" textAlignment="CENTER" textFill="#2448bf" wrapText="false">

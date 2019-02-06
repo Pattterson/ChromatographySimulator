@@ -13,7 +13,6 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainChromatograph.fxml"));
         primaryStage.setTitle("Chromatography Simulator 2019");
         Scene scene = new Scene(root, 1350, 825);
-
         primaryStage.setScene(scene);
         scene.getStylesheets().add(Main.class.getResource("/styles.css").toExternalForm());
         primaryStage.show();
