@@ -1,29 +1,13 @@
-# Foobar
+# Chromatography Simulator
 
-Foobar is a Python library for dealing with word pluralization.
+Chromatography Simulator is an interactive tool for learning the general processes and workflows for acquiring chromatographic data.
 
-## Installation
+## Usage 
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
-
-```bash
-pip install foobar
-```
-
-## Usage
-
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
-```
+Workflows for acquiring data are modeled after professional chromatography suites such as Waters™ Empower and Agilent™ Chemstation.  Tutorials explaining these processes will be released in the future. 
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update tests as appropriate.
-
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[BSD](https://opensource.org/licenses/BSD-2-Clause)
