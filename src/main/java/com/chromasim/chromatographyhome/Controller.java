@@ -22,8 +22,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-import java.io.File;
-import java.io.IOException;
+
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -443,6 +443,18 @@ public class Controller {
     public TableView<IntegrationEvent> getEventsTable() {
         return eventsTable;
     }
+
+    public void exportSeriesAsCSV(ActionEvent actionEvent) throws IOException {
+
+        PrintWriter out = new PrintWriter("chromatogramData.csv");
+        XYChart.Series<Number,Number> series = lineChart.getData().get(0);
+        for(XYChart.Data<Number,Number> data: series.getData()){
+            out.println(data.getXValue().doubleValue() + "," + data.getYValue().doubleValue());
+
+        }
+        // Close the file.
+        out.close();  // Step 4
+        }
 }
 
 
