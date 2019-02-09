@@ -29,6 +29,7 @@ import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 
 //for a second stage (for reference)
 //public void changeScreenButtonPushed(ActionEvent event) throws IOException
@@ -94,7 +95,7 @@ public class Controller {
     private TableColumn<SampleInfo, String> injectionVolumeColumn;
 
     @FXML
-    private TableView<SampleInfo> sampleTable;
+     TableView<SampleInfo> sampleTable;
 
     @FXML
     private Button newSampleButton;
@@ -107,6 +108,7 @@ public class Controller {
     @FXML
     private TableColumn<SampleInfo, Button> compoundsColumn;
 
+    @FXML
     private GridPane chartContainer;
 
     @FXML
@@ -118,7 +120,19 @@ public class Controller {
     @FXML
     private TableColumn<IntegrationEvent,String> eventValueColumn;
 
+    @FXML
+    Label progressIndicatorText;
+
+
+    private InjectionInfo injectionInfo;
+
+
+
+
+
+
     int injectionNumber = 1;
+
 
 
     public void initialize() {
@@ -139,7 +153,6 @@ public class Controller {
         //initialize integration table
         Label placeholder = new Label("Integration events will be available once run has started");
         placeholder.setWrapText(true);
-
         eventsTable.setPlaceholder(placeholder);
         initializeIntegrationEvents();
 //        eventsTable.setItems(eventsList);
@@ -255,6 +268,7 @@ public class Controller {
     }
 
     public void startButtonClicked() {
+
         if (InjectionInfo.injectionCounter == 1) {
             mediaPlayer.play();
 
@@ -266,7 +280,7 @@ public class Controller {
 
         if (injectionNumber <= sampleList.size()) {
 
-            InjectionInfo injectionInfo = new InjectionInfo(sampleList.get(injectionNumber - 1).getSampleCompounds(), 33, 5, speedSlider,
+             injectionInfo = new InjectionInfo(sampleList.get(injectionNumber - 1).getSampleCompounds(), 33, 5, speedSlider,
                     lineChart, new XYChart.Series<>(), startButton, 5,progressBar,this);
 
             injectionDataList.add(injectionInfo);
@@ -430,14 +444,11 @@ public class Controller {
     public void abandonInjection(ActionEvent actionEvent) {
         InjectionInfo currentInjection = InjectionInfo.injectionList.get( InjectionInfo.injectionList.size()-1);
         currentInjection.setInjectionAbandoned(true);
-       ;
     }
 
     public void finishInjection(ActionEvent actionEvent) {
         InjectionInfo currentInjection = InjectionInfo.injectionList.get( InjectionInfo.injectionList.size()-1);
         currentInjection.setInstantaneousInjectionFlag(true);
-
-
     }
 
     public TableView<IntegrationEvent> getEventsTable() {
@@ -454,6 +465,34 @@ public class Controller {
         }
         // Close the file.
         out.close();  // Step 4
+        }
+
+
+        public void createNewSampleSet(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Creating new sample set abandons any currently running sets.  " +
+                "Are you sure you wish to continue?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                abandonSet();
+                ObservableList<SampleInfo> newSampleList = FXCollections.observableArrayList();
+               sampleList.clear();
+                System.out.println(sampleList);
+               sampleList = newSampleList;
+                sampleTable.setItems(sampleList);
+                SampleInfo.setSampleCounter(1);
+                injectionInfo = null;
+                InjectionInfo.injectionList.clear();
+                InjectionInfo.injectionCounter=1;
+
+            }
+
+        }
+        public void abandonSet(){
+
+            InjectionInfo currentInjection = InjectionInfo.injectionList.get( InjectionInfo.injectionList.size()-1);
+            currentInjection.setSetAbandoned(true);
+            lineChart.getData().clear();
+
         }
 }
 

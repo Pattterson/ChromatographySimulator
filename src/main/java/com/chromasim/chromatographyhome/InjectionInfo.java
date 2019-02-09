@@ -36,6 +36,7 @@ public class InjectionInfo {
     private ProgressBar progressBar;
     private Controller controller;
     private ObservableList<IntegrationEvent> eventsList = FXCollections.observableArrayList();
+    private boolean setAbandoned;
 
     public ProgressBar getProgressBar() {
         return progressBar;
@@ -157,5 +158,15 @@ public class InjectionInfo {
         this.instantaneousInjectionFlag = instantaneousInjectionFlag;
     }
 
+    public boolean isSetAbandoned() {
+        return setAbandoned;
+    }
 
+    //bad naming scheme
+    public void setSetAbandoned(boolean setAbandoned) {
+        this.setAbandoned = setAbandoned;
+    }
+    public boolean getSetAbandoned(){
+        return setAbandoned;
+    }
 }
