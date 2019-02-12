@@ -34,6 +34,11 @@ public class LineChartController {
     final Rectangle zoomRect = new Rectangle();
 
     public void initialize(){
+        FXMLComponents.lineChart=lineChart;
+        FXMLComponents.xAxis=xAxis;
+        FXMLComponents.yAxis=yAxis;
+
+
         xAxis.autoRangingProperty().setValue(false);
         yAxis.autoRangingProperty().setValue(false);
         lineChart.setVisible(true);

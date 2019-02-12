@@ -29,6 +29,7 @@ import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 //for a second stage (for reference)
@@ -52,7 +53,7 @@ public class Controller {
     private boolean acquisitionViewShowing = true;
     private Scene processingScene;
     private ArrayList<InjectionInfo> injectionDataList = new ArrayList<>();
-    private LineChart<Number,Number> lineChart;
+    private LineChart<Number, Number> lineChart;
 
 
     @FXML
@@ -61,42 +62,30 @@ public class Controller {
     private Task<ObservableList<XYChart.Data>> task;
     private static MediaPlayer mediaPlayer;
     private ObservableList<IntegrationEvent> eventsList = FXCollections.observableArrayList();
-    private ObservableList<SampleInfo> sampleList = FXCollections.observableArrayList();
+    private ObservableList<SampleInfo> sampleList = SampleInfo.samplesList;
 
     @FXML
     private Button startButton;
-
     @FXML
     private Slider speedSlider;
-
-
     @FXML
     private TableView<IntegrationEvent> eventsTable;
-
     @FXML
     private TableColumn<IntegrationEvent, ComboBox> eventColumn;
-
     @FXML
     private TableColumn<IntegrationEvent, String> eventStartColumn;
-
     @FXML
     private TableColumn<IntegrationEvent, String> eventEndColumn;
-
     @FXML
     private TableColumn<SampleInfo, Integer> sampleNumberColumn;
-
     @FXML
     private TableColumn<SampleInfo, String> sampleNameColumn;
-
     @FXML
     private TableColumn<SampleInfo, ComboBox> sampleTypeColumn;
-
     @FXML
     private TableColumn<SampleInfo, String> injectionVolumeColumn;
-
     @FXML
-     TableView<SampleInfo> sampleTable;
-
+    TableView<SampleInfo> sampleTable;
     @FXML
     private Button newSampleButton;
     @FXML
@@ -107,35 +96,27 @@ public class Controller {
     private Button deleteEventButton;
     @FXML
     private TableColumn<SampleInfo, Button> compoundsColumn;
-
     @FXML
     private GridPane chartContainer;
-
     @FXML
     private LineChartController lineChartController;
-
     @FXML
     private ProgressBar progressBar;
-
     @FXML
-    private TableColumn<IntegrationEvent,String> eventValueColumn;
-
+    private TableColumn<IntegrationEvent, String> eventValueColumn;
     @FXML
     Label progressIndicatorText;
 
-
     private InjectionInfo injectionInfo;
-
-
-
-
 
 
     int injectionNumber = 1;
 
 
-
     public void initialize() {
+
+        setFXMLComponents();
+
 
         lineChartController.setController(this);
         chartContainer = lineChartController.getChartContainer();
@@ -158,11 +139,10 @@ public class Controller {
 //        eventsTable.setItems(eventsList);
 
         eventsTable.setEditable(true);
-        initializeTableColumn(eventColumn,"eventType",false);
-        initializeTableColumn(eventStartColumn,"eventStartTime",true);
-        initializeTableColumn(eventEndColumn,"eventEndTime",true);
-        initializeTableColumn(eventValueColumn,"eventValue",true);
-
+        initializeTableColumn(eventColumn, "eventType", false);
+        initializeTableColumn(eventStartColumn, "eventStartTime", true);
+        initializeTableColumn(eventEndColumn, "eventEndTime", true);
+        initializeTableColumn(eventValueColumn, "eventValue", true);
 
 
 //        eventStartColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -170,18 +150,20 @@ public class Controller {
 //        eventValueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
 
-
         //initialize sample table
         addInjectionDummyData();
         sampleTable.setItems(sampleList);
+        for (SampleInfo info : sampleList) {
+            System.out.println(sampleList.size());
+        }
 
         sampleTable.setEditable(true);
 
-        initializeTableColumn(sampleNumberColumn,"SampleNumber",false);
-        initializeTableColumn(sampleNameColumn,"sampleName",true);
-        initializeTableColumn(sampleTypeColumn,"sampleType",false);
-        initializeTableColumn(injectionVolumeColumn,"injectionVolume",true);
-        initializeTableColumn(compoundsColumn,"compoundButton",false);
+        initializeTableColumn(sampleNumberColumn, "SampleNumber", false);
+        initializeTableColumn(sampleNameColumn, "sampleName", true);
+        initializeTableColumn(sampleTypeColumn, "sampleType", false);
+        initializeTableColumn(injectionVolumeColumn, "injectionVolume", true);
+        initializeTableColumn(compoundsColumn, "compoundButton", false);
 
         sampleNameColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, String>("sampleName"));
 
@@ -191,7 +173,6 @@ public class Controller {
 //        injectionVolumeColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, Double>("injectionVolume"));
 //        compoundsColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, Button>("compoundButton"));
 //        sampleNumberColumn.setCellValueFactory(new PropertyValueFactory<SampleInfo, Integer>("SampleNumber"));
-
 
 
 //        sampleNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -216,11 +197,35 @@ public class Controller {
 
     }
 
-    private void initializeTableColumn(TableColumn column, String fieldName,boolean makeEditable){
+    private void setFXMLComponents() {
+        FXMLComponents.startButton = startButton;
+        FXMLComponents.speedSlider = speedSlider;
+        FXMLComponents.eventsTable = eventsTable;
+        FXMLComponents.eventColumn = eventColumn;
+        FXMLComponents.eventStartColumn = eventStartColumn;
+        FXMLComponents.eventEndColumn = eventEndColumn;
+        FXMLComponents.sampleNumberColumn = sampleNumberColumn;
+        FXMLComponents.sampleNameColumn = sampleNameColumn;
+        FXMLComponents.sampleTypeColumn = sampleTypeColumn;
+        FXMLComponents.injectionVolumeColumn = injectionVolumeColumn;
+        FXMLComponents.sampleTable = sampleTable;
+        FXMLComponents.newSampleButton = newSampleButton;
+        FXMLComponents.deleteSampleButton = deleteSampleButton;
+        FXMLComponents.newEventButton = newEventButton;
+        FXMLComponents.deleteEventButton = deleteEventButton;
+        FXMLComponents.compoundsColumn = compoundsColumn;
+        FXMLComponents.chartContainer = chartContainer;
+        FXMLComponents.lineChartController = lineChartController;
+        FXMLComponents.progressBar = progressBar;
+        FXMLComponents.eventValueColumn = eventValueColumn;
+        FXMLComponents.progressIndicatorText = progressIndicatorText;
+    }
+
+    private void initializeTableColumn(TableColumn column, String fieldName, boolean makeEditable) {
         column.setCellValueFactory(new PropertyValueFactory<>(fieldName));
 
 
-        if(makeEditable){
+        if (makeEditable) {
             column.setCellFactory(TextFieldTableCell.forTableColumn());
             column.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent>() {
                 @Override
@@ -231,22 +236,23 @@ public class Controller {
                     Method method;
                     System.out.println("handler fired");
                     try {
-                        String setterMethodName = "set" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
+                        String setterMethodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
                         System.out.println(setterMethodName);
 
-                         method = selected.getClass().getMethod(setterMethodName, String.class);
+                        method = selected.getClass().getMethod(setterMethodName, String.class);
                         System.out.println(event.getNewValue().toString());
                         try {
                             method.invoke(selected, event.getNewValue().toString());
-                        } catch (IllegalArgumentException e) {e.printStackTrace();}
-                        catch (IllegalAccessException e) {e.printStackTrace();}
-                        catch (InvocationTargetException e) {e.printStackTrace();}
+                        } catch (IllegalArgumentException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
                     } catch (NoSuchMethodException e) {
                         System.out.println("oh nose");
                     }
-
-
-
 
 
                 }
@@ -269,30 +275,28 @@ public class Controller {
 
     public void startButtonClicked() {
 
-        if (InjectionInfo.injectionCounter == 1) {
+
             mediaPlayer.play();
 
-        }
         lineChartController.getxAxis().setAutoRanging(true);
         lineChartController.getyAxis().setAutoRanging(true);
-        int injectionNumber = InjectionInfo.injectionCounter;
 
 
-        if (injectionNumber <= sampleList.size()) {
-
-             injectionInfo = new InjectionInfo(sampleList.get(injectionNumber - 1).getSampleCompounds(), 33, 5, speedSlider,
-                    lineChart, new XYChart.Series<>(), startButton, 5,progressBar,this);
-
-            injectionDataList.add(injectionInfo);
+//        if (injectionNumber <= sampleList.size()) {
+//
+//            injectionInfo = new InjectionInfo(sampleList.get(injectionNumber - 1).getSampleCompounds(), 33, 5, speedSlider,
+//                    lineChart, new XYChart.Series<>(), startButton, 5, progressBar, this);
+//
+//            injectionDataList.add(injectionInfo);
 
             //Controller does not need it's own injectionCounter, use one in injectionInfo instead
-            Injection injection = new Injection(injectionInfo);
+            Injection injection = new Injection(SampleInfo.samplesList);
             injection.run();
 
-        } else {
-            startButton.setDisable(true);
-
-        }
+//        } else {
+//            startButton.setDisable(true);
+//
+//        }
 
     }
 
@@ -339,44 +343,50 @@ public class Controller {
 
 
     private void addInjectionDummyData() {
-        SampleInfo dummySample1 = new SampleInfo("Working Standard", "5");
-        SampleInfo dummySample2 = new SampleInfo("Sensitivity", "5");
-        SampleInfo dummySample3 = new SampleInfo(" Lot 749353", "5");
-        sampleList.add(dummySample1);
-        sampleList.add(dummySample2);
-        sampleList.add(dummySample3);
+        new SampleInfo("Working Standard", "5");
+        new SampleInfo("Sensitivity", "5");
+        new SampleInfo(" Lot 749353", "5");
 
 
     }
 
 
     public void newSampleButtonPushed() {
-        SampleInfo sampleInfo = new SampleInfo("", "5");
-        sampleTable.getItems().add(sampleInfo);
+        new SampleInfo("", "5");
+
     }
 
     public void deleteSampleButtonPushed() {
-
+        //possibility in future to delete multiple samples at once
         ObservableList<SampleInfo> selectedRows = sampleTable.getSelectionModel().getSelectedItems();
+        System.out.println(selectedRows.get(0));
         ObservableList<SampleInfo> allSamples = sampleTable.getItems();
-        for (SampleInfo sample : selectedRows) {
-            int sampleNumberRemoved = sample.getSampleNumber();
-            SampleInfo.sampleCounter--;
-            allSamples.remove(sample);
+        if(selectedRows.get(0).getInjectionInfo().isInjected()){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Cannot delete already injected samples");
+            alert.show();
 
-            for (SampleInfo remainingSample : sampleList) {
-                if (remainingSample.getSampleNumber() > sampleNumberRemoved) {
-                    remainingSample.setSampleNumber(remainingSample.getSampleNumber() - 1);
+        }
+        else {
+
+
+            for (SampleInfo sample : selectedRows) {
+                int sampleNumberRemoved = sample.getSampleNumber();
+                SampleInfo.sampleCounter--;
+                SampleInfo.samplesList.remove(sample);
+
+                for (SampleInfo remainingSample : sampleList) {
+                    if (remainingSample.getSampleNumber() > sampleNumberRemoved) {
+                        remainingSample.setSampleNumber(remainingSample.getSampleNumber() - 1);
+
+
+                    }
 
 
                 }
 
 
             }
-
-
         }
-
     }
 
     public void newEventButtonPushed() {
@@ -442,12 +452,12 @@ public class Controller {
     }
 
     public void abandonInjection(ActionEvent actionEvent) {
-        InjectionInfo currentInjection = InjectionInfo.injectionList.get( InjectionInfo.injectionList.size()-1);
+        InjectionInfo currentInjection = InjectionInfo.injectionList.get(InjectionInfo.injectionList.size() - 1);
         currentInjection.setInjectionAbandoned(true);
     }
 
     public void finishInjection(ActionEvent actionEvent) {
-        InjectionInfo currentInjection = InjectionInfo.injectionList.get( InjectionInfo.injectionList.size()-1);
+        InjectionInfo currentInjection = InjectionInfo.injectionList.get(InjectionInfo.injectionList.size() - 1);
         currentInjection.setInstantaneousInjectionFlag(true);
     }
 
@@ -458,42 +468,45 @@ public class Controller {
     public void exportSeriesAsCSV(ActionEvent actionEvent) throws IOException {
 
         PrintWriter out = new PrintWriter("chromatogramData.csv");
-        XYChart.Series<Number,Number> series = lineChart.getData().get(0);
-        for(XYChart.Data<Number,Number> data: series.getData()){
+        XYChart.Series<Number, Number> series = lineChart.getData().get(0);
+        for (XYChart.Data<Number, Number> data : series.getData()) {
             out.println(data.getXValue().doubleValue() + "," + data.getYValue().doubleValue());
 
         }
         // Close the file.
         out.close();  // Step 4
-        }
+    }
 
 
-        public void createNewSampleSet(){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Creating new sample set abandons any currently running sets.  " +
+    public void createNewSampleSet() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Creating new sample set abandons any currently running sets.  " +
                 "Are you sure you wish to continue?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                abandonSet();
-                ObservableList<SampleInfo> newSampleList = FXCollections.observableArrayList();
-               sampleList.clear();
-                System.out.println(sampleList);
-               sampleList = newSampleList;
-                sampleTable.setItems(sampleList);
-                SampleInfo.setSampleCounter(1);
-                injectionInfo = null;
-                InjectionInfo.injectionList.clear();
-                InjectionInfo.injectionCounter=1;
-
-            }
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            abandonSet();
+            ObservableList<SampleInfo> newSampleList = FXCollections.observableArrayList();
+            sampleList.clear();
+            System.out.println(sampleList);
+            sampleList = newSampleList;
+            sampleTable.setItems(sampleList);
+            SampleInfo.setSampleCounter(1);
+            injectionInfo = null;
+            InjectionInfo.injectionList.clear();
+            InjectionInfo.injectionCounter = 1;
 
         }
-        public void abandonSet(){
 
-            InjectionInfo currentInjection = InjectionInfo.injectionList.get( InjectionInfo.injectionList.size()-1);
-            currentInjection.setSetAbandoned(true);
-            lineChart.getData().clear();
+    }
 
-        }
+    public void abandonSet() {
+        ObservableList<SampleInfo> newSampleList = FXCollections.observableArrayList();
+
+
+        InjectionInfo currentInjection = InjectionInfo.injectionList.get(InjectionInfo.injectionList.size() - 1);
+        currentInjection.setSetAbandoned(true);
+        lineChart.getData().clear();
+
+    }
 }
 
 
