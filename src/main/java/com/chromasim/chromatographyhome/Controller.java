@@ -54,6 +54,7 @@ public class Controller {
     private Scene processingScene;
     private ArrayList<InjectionInfo> injectionDataList = new ArrayList<>();
     private LineChart<Number, Number> lineChart;
+    private InstrumentMethod instrumentMethod;
 
 
     @FXML
@@ -505,6 +506,24 @@ public class Controller {
         InjectionInfo currentInjection = InjectionInfo.injectionList.get(InjectionInfo.injectionList.size() - 1);
         currentInjection.setSetAbandoned(true);
         lineChart.getData().clear();
+
+    }
+
+    public void EditInstrumentMethod(ActionEvent actionEvent) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/InstrumentMethod.fxml"));
+            InstrumentMethodController imController = new InstrumentMethodController(instrumentMethod);
+            loader.setController(imController);
+            try {
+                Stage instrumentMethodStage = new Stage();
+                Scene instrumentMethodScene = new Scene(loader.load(),600,300);
+                instrumentMethodStage.setScene(instrumentMethodScene);
+                instrumentMethodStage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Unable to load Compound table view scene");
+            }
+
 
     }
 }
