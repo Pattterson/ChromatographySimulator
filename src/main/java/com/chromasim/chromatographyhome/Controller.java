@@ -115,6 +115,7 @@ public class Controller {
 
 
     public void initialize() {
+        instrumentMethod = new InstrumentMethod();
 
         setFXMLComponents();
 
@@ -515,13 +516,13 @@ public class Controller {
             loader.setController(imController);
             try {
                 Stage instrumentMethodStage = new Stage();
-                Scene instrumentMethodScene = new Scene(loader.load(),600,300);
+                Scene instrumentMethodScene = new Scene(loader.load(),850,400);
                 instrumentMethodStage.setScene(instrumentMethodScene);
                 instrumentMethodStage.show();
 
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Unable to load Compound table view scene");
+                System.out.println("Unable to load Instrument Method");
             }
 
 
