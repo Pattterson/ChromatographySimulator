@@ -3,6 +3,7 @@ package com.chromasim.chromatographyhome;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -60,13 +61,18 @@ public class InjectionInfo {
 
         this.lineChart = lineChart;
         this.series = series;
+        System.out.println(this.series);
+
+        series.getData().add(new XYChart.Data<>(3,3));
 
         pointsToCollect = (int)(samplingRate * 60 * runTime + 1); //+1 for time =0 datapoint
 
         injectionList.add(this);
 
         Platform.runLater(() -> {
+            FXMLComponents.lineChart.getData().add(series);
             Node n = series.getNode();
+            System.out.println(n);
             StringBuilder style = new StringBuilder();
             style.append("-fx-stroke: black; \n  -fx-stroke-width: 1px;");
             n.setStyle(style.toString());

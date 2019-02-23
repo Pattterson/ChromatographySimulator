@@ -9,31 +9,38 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
+//this class needs badly needs refactoring
 public class Injection implements Runnable {
     private InjectionInfo injectionInfo;
     private final ArrayList<XYChart.Data<Number, Number>> pointsToAdd; //generated datapoints that will be pushed to chart by output timer
     private int samplingPoint = 0; //counter to increment with each new data point
     private ObservableList<SampleInfo> samplesList;
+    private int injectionNumber = 1;
+    private  SampleInfo sample;
 
     public Injection(ObservableList<SampleInfo> samplesList) {
         this.samplesList = samplesList;
+        sample = samplesList.get(0);
+        sample.setInjectionInfo(new InjectionInfo(samplesList.get(0).getSampleCompounds(), 33, 5, FXMLComponents.speedSlider,
+                FXMLComponents.lineChart, new XYChart.Series<Number,Number>(),5, FXMLComponents.progressBar));
+        injectionInfo = sample.getInjectionInfo();
+
+
         pointsToAdd = new ArrayList<>();
     }
 
 
     @Override
     public void run() {
-        SampleInfo sample = injectNext();
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                FXMLComponents.sampleTable.getSelectionModel().select(injectionInfo.getThisInjectionNumber() - 1);
+        Platform.runLater(() -> {
 
-                FXMLComponents.progressIndicatorText.setText("Injecting vial " + injectionInfo.getThisInjectionNumber() + ": " + sample.getSampleName());
-            }
+            FXMLComponents.sampleTable.getSelectionModel().select(injectionInfo.getThisInjectionNumber() - 1);
+            FXMLComponents.progressIndicatorText.setText("Injecting vial " + injectionInfo.getThisInjectionNumber() + ": " + sample.getSampleName());
         });
 
-        injectionInfo.getLineChart().getData().add(injectionInfo.getSeries());
+        injectionInfo = sample.getInjectionInfo();
+        System.out.println(injectionInfo.getSeries().getData());
         startGenerationTimer();
         startOutputTimer();
 
@@ -49,9 +56,11 @@ public class Injection implements Runnable {
             int speedSliderValue = FXMLComponents.speedSlider.valueProperty().intValue();
 
             public void run() {
+
                 generate();
 
                 if (samplingPoint > injectionInfo.getPointsToCollect() || injectionInfo.getInjectionAbandoned() || injectionInfo.getSetAbandoned()) {
+                    System.out.println(samplingPoint);
                     timer.cancel();
                     timer.purge();
 
@@ -79,6 +88,7 @@ public class Injection implements Runnable {
                 double time = samplingPoint * 1 / injectionInfo.getSamplingRate();
 
 
+
                 double response = calculateResponseAtDatum(time);
                 synchronized (pointsToAdd) {
                     pointsToAdd.add(new XYChart.Data<Number, Number>(time, response));
@@ -99,6 +109,7 @@ public class Injection implements Runnable {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+
                 int speedSliderValue =  FXMLComponents.speedSlider.valueProperty().intValue();
                 Platform.runLater(new Runnable() {
                     @Override
@@ -118,7 +129,6 @@ public class Injection implements Runnable {
                 if (injectionInfo.getSeries().getData().size() > injectionInfo.getPointsToCollect() || injectionInfo.getInjectionAbandoned() || injectionInfo.getSetAbandoned()) {
                     timer.cancel();
                     timer.purge();
-                    System.out.println("output timer has stopped");
                     if (injectionInfo.getInjectionAbandoned()) {
                         Platform.runLater(() -> FXMLComponents.progressIndicatorText.setText("Injection Abandoned"));
                     }
@@ -141,8 +151,9 @@ public class Injection implements Runnable {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+
                         Platform.runLater(() -> {
-                            injectionInfo.getNextInjection().fire();
+                            injectNext();
                             injectionInfo.getLineChart().getData().remove(injectionInfo.getSeries());
                         });
 
@@ -204,15 +215,20 @@ public class Injection implements Runnable {
 
 
     public SampleInfo injectNext(){
-        SampleInfo sampleToInject = samplesList.get(0);
-
+        FXMLComponents.lineChart.getData().remove(injectionInfo.getSeries());
+        System.out.println(injectionNumber);
+        SampleInfo sampleToInject = samplesList.get(injectionNumber);
+        injectionNumber++;
         injectionInfo = new InjectionInfo(sampleToInject.getSampleCompounds(), 33, 5, FXMLComponents.speedSlider,
                 FXMLComponents.lineChart, new XYChart.Series<Number,Number>(),5, FXMLComponents.progressBar);
 
         sampleToInject.setInjectionInfo(injectionInfo);
         sampleToInject.getInjectionInfo().setInjected(true);
-
+        sample = sampleToInject;
+        samplingPoint=0;
+        run();
         return sampleToInject;
+
     }
 
 
