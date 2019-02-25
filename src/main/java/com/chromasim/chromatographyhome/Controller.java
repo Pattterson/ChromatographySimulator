@@ -22,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -55,6 +56,7 @@ public class Controller {
     private ArrayList<InjectionInfo> injectionDataList = new ArrayList<>();
     private LineChart<Number, Number> lineChart;
     private InstrumentMethod instrumentMethod;
+    private Stage instrumentMethodStage;
 
 
     @FXML
@@ -525,15 +527,29 @@ public class Controller {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/InstrumentMethod.fxml"));
             InstrumentMethodController imController = new InstrumentMethodController(instrumentMethod);
             loader.setController(imController);
-            try {
-                Stage instrumentMethodStage = new Stage();
-                Scene instrumentMethodScene = new Scene(loader.load(),850,400);
-                instrumentMethodStage.setScene(instrumentMethodScene);
-                instrumentMethodStage.show();
+            if(instrumentMethodStage==null) {
 
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Unable to load Instrument Method");
+                try {
+                    instrumentMethodStage = new Stage();
+                    Scene instrumentMethodScene = new Scene(loader.load(), 850, 400);
+                    instrumentMethodStage.setScene(instrumentMethodScene);
+                    instrumentMethodStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                        @Override
+                        public void handle(WindowEvent event) {
+
+                            instrumentMethodStage=null;
+                        }
+                    });
+                    instrumentMethodStage.show();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("Unable to load Instrument Method");
+                }
+
+            }
+            else{
+                instrumentMethodStage.requestFocus();
             }
 
 
