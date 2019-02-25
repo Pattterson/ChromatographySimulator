@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-//All information needed to perform one injection (instrument method parameters / sample compounds, etc...
+//All information needed to perform one injection (instrument method parameters / sampleInfo / Series)
 //will be included in an Injection Info object which is passed to an injection object to actually perform the injection
 public class InjectionInfo {
 
@@ -47,23 +47,19 @@ public class InjectionInfo {
         this.injected = injected;
     }
 
-    public InjectionInfo(ObservableList<Compound> compounds, double runTime, double samplingRate, Slider speedSlider, LineChart<Number, Number> lineChart, XYChart.Series<Number, Number> series,  int refreshRate, ProgressBar progressBar) {
+    public InjectionInfo(ObservableList<Compound> compounds, double runTime, double samplingRate,  int refreshRate) {
         thisInjectionNumber = injectionCounter;
         injectionAbandoned = false;
         this.compounds = compounds;
         this.runTime = runTime;
         this.samplingRate = samplingRate;
         this.refreshRate = refreshRate;
-
+        series = new XYChart.Series<Number,Number>();
         addDefaultIntegrationEvents();
 
         injectionCounter++;
 
-        this.lineChart = lineChart;
-        this.series = series;
         System.out.println(this.series);
-
-        series.getData().add(new XYChart.Data<>(3,3));
 
         pointsToCollect = (int)(samplingRate * 60 * runTime + 1); //+1 for time =0 datapoint
 

@@ -74,11 +74,11 @@ public class InstrumentMethodController {
         addFocusListener(inletTemp, TextFieldType.TEMP);
         addFocusListener(columnFlow, TextFieldType.FLOW);
 
-
         columnType.getItems().add("DB-624");
         columnType.getItems().add("HP5-MS");
         detectorType.getItems().add("FID");
         detectorType.getItems().add("MS");
+
         allMethodsMapObservable.addListener(new MapChangeListener<String, InstrumentMethod>() {
             @Override
             public void onChanged(Change<? extends String, ? extends InstrumentMethod> change) {
@@ -137,7 +137,7 @@ public class InstrumentMethodController {
     public void saveButtonPressed() {
         try{
 
-            instrumentMethod = new InstrumentMethod();
+
             instrumentMethod.setSamplingRate(removeTextTail(samplingRate.getText()));
             instrumentMethod.setRunTime(removeTextTail(runTime.getText()));
             instrumentMethod.setInitialTemp(removeTextTail(initialTemp.getText()));
@@ -147,10 +147,12 @@ public class InstrumentMethodController {
             instrumentMethod.setInletTemp(removeTextTail(inletTemp.getText()));
             instrumentMethod.setColumnFlow(removeTextTail(columnFlow.getText()));
 
+            instrumentMethod.setPointsToCollect((int) (instrumentMethod.getRunTime()*60 * instrumentMethod.getSamplingRate()+1));
+
             //prevent map listener from being fired with duplicate
             if(!allMethodsMapObservable.keySet().contains(methodName.getText())){
                 allMethodsMapObservable.put(methodName.getText(),instrumentMethod);
-                pushMethodToDatabase();
+//                pushMethodToDatabase();
             }
 
 

@@ -184,7 +184,7 @@
                      <font>
                                 <Font size="18.0" fx:id="x1" />
                      </font></Label>
-                        <Button fx:id="startButton" layoutX="-3.0" layoutY="37.0" mnemonicParsing="false" onAction="#startButtonClicked" text="Inject All" />
+                        <Button fx:id="startButton" layoutX="-3.0" layoutY="37.0" mnemonicParsing="false" onAction="#startButtonPressed" text="Inject All" />
                         <Button disable="false" layoutY="64.0" mnemonicParsing="false" onAction="#abandonInjection" text="Abandon Injection" textFill="RED" />
                         <Button disable="false" layoutY="91.0" mnemonicParsing="false" onAction="#finishInjection" text="Finish Injection" />
                         <Button fx:id="abandonSetButton" layoutY="118.0" mnemonicParsing="false" onAction="#abandonSet" text="Abandon Set" />
@@ -203,7 +203,7 @@
                   <Slider fx:id="refreshRateSlider" blockIncrement="25.0" layoutX="29.0" layoutY="256.0" majorTickUnit="1.0" max="4.0" min="1.0" minorTickCount="0" prefHeight="17.0" prefWidth="83.0" showTickMarks="true" value="4.0" />
                   <Label layoutX="29.0" layoutY="239.0" text="Refresh Rate" />
                   <Label fx:id="speedIndicator1" layoutX="56.0" layoutY="274.0" text="1 hz" />
-                  <Button fx:id="injectSelectedButton" layoutX="66.0" layoutY="37.0" mnemonicParsing="false" onAction="#startButtonClicked" text="Inject Selected" />
+                  <Button fx:id="injectSelectedButton" layoutX="66.0" layoutY="37.0" mnemonicParsing="false" onAction="#startButtonPressed" text="Inject Selected" />
                     </children>
                 </AnchorPane>
             </items>

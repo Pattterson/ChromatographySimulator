@@ -156,7 +156,7 @@ public class Controller {
         addInjectionDummyData();
         sampleTable.setItems(sampleList);
         for (SampleInfo info : sampleList) {
-            System.out.println(sampleList.size());
+
         }
 
         sampleTable.setEditable(true);
@@ -236,13 +236,11 @@ public class Controller {
                             event.getTablePosition().getRow());
 
                     Method method;
-                    System.out.println("handler fired");
+
                     try {
                         String setterMethodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-                        System.out.println(setterMethodName);
 
                         method = selected.getClass().getMethod(setterMethodName, String.class);
-                        System.out.println(event.getNewValue().toString());
                         try {
                             method.invoke(selected, event.getNewValue().toString());
                         } catch (IllegalArgumentException e) {
@@ -253,7 +251,7 @@ public class Controller {
                             e.printStackTrace();
                         }
                     } catch (NoSuchMethodException e) {
-                        System.out.println("oh nose");
+                        System.out.println("Error accessing methods");
                     }
 
 
@@ -275,13 +273,20 @@ public class Controller {
 
     }
 
-    public void startButtonClicked() {
+    public void startButtonPressed() {
+        instrumentMethod.setSamplingRate(3);
+        instrumentMethod.setRunTime(3);
+        instrumentMethod.setInitialTemp(3);
+        instrumentMethod.setInitialTime(3);
+        instrumentMethod.setRamp(3);
+        instrumentMethod.setMaxTemp(3);
+        instrumentMethod.setInletTemp(3);
+        instrumentMethod.setColumnFlow(3);
+        instrumentMethod.setPointsToCollect((int) (instrumentMethod.getRunTime()*60 * instrumentMethod.getSamplingRate()+1));
 
 
-            mediaPlayer.play();
 
-        lineChartController.getxAxis().setAutoRanging(true);
-        lineChartController.getyAxis().setAutoRanging(true);
+
 
 
 //        if (injectionNumber <= sampleList.size()) {
@@ -292,13 +297,20 @@ public class Controller {
 //            injectionDataList.add(injectionInfo);
 
             //Controller does not need it's own injectionCounter, use one in injectionInfo instead
-            Injection injection = new Injection(SampleInfo.samplesList);
-            injection.run();
+        if(instrumentMethod.getPointsToCollect()>0){
 
-//        } else {
-//            startButton.setDisable(true);
-//
-//        }
+
+            mediaPlayer.play();
+            lineChartController.getxAxis().setAutoRanging(true);
+            lineChartController.getyAxis().setAutoRanging(true);
+            startButton.setDisable(true);
+            new Injection(SampleInfo.samplesList, instrumentMethod);
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Please set instrument method in settings menu before beginning analysis");
+            alert.show();
+        }
+
 
     }
 
@@ -361,7 +373,6 @@ public class Controller {
     public void deleteSampleButtonPushed() {
         //possibility in future to delete multiple samples at once
         ObservableList<SampleInfo> selectedRows = sampleTable.getSelectionModel().getSelectedItems();
-        System.out.println(selectedRows.get(0));
         ObservableList<SampleInfo> allSamples = sampleTable.getItems();
         if(selectedRows.get(0).getInjectionInfo().isInjected()){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Cannot delete already injected samples");
@@ -400,6 +411,7 @@ public class Controller {
     }
 
 
+//Processing view does not add any functionality not available in acquisition view, therefore will likely be deleted
     public void goToProcessingView() {
 
         Scene mainScene = StageHelper.getStages().get(0).getScene();
@@ -439,7 +451,6 @@ public class Controller {
             if (injectionIndex < InjectionInfo.injectionList.size()) {
 
                 InjectionInfo selectedInjection = InjectionInfo.injectionList.get(injectionIndex);
-                System.out.println(selectedInjection.getCompounds().size());
                 lineChart.getData().clear();
                 lineChart.getData().add(selectedInjection.getSeries());
                 eventsTable.setItems(selectedInjection.getEventsList());
@@ -454,6 +465,8 @@ public class Controller {
     }
 
     public void abandonInjection(ActionEvent actionEvent) {
+
+
         InjectionInfo currentInjection = InjectionInfo.injectionList.get(InjectionInfo.injectionList.size() - 1);
         currentInjection.setInjectionAbandoned(true);
     }
@@ -486,11 +499,7 @@ public class Controller {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             abandonSet();
-            ObservableList<SampleInfo> newSampleList = FXCollections.observableArrayList();
             sampleList.clear();
-            System.out.println(sampleList);
-            sampleList = newSampleList;
-            sampleTable.setItems(sampleList);
             SampleInfo.setSampleCounter(1);
             injectionInfo = null;
             InjectionInfo.injectionList.clear();
@@ -503,10 +512,12 @@ public class Controller {
     public void abandonSet() {
         ObservableList<SampleInfo> newSampleList = FXCollections.observableArrayList();
 
+        if(InjectionInfo.injectionList.size()>0){
+            InjectionInfo currentInjection = InjectionInfo.injectionList.get(InjectionInfo.injectionList.size() - 1);
+            currentInjection.setSetAbandoned(true);
+            lineChart.getData().clear();
+        }
 
-        InjectionInfo currentInjection = InjectionInfo.injectionList.get(InjectionInfo.injectionList.size() - 1);
-        currentInjection.setSetAbandoned(true);
-        lineChart.getData().clear();
 
     }
 

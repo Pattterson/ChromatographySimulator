@@ -54,6 +54,7 @@ public class SampleInfo {
     public SampleInfo(String sampleName, String injectionVolume) {
         samplesList.add(this);
 
+
         IntegerBinding sampleCompoundsSizeProperty = Bindings.size(sampleCompounds);
 
         compoundButton.textProperty().bind(sampleCompoundsSizeProperty.asString());

@@ -17,6 +17,8 @@ public class InstrumentMethod {
     private String columnType;
     private String detectorType;
 
+    private int pointsToCollect;
+
     public InstrumentMethod() {
 
     }
@@ -99,5 +101,13 @@ public class InstrumentMethod {
 
     public void setDetectorType(String detectorType) {
         this.detectorType = detectorType;
+    }
+
+    public int getPointsToCollect() {
+        return pointsToCollect;
+    }
+
+    public void setPointsToCollect(int pointsToCollect) {
+        this.pointsToCollect = pointsToCollect;
     }
 }
