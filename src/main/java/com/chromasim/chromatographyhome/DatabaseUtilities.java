@@ -1,35 +1,42 @@
 package com.chromasim.chromatographyhome;
 
+import com.google.gson.Gson;
 import com.mongodb.*;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import org.apache.jena.iri.impl.Test;
+import org.bson.Document;
 
 public class DatabaseUtilities {
     static MongoClientURI uri;
     static MongoClient mongoClient;
-    static DB database;
-    static DBCollection instrumentMethodCollection;
+    static MongoDatabase database;
+    static MongoCollection<Document> instrumentMethodCollection;
     static DBObject method;
 
     static{
         MongoClientURI uri  = new MongoClientURI("mongodb://test123:test123@ds113855.mlab.com:13855/sandboxdb");
         mongoClient = new MongoClient(uri);
-        database = mongoClient.getDB("sandboxdb");
-        instrumentMethodCollection = database.getCollection("instrumentMethods");
+        database = mongoClient.getDatabase("sandboxdb");
+         instrumentMethodCollection = database.getCollection("instrumentMethods");
 
-        instrumentMethodCollection.createIndex(new BasicDBObject("createdAt",1),new BasicDBObject("expireAfterSeconds",1L));
+//        instrumentMethodCollection.createIndex(new BasicDBObject("createdAt",1),new BasicDBObject("expireAfterSeconds",1L));
 
     }
 
 
-    public static void pushInstrumentMethodToDatabase(InstrumentMethod im){
-        method = new BasicDBObject();
-        method = ((BasicDBObject) method).append("samplingRate",im.getSamplingRate()).append("Runtime",im.getRunTime())
-                .append("initialTemp",im.getInitialTemp()).append("initialTime",im.getInitialTime())
-                .append("ramp",im.getRamp()).append("maxTemperature", im.getMaxTemp())
-                .append("inletTemp",im.getInletTemp()).append("columnFlow",im.getColumnFlow());
-
-        instrumentMethodCollection.insert(method);
-        System.out.println(instrumentMethodCollection.getCount());
+    public  static void pushInstrumentMethodToDatabase(InstrumentMethod im){
+        Gson gson = new Gson();
+        String json = gson.toJson(im);
+        System.out.println(json);
+        Document methodToAdd = Document.parse(json);
+//        ((BasicDBObject) method).append(json);
+//        method = ((BasicDBObject) method).append("samplingRate",im.getSamplingRate()).append("Runtime",im.getRunTime())
+//                .append("initialTemp",im.getInitialTemp()).append("initialTime",im.getInitialTime())
+//                .append("ramp",im.getRamp()).append("maxTemperature", im.getMaxTemp())
+//                .append("inletTemp",im.getInletTemp()).append("columnFlow",im.getColumnFlow());
+        instrumentMethodCollection.insertOne(methodToAdd);
+        System.out.println(instrumentMethodCollection.countDocuments());
 
 
 
