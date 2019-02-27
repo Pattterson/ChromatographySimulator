@@ -152,7 +152,7 @@ public class InstrumentMethodController {
             //prevent map listener from being fired with duplicate
             if(!allMethodsMapObservable.keySet().contains(methodName.getText())){
                 allMethodsMapObservable.put(methodName.getText(),instrumentMethod);
-//                pushMethodToDatabase();
+                DatabaseUtilities.pushInstrumentMethodToDatabase(instrumentMethod);
             }
 
 

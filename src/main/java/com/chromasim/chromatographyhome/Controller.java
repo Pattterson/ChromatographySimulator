@@ -276,15 +276,15 @@ public class Controller {
     }
 
     public void startButtonPressed() {
-        instrumentMethod.setSamplingRate(3);
-        instrumentMethod.setRunTime(3);
-        instrumentMethod.setInitialTemp(3);
-        instrumentMethod.setInitialTime(3);
-        instrumentMethod.setRamp(3);
-        instrumentMethod.setMaxTemp(3);
-        instrumentMethod.setInletTemp(3);
-        instrumentMethod.setColumnFlow(3);
-        instrumentMethod.setPointsToCollect((int) (instrumentMethod.getRunTime()*60 * instrumentMethod.getSamplingRate()+1));
+//        instrumentMethod.setSamplingRate(3);
+//        instrumentMethod.setRunTime(3);
+//        instrumentMethod.setInitialTemp(3);
+//        instrumentMethod.setInitialTime(3);
+//        instrumentMethod.setRamp(3);
+//        instrumentMethod.setMaxTemp(3);
+//        instrumentMethod.setInletTemp(3);
+//        instrumentMethod.setColumnFlow(3);
+//        instrumentMethod.setPointsToCollect((int) (instrumentMethod.getRunTime()*60 * instrumentMethod.getSamplingRate()+1));
 
 
 
@@ -531,6 +531,7 @@ public class Controller {
 
                 try {
                     instrumentMethodStage = new Stage();
+//                    imController.initialize();
                     Scene instrumentMethodScene = new Scene(loader.load(), 850, 400);
                     instrumentMethodStage.setScene(instrumentMethodScene);
                     instrumentMethodStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
