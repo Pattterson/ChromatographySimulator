@@ -16,10 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InstrumentMethodController {
     @FXML
@@ -61,6 +58,7 @@ public class InstrumentMethodController {
     }
 
     public void initialize() {
+
 
 
 
@@ -135,6 +133,7 @@ public class InstrumentMethodController {
     }
 
     public void saveButtonPressed() {
+        DatabaseUtilities.getAllInstrumentMethods();
         try{
 
 
@@ -146,6 +145,8 @@ public class InstrumentMethodController {
             instrumentMethod.setMaxTemp(removeTextTail(maxTemp.getText()));
             instrumentMethod.setInletTemp(removeTextTail(inletTemp.getText()));
             instrumentMethod.setColumnFlow(removeTextTail(columnFlow.getText()));
+
+            instrumentMethod.setMethodName(methodName.getText());
 
             instrumentMethod.setPointsToCollect((int) (instrumentMethod.getRunTime()*60 * instrumentMethod.getSamplingRate()+1));
 
@@ -275,12 +276,25 @@ public class InstrumentMethodController {
     }
 
 
+    public void setUpMethodList() {
+        allMethodsMapObservable.clear();
+        System.out.println("methods map size = " + allMethodsMapObservable.size());
+
+        ArrayList<InstrumentMethod> methodList= new ArrayList<>(DatabaseUtilities.getAllInstrumentMethods());
+        for(InstrumentMethod im: methodList){
+            System.out.println("adding: " + im.getMethodName());
+            allMethodsMapObservable.put(im.getMethodName(),im);
+
+        }
+//        this.methodList.getItems().addAll(allMethodsMapObservable.keySet());
+
+    }
 }
 
 
 enum TextFieldType {
     FREQUENCY, TIME, TEMP, TEMPRAMP,
-    FLOW, FRIDAY, SATURDAY;
+    FLOW,
 }
 
 

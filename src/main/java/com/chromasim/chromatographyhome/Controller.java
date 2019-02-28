@@ -527,6 +527,8 @@ public class Controller {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/InstrumentMethod.fxml"));
             InstrumentMethodController imController = new InstrumentMethodController(instrumentMethod);
             loader.setController(imController);
+
+
             if(instrumentMethodStage==null) {
 
                 try {
@@ -542,6 +544,8 @@ public class Controller {
                         }
                     });
                     instrumentMethodStage.show();
+                    new Thread(() ->imController.setUpMethodList()).start();
+
 
                 } catch (IOException e) {
                     e.printStackTrace();

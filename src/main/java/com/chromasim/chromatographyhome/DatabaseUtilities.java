@@ -3,9 +3,14 @@ package com.chromasim.chromatographyhome;
 import com.google.gson.Gson;
 import com.mongodb.*;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import org.apache.jena.iri.impl.Test;
 import org.bson.Document;
+import org.bson.types.ObjectId;
+
+import javax.sound.midi.Instrument;
+import java.util.ArrayList;
 
 public class DatabaseUtilities {
     static MongoClientURI uri;
@@ -25,22 +30,56 @@ public class DatabaseUtilities {
     }
 
 
-    public  static void pushInstrumentMethodToDatabase(InstrumentMethod im){
+    public static void pushInstrumentMethodToDatabase(InstrumentMethod im){
+        ObjectId id = new ObjectId();
+        im.setDatabaseID(id.toString());
         Gson gson = new Gson();
         String json = gson.toJson(im);
-        System.out.println(json);
+//        System.out.println(json);
         Document methodToAdd = Document.parse(json);
-//        ((BasicDBObject) method).append(json);
-//        method = ((BasicDBObject) method).append("samplingRate",im.getSamplingRate()).append("Runtime",im.getRunTime())
-//                .append("initialTemp",im.getInitialTemp()).append("initialTime",im.getInitialTime())
-//                .append("ramp",im.getRamp()).append("maxTemperature", im.getMaxTemp())
-//                .append("inletTemp",im.getInletTemp()).append("columnFlow",im.getColumnFlow());
+        methodToAdd.append("_id", id);
+        System.out.println(methodToAdd.get("_id"));
         instrumentMethodCollection.insertOne(methodToAdd);
+        instrumentMethodCollection.find().first().toJson();
+        MongoCursor<Document> cursor = instrumentMethodCollection.find().iterator();
+        while(cursor.hasNext()){
+            Document nextDocument = cursor.next();
+            System.out.println(nextDocument.get("_id"));
+            InstrumentMethod temp = gson.fromJson(nextDocument.toJson(),InstrumentMethod.class);
+
+        }
+        cursor.close();
+        InstrumentMethod retreivedMethod = gson.fromJson(instrumentMethodCollection.find().first().toJson(),InstrumentMethod.class);
+        System.out.println(retreivedMethod.getSamplingRate());
         System.out.println(instrumentMethodCollection.countDocuments());
 
 
 
     }
+
+    public static ArrayList<InstrumentMethod> getAllInstrumentMethods(){
+        Gson gson = new Gson();
+        ArrayList<InstrumentMethod> methodDocumentList = new ArrayList<>();
+        MongoCursor<Document> cursor = instrumentMethodCollection.find().iterator();
+        try {
+            while (cursor.hasNext()) {
+                InstrumentMethod retreivedMethod = gson.fromJson(cursor.next().toJson(),InstrumentMethod.class);
+                methodDocumentList.add(retreivedMethod);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        for(InstrumentMethod method: methodDocumentList){
+            System.out.println("sampling rate is: " + method.getSamplingRate() );
+        }
+
+
+        return methodDocumentList;
+    }
+
+
+
 
 //    //        System.out.println(mongoClient.getAddress());
 //    DB database = mongoClient.getDB("sandboxdb");

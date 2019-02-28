@@ -6,6 +6,7 @@ import javafx.scene.control.ChoiceBox;
 
 public class InstrumentMethod {
 
+
     private double samplingRate;
     private double runTime;
     private double initialTemp;
@@ -17,10 +18,32 @@ public class InstrumentMethod {
     private String columnType;
     private String detectorType;
 
+    private String methodName;
+    private String databaseID="";
+
     private int pointsToCollect;
 
     public InstrumentMethod() {
+    }
 
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public String getDatabaseID() {
+        return databaseID;
+    }
+
+    public void setDatabaseID(String databaseID) {
+        if(databaseID==""){
+            this.databaseID = databaseID;
+        }
+
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
     }
 
     public double getSamplingRate() {
