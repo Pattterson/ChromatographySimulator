@@ -1,5 +1,6 @@
 package com.chromasim.chromatographyhome;
 
+import com.sun.javafx.application.PlatformImpl;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -18,8 +19,11 @@ public class Main extends Application {
         Scene scene = new Scene(root, 1350, 825);
         primaryStage.setScene(scene);
         scene.getStylesheets().add(Main.class.getResource("/styles.css").toExternalForm());
+        Platform.setImplicitExit(true);
         primaryStage.setOnCloseRequest(event -> {
             Platform.exit();
+
+
         });
         primaryStage.show();
 
