@@ -261,6 +261,32 @@ public class InstrumentMethodController {
     }
 
     public void loadButtonPressed() {
+        InstrumentMethod loadedMethod;
+        loadedMethod = allMethodsMapObservable.get(methodList.getSelectionModel().getSelectedItem());
+
+        System.out.println(instrumentMethod.getSamplingRate());
+        samplingRate.setText(Double.toString(instrumentMethod.getSamplingRate()));
+
+        runTime.setText(Double.toString(loadedMethod.getRunTime()));
+        initialTemp.setText(Double.toString(loadedMethod.getInitialTemp()));
+        initialTime.setText(Double.toString(loadedMethod.getInitialTime()));
+        ramp.setText(Double.toString(loadedMethod.getRunTime()));
+        maxTemp.setText(Double.toString(loadedMethod.getMaxTemp()));
+        inletTemp.setText(Double.toString(loadedMethod.getInletTemp()));
+        columnFlow.setText(Double.toString(loadedMethod.getColumnFlow()));
+        methodName.setText(loadedMethod.getMethodName());
+
+        samplingRate.requestFocus();
+        runTime.requestFocus();
+        initialTemp.requestFocus();
+        initialTime.requestFocus();
+        ramp.requestFocus();
+        maxTemp.requestFocus();
+        inletTemp.requestFocus();
+        columnFlow.requestFocus();
+
+        methodName.requestFocus();
+
 
     }
 

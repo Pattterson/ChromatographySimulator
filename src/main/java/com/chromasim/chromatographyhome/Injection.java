@@ -6,8 +6,11 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.XYChart;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 
 //this class needs badly needs refactoring, might not need to implement runnable
@@ -19,6 +22,8 @@ public class Injection implements Runnable {
     private int injectionNumber = 0;
     private SampleInfo sample;
     private InstrumentMethod instrumentMethod;
+
+    private List<InjectionInfo> injectedSamplesList = new ArrayList<>();
 
     public Injection(ObservableList<SampleInfo> samplesList, InstrumentMethod instrumentMethod) {
         System.out.println(instrumentMethod.getPointsToCollect());
@@ -54,7 +59,9 @@ public class Injection implements Runnable {
 
         Timer timer = new Timer(true);
 
-        timer.scheduleAtFixedRate(new TimerTask() {
+
+        timer.schedule(new TimerTask() {
+
 
             int speedSliderValue = FXMLComponents.speedSlider.valueProperty().intValue();
 
@@ -217,6 +224,7 @@ public class Injection implements Runnable {
 
 
     public void injectNext() {
+
         FXMLComponents.lineChart.getData().clear();
         System.out.println(injectionNumber);
         if (injectionNumber < samplesList.size()) {
@@ -226,6 +234,7 @@ public class Injection implements Runnable {
             injectionNumber++;
             injectionInfo = new InjectionInfo(sampleToInject.getSampleCompounds(), 33, 5,
                      5);
+            injectedSamplesList.add(injectionInfo);
 
             sampleToInject.setInjectionInfo(injectionInfo);
 
