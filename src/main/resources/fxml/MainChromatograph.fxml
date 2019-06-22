@@ -39,7 +39,8 @@
                         <Menu mnemonicParsing="false" text="Open Recent" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" text="Close" />
-                        <MenuItem mnemonicParsing="false" text="Save" />
+                        <MenuItem mnemonicParsing="false" text="Save Sample Set" onAction="#saveSampleSet" />
+
                         <MenuItem mnemonicParsing="false" text="Save As…" />
                         <MenuItem mnemonicParsing="false" text="Revert" />
                         <SeparatorMenuItem mnemonicParsing="false" />
@@ -164,20 +165,6 @@
                         </SplitPane>
                     </children>
                 </VBox>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 <AnchorPane maxWidth="170.0" minWidth="0.0" prefHeight="543.0" prefWidth="170.0">
                     <children>
                         <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Actions" textAlignment="CENTER" textFill="#2448bf" wrapText="false">

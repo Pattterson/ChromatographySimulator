@@ -114,8 +114,6 @@ public class InjectionInfo {
     }
 
     public XYChart.Series<Number, Number> getSeries() {
-
-
         Platform.runLater(() -> {
             Node n = series.getNode();
             StringBuilder style = new StringBuilder();

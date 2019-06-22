@@ -17,6 +17,7 @@ public class DatabaseUtilities {
     static MongoClient mongoClient;
     static MongoDatabase database;
     static MongoCollection<Document> instrumentMethodCollection;
+    static MongoCollection<Document> sampleSetCollection;
     static DBObject method;
 
     static{
@@ -24,22 +25,35 @@ public class DatabaseUtilities {
         mongoClient = new MongoClient(uri);
         database = mongoClient.getDatabase("sandboxdb");
          instrumentMethodCollection = database.getCollection("instrumentMethods");
-
+        sampleSetCollection = database.getCollection("sampleSets");
 //        instrumentMethodCollection.createIndex(new BasicDBObject("createdAt",1),new BasicDBObject("expireAfterSeconds",1L));
 
     }
 
+//    public static void main(String[] args) {
+//        SampleSet set = new SampleSet();
+//        ObjectId id = new ObjectId();
+//        Gson gson = new Gson();
+//        String json = gson.toJson(set);
+//        System.out.println(json);
+//        Document setToAdd = Document.parse(json);
+//        sampleSetCollection.insertOne(setToAdd);
+//
+//
+//    }
 
     public static void pushInstrumentMethodToDatabase(InstrumentMethod im){
+        //setting the id manually so it can be used later
         ObjectId id = new ObjectId();
         im.setDatabaseID(id.toString());
         Gson gson = new Gson();
         String json = gson.toJson(im);
-//        System.out.println(json);
         Document methodToAdd = Document.parse(json);
         methodToAdd.append("_id", id);
         System.out.println(methodToAdd.get("_id"));
         instrumentMethodCollection.insertOne(methodToAdd);
+
+
         instrumentMethodCollection.find().first().toJson();
         MongoCursor<Document> cursor = instrumentMethodCollection.find().iterator();
         while(cursor.hasNext()){
