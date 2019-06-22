@@ -506,6 +506,7 @@ public class Controller {
             injectionInfo = null;
             InjectionInfo.injectionList.clear();
             InjectionInfo.injectionCounter = 1;
+            startButton.setDisable(false);
 
         }
 
@@ -558,6 +559,12 @@ public class Controller {
             }
 
 
+    }
+
+    public void saveSampleSet(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SaveSetList.fxml"));
+        InstrumentMethodController imController = new InstrumentMethodController(instrumentMethod);
+        loader.setController(imController);
     }
 }
 
