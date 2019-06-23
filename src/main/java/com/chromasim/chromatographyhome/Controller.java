@@ -317,6 +317,9 @@ public class Controller {
     }
 
     public void integrate() {
+        List integrationEvents = new ArrayList<IntegrationEvent>();
+        integrationEvents =  FXMLComponents.eventsTable.getItems();
+
 
         //The easiest way to start will be to convert series into array and process the array
         //Eventual goal is to process as a series without explicit conversion to an array
@@ -537,13 +540,7 @@ public class Controller {
 //                    imController.initialize();
                     Scene instrumentMethodScene = new Scene(loader.load(), 850, 400);
                     instrumentMethodStage.setScene(instrumentMethodScene);
-                    instrumentMethodStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                        @Override
-                        public void handle(WindowEvent event) {
-
-                            instrumentMethodStage=null;
-                        }
-                    });
+                    instrumentMethodStage.setOnCloseRequest(event -> instrumentMethodStage=null);
                     instrumentMethodStage.show();
                     new Thread(() ->imController.setUpMethodList()).start();
 
@@ -562,9 +559,33 @@ public class Controller {
     }
 
     public void saveSampleSet(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SaveSetList.fxml"));
-        InstrumentMethodController imController = new InstrumentMethodController(instrumentMethod);
-        loader.setController(imController);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SavedSetList.fxml"));
+        //InstrumentMethodController imController = new InstrumentMethodController(instrumentMethod);
+        //loader.setController(imController);
+    }
+
+
+    public void openSampleSet(){
+
+    }
+    //adding the modular component here for testing purposes, welcomeScreen will be show when application is launched
+    //when "Revert" is pressed, for testing purposes
+    public void showTitleScreen(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/WelcomeScreen.fxml"));
+        WelcomeScreenController wscontroller = new WelcomeScreenController();
+        loader.setController(wscontroller);
+
+        Stage stage = new Stage();
+        try {
+            Scene welcomeScene = new Scene(loader.load(), 740 , 230 );
+            stage.setScene(welcomeScene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
 

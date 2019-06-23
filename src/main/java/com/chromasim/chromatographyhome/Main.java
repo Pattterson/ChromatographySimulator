@@ -1,6 +1,8 @@
 package com.chromasim.chromatographyhome;
 
 import com.sun.javafx.application.PlatformImpl;
+import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
+import de.codecentric.centerdevice.javafxsvg.dimension.PrimitiveDimensionProvider;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -14,6 +16,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
+        SvgImageLoaderFactory.install(new PrimitiveDimensionProvider());
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainChromatograph.fxml"));
         primaryStage.setTitle("Chromatography Simulator 2019");
         Scene scene = new Scene(root, 1350, 825);

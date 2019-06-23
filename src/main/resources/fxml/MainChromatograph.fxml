@@ -41,8 +41,8 @@
                         <MenuItem mnemonicParsing="false" text="Close" />
                         <MenuItem mnemonicParsing="false" text="Save Sample Set" onAction="#saveSampleSet" />
 
-                        <MenuItem mnemonicParsing="false" text="Save As…" />
-                        <MenuItem mnemonicParsing="false" text="Revert" />
+                        <MenuItem mnemonicParsing="false" text="Open Sample Set" onAction="#openSampleSet" />
+                        <MenuItem mnemonicParsing="false" text="Revert" onAction="#showTitleScreen" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" text="Preferences…" />
                         <SeparatorMenuItem mnemonicParsing="false" />

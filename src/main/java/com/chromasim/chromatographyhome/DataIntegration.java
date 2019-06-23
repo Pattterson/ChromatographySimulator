@@ -9,6 +9,7 @@ import javafx.scene.chart.XYChart;
 import javax.sound.sampled.Line;
 import java.util.ArrayList;
 
+
 public class DataIntegration implements Runnable {
 
     private int peakWidth;
