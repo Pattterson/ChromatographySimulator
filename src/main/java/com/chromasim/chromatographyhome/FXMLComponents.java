@@ -35,7 +35,8 @@ public class FXMLComponents {
     static LineChart<Number,Number> lineChart;
     static NumberAxis xAxis;
     static NumberAxis yAxis;
-
+    static TextField peakWidthTextBox;
+    static TextField thresholdTextBox;
 
 private FXMLComponents(){}
 

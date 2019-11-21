@@ -108,7 +108,13 @@ public class Controller {
     @FXML
     private TableColumn<IntegrationEvent, String> eventValueColumn;
     @FXML
-    Label progressIndicatorText;
+    private Label progressIndicatorText;
+    @FXML
+    private TextField peakWidth;
+    @FXML
+    private TextField threshold;
+
+
 
     private InjectionInfo injectionInfo;
 
@@ -223,6 +229,8 @@ public class Controller {
         FXMLComponents.progressBar = progressBar;
         FXMLComponents.eventValueColumn = eventValueColumn;
         FXMLComponents.progressIndicatorText = progressIndicatorText;
+        FXMLComponents.peakWidthTextBox = peakWidth;
+        FXMLComponents.thresholdTextBox = threshold;
     }
 
     private void initializeTableColumn(TableColumn column, String fieldName, boolean makeEditable) {
@@ -323,19 +331,20 @@ public class Controller {
 
         //The easiest way to start will be to convert series into array and process the array
         //Eventual goal is to process as a series without explicit conversion to an array
-        XYChart.Series<Number, Number> series2 = lineChartController.getLineChart().getData().get(0);
-        double[][] rawData = new double[series2.getData().size()][2];
+        if(lineChartController.getLineChart().getData().size()>0){
+            XYChart.Series<Number, Number> series2 = lineChartController.getLineChart().getData().get(0);
+            double[][] rawData = new double[series2.getData().size()][2];
+            for (int i = 0; i < series2.getData().size(); i++) {
+                rawData[i][0] = series2.getData().get(i).getXValue().doubleValue();
+                rawData[i][1] = series2.getData().get(i).getYValue().doubleValue();
+            }
 
+            Runnable dataIntegration = new DataIntegration(integrationEvents, rawData,FXMLComponents.peakWidthTextBox.getText(),FXMLComponents.thresholdTextBox.getText());
+            Thread thread = new Thread(dataIntegration);
+            thread.setDaemon(true);
+            thread.start();
 
-        for (int i = 0; i < series2.getData().size(); i++) {
-            rawData[i][0] = series2.getData().get(i).getXValue().doubleValue();
-            rawData[i][1] = series2.getData().get(i).getYValue().doubleValue();
         }
-
-        Runnable dataIntegration = new DataIntegration(4, 5, rawData, 3, rawData, lineChartController.getLineChart());
-        Thread thread = new Thread(dataIntegration);
-        thread.setDaemon(true);
-        thread.start();
 
 
     }
