@@ -229,7 +229,6 @@ public class Injection implements Runnable {
         System.out.println(injectionNumber);
         if (injectionNumber < samplesList.size()) {
 
-
             SampleInfo sampleToInject = samplesList.get(injectionNumber);
             injectionNumber++;
             injectionInfo = new InjectionInfo(sampleToInject.getSampleCompounds(), 33, 5,

@@ -480,7 +480,6 @@ public class Controller {
 
     public void abandonInjection(ActionEvent actionEvent) {
 
-
         InjectionInfo currentInjection = InjectionInfo.injectionList.get(InjectionInfo.injectionList.size() - 1);
         currentInjection.setInjectionAbandoned(true);
     }
