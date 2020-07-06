@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <MenuBar VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem mnemonicParsing="false" text="New" />
+            <MenuItem mnemonicParsing="false" text="Open…" />
+            <Menu mnemonicParsing="false" text="Open Recent" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Close" />
+            <MenuItem mnemonicParsing="false" text="Save" />
+            <MenuItem mnemonicParsing="false" text="Save As…" />
+            <MenuItem mnemonicParsing="false" text="Revert" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Preferences…" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Quit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Undo" />
+            <MenuItem mnemonicParsing="false" text="Redo" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Cut" />
+            <MenuItem mnemonicParsing="false" text="Copy" />
+            <MenuItem mnemonicParsing="false" text="Paste" />
+            <MenuItem mnemonicParsing="false" text="Delete" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Select All" />
+            <MenuItem mnemonicParsing="false" text="Unselect All" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+      <GridPane VBox.vgrow="ALWAYS">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="147.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="313.0" minWidth="10.0" prefWidth="161.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="338.0" minWidth="10.0" prefWidth="332.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="93.0" prefWidth="147.0">
+                     <children>
+                        <Label prefHeight="19.0" prefWidth="230.0" text="Acquistion Parameters" textFill="RED">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="25.0" top="25.0" />
+                     </padding>
+                  </HBox>
+                  <Label text="Sampling " />
+                  <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="139.0">
+                     <children>
+                        <TextField fx:id="samplingRate" prefHeight="27.0" prefWidth="104.0" />
+                        <Label text="Rate" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="139.0">
+                     <children>
+                        <TextField fx:id="runTime" prefHeight="27.0" prefWidth="104.0" />
+                        <Label text="Runtime" />
+                     </children>
+                  </HBox>
+                  <Label text="Label" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="139.0">
+                     <children>
+                        <TextField prefHeight="27.0" prefWidth="104.0" />
+                        <Label text="Label" />
+                     </children>
+                  </HBox>
+                  <Label text="Label" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="139.0">
+                     <children>
+                        <TextField prefHeight="27.0" prefWidth="104.0" />
+                        <Label text="Label" />
+                     </children>
+                  </HBox>
+                  <Label text="Label" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="139.0">
+                     <children>
+                        <TextField prefHeight="27.0" prefWidth="104.0" />
+                        <Label text="Label" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="139.0" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="134.0" prefWidth="147.0" />
+               </children>
+            </VBox>
+            <VBox GridPane.columnIndex="2">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Default methods" />
+                        <ListView fx:id="methodList" prefHeight="200.0" prefWidth="200.0" />
+                        <HBox>
+                           <children>
+                              <ChoiceBox fx:id="columnType" prefWidth="150.0" />
+                              <Label text="Column Type" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <ChoiceBox fx:id="detectorType" prefWidth="150.0" />
+                              <Label text="Detector Type" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#saveButtonPressed" prefHeight="27.0" prefWidth="225.0" text="Send Method to GC" />
+                              <HBox alignment="TOP_RIGHT" prefHeight="89.0" prefWidth="273.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" text="Load method" onAction="#loadButtonPressed"/>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <HBox alignment="CENTER" prefHeight="35.0" prefWidth="332.0">
+                     <children>
+                        <Label text="Method Name" />
+                        <TextField fx:id="methodName" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="353.0" prefWidth="156.0" GridPane.columnIndex="1">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="67.0" prefWidth="50.0">
+                     <children>
+                        <Label text="GC Parameters" textFill="RED">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="25.0" top="25.0" />
+                     </padding>
+                  </HBox>
+                  <Label text="Oven" />
+                  <HBox prefHeight="21.0" prefWidth="279.0">
+                     <children>
+                        <TextField fx:id="initialTemp" prefHeight="27.0" prefWidth="104.0" />
+                        <Label text="Initial Temperature" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="21.0" prefWidth="279.0">
+                     <children>
+                        <TextField fx:id="initialTime" prefHeight="27.0" prefWidth="104.0" />
+                        <Label text="Initial TIme" />
+                     </children>
+                  </HBox>
+                  <CheckBox fx:id="isothermal" mnemonicParsing="false" text="Isothermal" />
+                  <HBox prefHeight="21.0" prefWidth="279.0">
+                     <children>
+                        <TextField fx:id="ramp" prefHeight="27.0" prefWidth="104.0" />
+                        <Label text="Ramp" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="21.0" prefWidth="279.0">
+                     <children>
+                        <TextField fx:id="maxTemp" prefHeight="27.0" prefWidth="104.0" />
+                        <Label text="Max Temperature" />
+                     </children>
+                  </HBox>
+                  <Label text="miscellaneous" />
+                  <HBox prefHeight="31.0" prefWidth="139.0">
+                     <children>
+                        <TextField fx:id="inletTemp" prefHeight="27.0" prefWidth="104.0" />
+                        <Label text="Inlet temperature" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="31.0" prefWidth="139.0">
+                     <children>
+                        <TextField fx:id="columnFlow" prefHeight="27.0" prefWidth="104.0" />
+                        <Label text="Column Flow" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="31.0" prefWidth="156.0" />
+                  <HBox prefHeight="31.0" prefWidth="139.0" />
+               </children>
+               <GridPane.margin>
+                  <Insets left="5.0" />
+               </GridPane.margin>
+            </VBox>
+         </children>
+      </GridPane>
+  </children>
+</VBox>

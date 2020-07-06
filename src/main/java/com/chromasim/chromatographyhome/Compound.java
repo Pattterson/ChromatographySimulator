@@ -92,9 +92,6 @@ public class Compound {
     //Sample method for now, will be made more robust in future
     private Double calculateResponse(String smiles) {
 
-
-
-
         return smiles.length() * 2000 * Math.random();
     }
 

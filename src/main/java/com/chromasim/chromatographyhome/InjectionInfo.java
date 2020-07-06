@@ -3,6 +3,7 @@ package com.chromasim.chromatographyhome;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-//All information needed to perform one injection (instrument method parameters / sample compounds, etc...
+//All information needed to perform one injection (instrument method parameters / sampleInfo / Series)
 //will be included in an Injection Info object which is passed to an injection object to actually perform the injection
 public class InjectionInfo {
 
@@ -23,7 +24,7 @@ public class InjectionInfo {
     private ObservableList<Compound> compounds;
     private double runTime; //in minutes
     private double samplingRate;
-    private Slider speedSlider;
+
     static int injectionCounter =1;
     private final int thisInjectionNumber;
     private LineChart<Number,Number> lineChart;
@@ -33,37 +34,41 @@ public class InjectionInfo {
     private int refreshRate; //chromatogram refresh / add data rate, in seconds
     static List<InjectionInfo> injectionList= new ArrayList<>();
     private boolean instantaneousInjectionFlag = false;
-    private ProgressBar progressBar;
-    private Controller controller;
-    private ObservableList<IntegrationEvent> eventsList = FXCollections.observableArrayList();
 
-    public ProgressBar getProgressBar() {
-        return progressBar;
+    private ObservableList<IntegrationEvent> eventsList = FXCollections.observableArrayList();
+    private boolean setAbandoned;
+    private boolean injected = false;
+
+    public boolean isInjected() {
+        return injected;
     }
 
-    public InjectionInfo(ObservableList<Compound> compounds, double runTime, double samplingRate, Slider speedSlider, LineChart<Number, Number> lineChart, XYChart.Series<Number, Number> series, Button nextInjection, int refreshRate, ProgressBar progressBar,Controller controller) {
+    public void setInjected(boolean injected) {
+        this.injected = injected;
+    }
+
+    public InjectionInfo(ObservableList<Compound> compounds, double runTime, double samplingRate,  int refreshRate) {
         thisInjectionNumber = injectionCounter;
         injectionAbandoned = false;
         this.compounds = compounds;
         this.runTime = runTime;
         this.samplingRate = samplingRate;
-        this.speedSlider = speedSlider;
         this.refreshRate = refreshRate;
-        this.progressBar = progressBar;
-        this.controller = controller;
+        series = new XYChart.Series<Number,Number>();
         addDefaultIntegrationEvents();
 
         injectionCounter++;
 
-        this.lineChart = lineChart;
-        this.series = series;
-        this.nextInjection = nextInjection;
+        System.out.println(this.series);
+
         pointsToCollect = (int)(samplingRate * 60 * runTime + 1); //+1 for time =0 datapoint
 
         injectionList.add(this);
 
         Platform.runLater(() -> {
+            FXMLComponents.lineChart.getData().add(series);
             Node n = series.getNode();
+            System.out.println(n);
             StringBuilder style = new StringBuilder();
             style.append("-fx-stroke: black; \n  -fx-stroke-width: 1px;");
             n.setStyle(style.toString());
@@ -76,15 +81,11 @@ public class InjectionInfo {
         IntegrationEvent defaultEvent2 = new IntegrationEvent("Set Peak Width","0", "0");
         eventsList.add(defaultEvent1);
         eventsList.add(defaultEvent2);
-        controller.getEventsTable().setItems(eventsList);
+        FXMLComponents.eventsTable.setItems(eventsList);
     }
 
     public ObservableList<IntegrationEvent> getEventsList() {
         return eventsList;
-    }
-
-    public Controller getController() {
-        return controller;
     }
 
     public boolean getInjectionAbandoned() {
@@ -107,17 +108,12 @@ public class InjectionInfo {
         return samplingRate;
     }
 
-    public Slider getSpeedSlider() {
-        return speedSlider;
-    }
 
     public LineChart<Number, Number> getLineChart() {
         return lineChart;
     }
 
     public XYChart.Series<Number, Number> getSeries() {
-
-
         Platform.runLater(() -> {
             Node n = series.getNode();
             StringBuilder style = new StringBuilder();
@@ -157,5 +153,15 @@ public class InjectionInfo {
         this.instantaneousInjectionFlag = instantaneousInjectionFlag;
     }
 
+    public boolean isSetAbandoned() {
+        return setAbandoned;
+    }
 
+    //bad naming scheme
+    public void setSetAbandoned(boolean setAbandoned) {
+        this.setAbandoned = setAbandoned;
+    }
+    public boolean getSetAbandoned(){
+        return setAbandoned;
+    }
 }

@@ -13,6 +13,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -23,23 +24,26 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.Cursor?>
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chromasim.chromatographyhome.Controller">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
+                  <Menu mnemonicParsing="false" text="New">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#createNewSampleSet" text="New Sample Set" />
+                    </items>
+                  </Menu>
                         <MenuItem mnemonicParsing="false" text="New" />
                         <MenuItem mnemonicParsing="false" text="Open…" />
                         <Menu mnemonicParsing="false" text="Open Recent" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" text="Close" />
-                        <MenuItem mnemonicParsing="false" text="Save" />
-                        <MenuItem mnemonicParsing="false" text="Save As…" />
-                        <MenuItem mnemonicParsing="false" text="Revert" />
+                        <MenuItem mnemonicParsing="false" onAction="#saveSampleSet" text="Save Sample Set" />
+
+                        <MenuItem mnemonicParsing="false" onAction="#openSampleSet" text="Open Sample Set" />
+                        <MenuItem mnemonicParsing="false" onAction="#showTitleScreen" text="Revert" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" text="Preferences…" />
                         <SeparatorMenuItem mnemonicParsing="false" />
@@ -62,7 +66,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Settings">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Action 1" />
+                        <MenuItem mnemonicParsing="false" onAction="#EditInstrumentMethod" text="Instrument Method" />
                     </items>
                 </Menu>
             <Menu mnemonicParsing="false" text="View">
@@ -90,6 +94,8 @@
                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -112,7 +118,7 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                           </TableView>
-                          <TableView fx:id="eventsTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4" GridPane.rowSpan="3">
+                          <TableView fx:id="eventsTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="6" GridPane.rowSpan="3">
                               <columns>
                                   <TableColumn fx:id="eventColumn" maxWidth="1000.0" minWidth="100.0" prefWidth="210.0" text="Event" />
                                   <TableColumn fx:id="eventStartColumn" maxWidth="500.0" minWidth="50.0" prefWidth="50.0" text="Start" />
@@ -129,12 +135,24 @@
                         <Insets />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="newEventButton" mnemonicParsing="false" onAction="#newEventButtonPushed" text="New Event" GridPane.rowIndex="7" />
-                  <Button fx:id="deleteEventButton" mnemonicParsing="false" onAction="#deleteEventButtonPushed" text="Delete Event" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                  <Button fx:id="newEventButton" mnemonicParsing="false" onAction="#newEventButtonPushed" text="New Event" GridPane.rowIndex="9" />
+                  <Button fx:id="deleteEventButton" mnemonicParsing="false" onAction="#deleteEventButtonPushed" text="Delete Event" GridPane.columnIndex="1" GridPane.rowIndex="9">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
                   </Button>
+                  <HBox alignment="CENTER_LEFT" GridPane.rowIndex="5">
+                     <children>
+                        <Label text="Peak Width" textAlignment="CENTER" textOverrun="CLIP" />
+                        <TextField fx:id="peakWidth" maxWidth="50.0" text="10" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                     <children>
+                        <Label text="Threshold" textOverrun="CLIP" />
+                        <TextField fx:id="threshold" maxWidth="50.0" text="10" />
+                     </children>
+                  </HBox>
                       </children>
                   </GridPane>
                 <VBox>
@@ -162,33 +180,19 @@
                         </SplitPane>
                     </children>
                 </VBox>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 <AnchorPane maxWidth="170.0" minWidth="0.0" prefHeight="543.0" prefWidth="170.0">
                     <children>
                         <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Actions" textAlignment="CENTER" textFill="#2448bf" wrapText="false">
                      <font>
                                 <Font size="18.0" fx:id="x1" />
                      </font></Label>
-                        <Button fx:id="startButton" layoutX="-3.0" layoutY="37.0" mnemonicParsing="false" onAction="#startButtonClicked" text="Start" />
+                        <Button fx:id="startButton" layoutX="-3.0" layoutY="37.0" mnemonicParsing="false" onAction="#startButtonPressed" text="Inject All" />
                         <Button disable="false" layoutY="64.0" mnemonicParsing="false" onAction="#abandonInjection" text="Abandon Injection" textFill="RED" />
                         <Button disable="false" layoutY="91.0" mnemonicParsing="false" onAction="#finishInjection" text="Finish Injection" />
-                        <Button disable="true" layoutY="118.0" mnemonicParsing="false" text="Pause Set" />
+                        <Button fx:id="abandonSetButton" layoutY="118.0" mnemonicParsing="false" onAction="#abandonSet" text="Abandon Set" />
                         <Button disable="true" layoutY="145.0" mnemonicParsing="false" text="Gerstel" />
                         <Button layoutX="-2.0" layoutY="462.0" mnemonicParsing="false" onMouseClicked="#integrate" text="AutoIntegrate" />
-                        <Button disable="false" layoutX="-1.0" layoutY="489.0" mnemonicParsing="false" text="Manual Integration" onAction="#exportSeriesAsCSV" />
+                        <Button disable="false" layoutX="-1.0" layoutY="489.0" mnemonicParsing="false" onAction="#exportSeriesAsCSV" text="Manual Integration" />
                         <Button disable="true" layoutX="-1.0" layoutY="516.0" mnemonicParsing="false" text="Quantitate" />
                         <Slider fx:id="speedSlider" blockIncrement="25.0" layoutX="28.0" layoutY="189.0" min="1.0" minorTickCount="0" prefHeight="17.0" prefWidth="83.0" showTickMarks="true" />
                         <Label layoutX="14.0" layoutY="172.0" text="Acquisition speed" />
@@ -201,6 +205,7 @@
                   <Slider fx:id="refreshRateSlider" blockIncrement="25.0" layoutX="29.0" layoutY="256.0" majorTickUnit="1.0" max="4.0" min="1.0" minorTickCount="0" prefHeight="17.0" prefWidth="83.0" showTickMarks="true" value="4.0" />
                   <Label layoutX="29.0" layoutY="239.0" text="Refresh Rate" />
                   <Label fx:id="speedIndicator1" layoutX="56.0" layoutY="274.0" text="1 hz" />
+                  <Button fx:id="injectSelectedButton" layoutX="66.0" layoutY="37.0" mnemonicParsing="false" onAction="#startButtonPressed" text="Inject Selected" />
                     </children>
                 </AnchorPane>
             </items>
@@ -208,7 +213,7 @@
         <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
             <children>
                 <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-                <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Progress">
+                <Label fx:id="progressIndicatorText" maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Waiting for Injection">
                     <font>
                         <Font size="11.0" fx:id="x3" />
                     </font>

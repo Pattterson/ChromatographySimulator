@@ -14,6 +14,8 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 //Each sample (characterized by a SampleInfo Object) contains both sample metadata (sample number, name, injection volume, etc...)
@@ -28,12 +30,18 @@ public class SampleInfo {
     private ComboBox<String> sampleType = new ComboBox<>();
     private String injectionVolume;
     private ObservableList<Compound> sampleCompounds = FXCollections.observableArrayList();
-
+     static ObservableList<SampleInfo> samplesList = FXCollections.observableArrayList();
     private Button compoundButton = new Button("0");
     private Stage compoundAdditionTableStage = new Stage();
+    private InjectionInfo injectionInfo;
 
+    public InjectionInfo getInjectionInfo() {
+        return injectionInfo;
+    }
 
-
+    public void setInjectionInfo(InjectionInfo injectionInfo) {
+        this.injectionInfo = injectionInfo;
+    }
 
     public Button getCompoundButton() {
         return compoundButton;
@@ -44,6 +52,9 @@ public class SampleInfo {
     }
 
     public SampleInfo(String sampleName, String injectionVolume) {
+        samplesList.add(this);
+
+
         IntegerBinding sampleCompoundsSizeProperty = Bindings.size(sampleCompounds);
 
         compoundButton.textProperty().bind(sampleCompoundsSizeProperty.asString());
